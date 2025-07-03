@@ -30,14 +30,14 @@ const CodeSlider: React.FC<CodeSliderProps> = ({
   const shouldShowSlider = codeLines.length > 15;
 
   return (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden">
+    <div className="relative bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
       <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
-        <span className="text-sm text-gray-300 font-mono">{language}</span>
+        <span className="text-sm text-gray-300 font-mono uppercase tracking-wide">{language}</span>
         <Button
           onClick={copyToClipboard}
           size="sm"
           variant="ghost"
-          className="text-gray-300 hover:text-white hover:bg-gray-700"
+          className="text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
         >
           <Copy className="h-4 w-4 mr-1" />
           Copy
@@ -45,23 +45,26 @@ const CodeSlider: React.FC<CodeSliderProps> = ({
       </div>
       
       <div 
-        className={`overflow-y-auto transition-all duration-300 ${
-          shouldShowSlider && !isExpanded ? `max-h-[${maxHeight}px]` : 'max-h-none'
+        className={`overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 transition-all duration-300 ${
+          shouldShowSlider && !isExpanded ? 'max-h-96' : 'max-h-none'
         }`}
-        style={{ maxHeight: shouldShowSlider && !isExpanded ? `${maxHeight}px` : 'none' }}
+        style={{ 
+          maxHeight: shouldShowSlider && !isExpanded ? `${maxHeight}px` : 'none',
+          scrollbarWidth: 'thin'
+        }}
       >
-        <pre className="p-4 text-sm text-gray-100 font-mono whitespace-pre-wrap">
+        <pre className="p-4 text-sm text-gray-100 font-mono whitespace-pre-wrap leading-relaxed">
           <code className={`language-${language}`}>{code}</code>
         </pre>
       </div>
       
       {shouldShowSlider && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-2 flex justify-center">
+        <div className={`${isExpanded ? 'relative' : 'absolute bottom-0'} left-0 right-0 ${!isExpanded ? 'bg-gradient-to-t from-gray-900 to-transparent' : 'bg-gray-800 border-t border-gray-700'} p-3 flex justify-center`}>
           <Button
             onClick={() => setIsExpanded(!isExpanded)}
             size="sm"
             variant="secondary"
-            className="bg-gray-800 hover:bg-gray-700 border border-gray-600"
+            className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-200 transition-colors"
           >
             {isExpanded ? (
               <>
@@ -71,7 +74,7 @@ const CodeSlider: React.FC<CodeSliderProps> = ({
             ) : (
               <>
                 <ChevronDown className="h-4 w-4 mr-1" />
-                Show More
+                Show More ({codeLines.length} lines)
               </>
             )}
           </Button>

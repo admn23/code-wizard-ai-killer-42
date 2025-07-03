@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,16 +15,15 @@ import {
   BookOpen,
   Shield,
   Sparkles,
-  Check
+  Check,
+  Play,
+  Star,
+  Users,
+  Award
 } from 'lucide-react';
-import FloatingCTA from '@/components/FloatingCTA';
-import CookieConsent from '@/components/CookieConsent';
-import SuccessShowcase from '@/components/SuccessShowcase';
-import RealtimeCounter from '@/components/RealtimeCounter';
-import SocialMediaCTA from '@/components/SocialMediaCTA';
-import AIDemo from '@/components/AIDemo';
-import FAQ from '@/components/FAQ';
-import CodeSlideDemo from '@/components/CodeSlideDemo';
+import TypingAnimation from '@/components/TypingAnimation';
+import CodeSlider from '@/components/CodeSlider';
+import { useState } from 'react';
 
 const Index = () => {
   const features = [
@@ -159,8 +157,111 @@ const Index = () => {
     }
   ];
 
+  const aiExamples = [
+    {
+      title: "React Component Generator",
+      description: "Generate modern React components with TypeScript",
+      input: "Create a user profile card component with avatar, name, email, and social links",
+      output: `function UserProfileCard({ user }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-roboto">
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="flex items-center space-x-4">
+        <img 
+          src={user.avatar} 
+          alt={user.name}
+          className="w-16 h-16 rounded-full"
+        />
+        <div>
+          <h3 className="text-xl font-semibold">{user.name}</h3>
+          <p className="text-gray-600">{user.email}</p>
+        </div>
+      </div>
+      <div className="mt-4 flex space-x-2">
+        {user.socialLinks.map(link => (
+          <a key={link.platform} href={link.url}>
+            {link.platform}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      icon: <Code className="h-6 w-6" />
+    },
+    {
+      title: "Bug Detection & Fix",
+      description: "Automatically detect and fix common programming errors",
+      input: "Fix the infinite loop in this React useEffect",
+      output: `// Before (Infinite loop)
+useEffect(() => {
+  setCount(count + 1);
+});
+
+// After (Fixed)
+useEffect(() => {
+  setCount(prevCount => prevCount + 1);
+}, []); // Added dependency array`,
+      icon: <Bug className="h-6 w-6" />
+    },
+    {
+      title: "API Endpoint Creation",
+      description: "Generate REST API endpoints with validation",
+      input: "Create a POST endpoint for user registration with validation",
+      output: `app.post('/api/users/register', [
+  body('email').isEmail().normalizeEmail(),
+  body('password').isLength({ min: 8 }),
+  body('name').trim().notEmpty()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { email, password, name } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    
+    const user = new User({ email, password: hashedPassword, name });
+    await user.save();
+    
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});`,
+      icon: <Globe className="h-6 w-6" />
+    }
+  ];
+
+  const [activeExample, setActiveExample] = useState(0);
+
+  const faqData = [
+    {
+      question: "What is Coding Killer?",
+      answer: "Coding Killer is an AI-powered coding assistant that helps developers write better code faster. It offers various tools like code generation, bug fixing, optimization, and more."
+    },
+    {
+      question: "How does the credit system work?",
+      answer: "Each AI tool usage consumes credits. Different tools may consume different amounts of credits based on their complexity. Credits are refilled monthly based on your subscription plan."
+    },
+    {
+      question: "Can I upgrade or downgrade my plan?",
+      answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
+    },
+    {
+      question: "Is there a free trial?",
+      answer: "Yes, all new users get 5 free credits to try our AI tools before subscribing to a paid plan."
+    },
+    {
+      question: "What programming languages are supported?",
+      answer: "Our AI tools support all major programming languages including JavaScript, Python, Java, C++, Go, Rust, PHP, and many more."
+    }
+  ];
+
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Navbar1 />
       
       {/* Hero Section */}
@@ -172,6 +273,23 @@ const Index = () => {
                 <span className="gradient-text">AI Powered</span><br />
                 <span className="text-gray-900">Coding Assistant</span>
               </h1>
+              
+              {/* Typing Animation */}
+              <div className="text-2xl md:text-3xl mb-6 h-12 flex items-center">
+                <TypingAnimation 
+                  texts={[
+                    "Generate Code Instantly",
+                    "Fix Bugs Automatically", 
+                    "Optimize Performance",
+                    "Create Documentation",
+                    "Build APIs Faster"
+                  ]}
+                  speed={100}
+                  deleteSpeed={50}
+                  delayBetweenTexts={2000}
+                />
+              </div>
+              
               <p className="text-xl md:text-2xl text-gray-600 mb-8">
                 Revolutionize your development workflow with AI-powered code generation, 
                 debugging, optimization, and more. Code smarter, not harder.
@@ -191,21 +309,40 @@ const Index = () => {
             </div>
             
             <div className="lg:pl-8">
-              <div className="h-96 w-full">
-                <CodeSlideDemo />
+              <div className="bg-gray-900 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-green-400 text-sm font-mono">AI Code Generator</span>
+                  <div className="flex space-x-1">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm font-mono">
+                  <div className="text-blue-400">// Input: Create a login function</div>
+                  <div className="text-white">
+                    <span className="text-purple-400">function</span>{" "}
+                    <span className="text-yellow-300">login</span>
+                    <span className="text-white">(email, password) {"{"}
+                  </div>
+                  <div className="text-white ml-4">
+                    <span className="text-purple-400">const</span>{" "}
+                    <span className="text-blue-300">user</span> = 
+                    <span className="text-purple-400"> await</span>{" "}
+                    <span className="text-yellow-300">authenticate</span>(email, password);
+                  </div>
+                  <div className="text-white ml-4">
+                    <span className="text-purple-400">return</span> user;
+                  </div>
+                  <div className="text-white">{"}"}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Real-time Counter */}
-      <RealtimeCounter />
-
-      {/* Success Showcase */}
-      <SuccessShowcase />
-
-      {/* Features Grid */}
+      {/* Powerful AI Tools */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -215,7 +352,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 animate-slide-up border-primary/10">
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 animate-slide-up border-primary/10 hover-scale">
                 <CardHeader>
                   <div className="text-primary mb-4">
                     {feature.icon}
@@ -233,8 +370,143 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AI Demo */}
-      <AIDemo />
+      {/* Success Stories */}
+      <section className="py-20 px-4 bg-gradient-to-r from-green-50 to-blue-50">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold gradient-text mb-4">Success Stories</h2>
+            <p className="text-xl text-gray-600">See how developers are transforming their workflow</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="bg-white/80 backdrop-blur-sm border-primary/10">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Sarah Chen</h3>
+                    <p className="text-sm text-gray-600">Frontend Developer</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">"Coding Killer reduced my development time by 60%. The AI code generator is incredibly accurate and saves me hours of repetitive coding."</p>
+                <div className="flex mt-4">
+                  {[1,2,3,4,5].map((star) => (
+                    <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border-primary/10">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Award className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Mike Rodriguez</h3>
+                    <p className="text-sm text-gray-600">Full Stack Developer</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">"The bug fixer tool is a game-changer. It not only finds bugs but explains why they occur and how to prevent them in the future."</p>
+                <div className="flex mt-4">
+                  {[1,2,3,4,5].map((star) => (
+                    <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/80 backdrop-blur-sm border-primary/10">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Rocket className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Emily Johnson</h3>
+                    <p className="text-sm text-gray-600">DevOps Engineer</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">"The deployment script generator helped me automate our entire CI/CD pipeline. What used to take days now takes minutes."</p>
+                <div className="flex mt-4">
+                  {[1,2,3,4,5].map((star) => (
+                    <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* See AI in Action */}
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold gradient-text mb-4">See AI in Action</h2>
+            <p className="text-xl text-gray-600">Watch our AI tools solve real coding challenges</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Examples Navigation */}
+            <div className="space-y-4">
+              {aiExamples.map((example, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveExample(index)}
+                  className={`w-full text-left p-4 rounded-lg border transition-all ${
+                    activeExample === index 
+                      ? 'border-primary bg-primary/5 shadow-md' 
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg ${
+                      activeExample === index ? 'bg-primary text-white' : 'bg-gray-100 text-primary'
+                    }`}>
+                      {example.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{example.title}</h3>
+                      <p className="text-sm text-gray-600">{example.description}</p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Code Example */}
+            <div className="lg:col-span-2">
+              <div className="bg-gray-50 rounded-lg p-6 border">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2">Input:</h3>
+                  <p className="text-gray-700 bg-white p-3 rounded border italic">
+                    "{aiExamples[activeExample].input}"
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">AI Generated Output:</h3>
+                  <CodeSlider 
+                    code={aiExamples[activeExample].output}
+                    language="javascript"
+                    maxHeight={300}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Compare Plans Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
@@ -250,7 +522,7 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {plans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border-gray-200'}`}>
+              <Card key={index} className={`relative hover-scale ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border-gray-200'}`}>
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">
                     Most Popular
@@ -303,10 +575,36 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <FAQ />
+      <section className="py-20 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold gradient-text mb-4">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-600">Everything you need to know about our AI coding tools</p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {faqData.map((faq, index) => (
+              <div key={index} className="faq-item">
+                <button
+                  className="faq-question w-full flex items-center justify-between"
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                >
+                  <span className="font-medium">{faq.question}</span>
+                  <ChevronDown className={`h-5 w-5 transition-transform ${openFaq === index ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === index && (
+                  <div className="faq-answer">
+                    <p className="text-gray-700">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 gradient-text">How It Works</h2>
@@ -327,18 +625,35 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Social Media CTA */}
-      <SocialMediaCTA />
+      {/* Newsletter Section */}
+      <section className="py-20 px-4 bg-gradient-to-r from-primary/10 to-green-100">
+        <div className="container mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4 gradient-text">Stay Updated</h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Get the latest updates on new AI tools and features
+          </p>
+          <div className="max-w-md mx-auto flex gap-4">
+            <input 
+              type="email" 
+              placeholder="Enter your email"
+              className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <Button className="bg-primary hover:bg-primary/90 px-6">
+              Subscribe
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-hero-gradient text-white">
+      <section className="py-20 px-4 bg-gradient-to-r from-primary to-green-600 text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to Code Smarter?</h2>
           <p className="text-xl mb-8 opacity-90">
             Join thousands of developers who are already using AI to write better code faster
           </p>
           <Link to="/signup">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+            <Button size="lg" variant="secondary" className="text-lg px-8 py-4 bg-white text-primary hover:bg-gray-100">
               Get Started Free
             </Button>
           </Link>
@@ -351,9 +666,11 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">CK</span>
-                </div>
+                <img 
+                  src="/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png" 
+                  alt="Coding Killer Logo" 
+                  className="h-8 w-8"
+                />
                 <span className="text-xl font-bold">Coding Killer</span>
               </div>
               <p className="text-gray-400">
@@ -393,10 +710,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-
-      {/* Floating Components */}
-      <FloatingCTA />
-      <CookieConsent />
     </div>
   );
 };
