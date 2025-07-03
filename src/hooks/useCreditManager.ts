@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserData } from "@/hooks/useUserData";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,13 +58,50 @@ const logError = (context: string, error: any) => {
   }
 };
 
+// Local storage key for credits
+const CREDITS_STORAGE_KEY = "coding_killer_credits";
+
+// Get credits from localStorage
+const getLocalCredits = (userId: string): number => {
+  try {
+    const stored = localStorage.getItem(`${CREDITS_STORAGE_KEY}_${userId}`);
+    return stored ? parseInt(stored, 10) : 5; // Default 5 credits
+  } catch {
+    return 5;
+  }
+};
+
+// Set credits in localStorage
+const setLocalCredits = (userId: string, credits: number): void => {
+  try {
+    localStorage.setItem(
+      `${CREDITS_STORAGE_KEY}_${userId}`,
+      credits.toString(),
+    );
+  } catch (error) {
+    console.warn("Could not save credits to localStorage:", error);
+  }
+};
+
 export const useCreditManager = () => {
   const { user } = useAuth();
   const { profile } = useUserData();
   const [isDeducting, setIsDeducting] = useState(false);
+  const [localCredits, setLocalCreditsState] = useState<number | null>(null);
+
+  // Initialize local credits when user changes
+  React.useEffect(() => {
+    if (user) {
+      const credits = getLocalCredits(user.id);
+      setLocalCreditsState(credits);
+    } else {
+      setLocalCreditsState(null);
+    }
+  }, [user]);
 
   const checkCredits = (requiredCredits: number): boolean => {
-    const currentCredits = profile?.credits_remaining || 0;
+    // Use database credits if available, otherwise use local credits
+    const currentCredits = profile?.credits_remaining ?? localCredits ?? 0;
     return currentCredits >= requiredCredits;
   };
 
@@ -89,9 +126,16 @@ export const useCreditManager = () => {
     setIsDeducting(true);
 
     try {
-      // Update credits in profiles table
-      const newCredits = (profile.credits_remaining || 0) - creditsToDeduct;
-      const newTasksCount = (profile.tasks_this_month || 0) + 1;
+      // Calculate new credits - use profile credits if available, otherwise local credits
+      const currentCredits = profile?.credits_remaining ?? localCredits ?? 0;
+      const newCredits = currentCredits - creditsToDeduct;
+      const newTasksCount = (profile?.tasks_this_month || 0) + 1;
+
+      // Always update local credits as a fallback
+      if (user) {
+        setLocalCredits(user.id, newCredits);
+        setLocalCreditsState(newCredits);
+      }
 
       const { error: profileError } = await supabase
         .from("profiles")
@@ -207,6 +251,6 @@ export const useCreditManager = () => {
     checkCredits,
     deductCredits,
     isDeducting,
-    currentCredits: profile?.credits_remaining || 0,
+    currentCredits: profile?.credits_remaining ?? localCredits ?? 0,
   };
 };
