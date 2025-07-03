@@ -31,36 +31,67 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
 
   const copyToClipboard = async () => {
     try {
+      // Try modern clipboard API first
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(code);
-        toast.success("Code copied to clipboard!");
-      } else {
-        // Fallback for non-secure contexts
-        const textArea = document.createElement("textarea");
-        textArea.value = code;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
         try {
-          const successful = document.execCommand("copy");
-          if (successful) {
-            toast.success("Code copied to clipboard!");
-          } else {
-            throw new Error("Copy command failed");
-          }
-        } catch (err) {
-          toast.error("Failed to copy code");
-        } finally {
-          document.body.removeChild(textArea);
+          await navigator.clipboard.writeText(code);
+          toast.success("Code copied to clipboard!");
+          return;
+        } catch (clipboardError) {
+          console.log("Clipboard API failed, trying fallback...");
+          // Fall through to legacy method
         }
       }
+
+      // Legacy fallback method
+      const textArea = document.createElement("textarea");
+      textArea.value = code;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      textArea.style.opacity = "0";
+      textArea.setAttribute("readonly", "");
+      textArea.setAttribute("contenteditable", "true");
+
+      document.body.appendChild(textArea);
+
+      // For mobile devices
+      if (/ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase())) {
+        textArea.contentEditable = "true";
+        textArea.readOnly = false;
+        const range = document.createRange();
+        range.selectNodeContents(textArea);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+        textArea.setSelectionRange(0, textArea.value.length);
+      }
+
+      let successful = false;
+      try {
+        successful = document.execCommand("copy");
+      } catch (err) {
+        console.log("execCommand failed, trying selection...");
+      }
+
+      document.body.removeChild(textArea);
+
+      if (successful) {
+        toast.success("Code copied to clipboard!");
+      } else {
+        // Final fallback - just show the user a message
+        toast.info(
+          "Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)",
+        );
+      }
     } catch (error) {
-      console.error("Copy failed:", error);
-      toast.error("Failed to copy code");
+      console.log("Copy operation failed:", error);
+      toast.info(
+        "Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)",
+      );
     }
   };
 

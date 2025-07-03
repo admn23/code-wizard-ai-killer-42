@@ -71,13 +71,18 @@ const Profile = () => {
       toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (error) {
+      const errorMessage = error?.message || "Unknown error occurred";
+      const errorCode = error?.code || "No error code";
+      const errorDetails = error?.details || "No additional details";
+
       console.error("Error updating profile:", {
-        message: error?.message || "Unknown error",
-        code: error?.code || "No code",
-        details: error?.details || "No details",
-        fullError: String(error),
+        message: errorMessage,
+        code: errorCode,
+        details: errorDetails,
+        timestamp: new Date().toISOString(),
       });
-      toast.error("Failed to update profile");
+
+      toast.error(`Failed to update profile: ${errorMessage}`);
     }
   };
 
