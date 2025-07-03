@@ -54,6 +54,10 @@ const logError = (context: string, error: any) => {
   }
 };
 
+// Test the logError function immediately
+console.log("🔧 Testing logError function...");
+logError("Test error logging", { message: "Test message", code: "TEST001" });
+
 export const useUserData = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
