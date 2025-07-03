@@ -1,12 +1,19 @@
 
-import Header from '@/components/Header';
+import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Mail, Clock, CreditCard } from 'lucide-react';
+import { AlertCircle, Mail, Shield } from 'lucide-react';
 
 const RefundPolicy = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO 
+        title="Refund Policy"
+        description="Clear and transparent refund policy for Coding Killer services"
+        canonical="/refund-policy"
+      />
+      
+      <Navbar1 />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
@@ -18,138 +25,143 @@ const RefundPolicy = () => {
           </div>
 
           <div className="space-y-8">
+            {/* Refund Eligibility */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-primary" />
+                  <Shield className="h-5 w-5 text-green-600" />
                   Refund Eligibility
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">We offer refunds only under the following conditions:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    You made a payment but no credits were used from your account
+              <CardContent>
+                <p className="text-gray-600 mb-4">We offer refunds only under the following conditions:</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                    <span>You made a payment but no credits were used from your account</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    You mistakenly purchased a wrong plan and contacted us within 24 hours
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                    <span>You mistakenly purchased a wrong plan and contacted us within 24 hours</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Technical issues on our end prevented you from using the service after payment
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                    <span>Technical issues on our end prevented you from using the service after payment</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            {/* Non-Refundable Situations */}
+            <Card className="border-red-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-red-500" />
+                <CardTitle className="flex items-center gap-2 text-red-600">
+                  <AlertCircle className="h-5 w-5" />
                   Non-Refundable Situations
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">No refund will be granted in the following cases:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Credits have already been consumed or used for AI tasks
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                    <span>Credits have already been consumed or used for AI tasks</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    More than 24 hours have passed since payment for wrong plan purchases
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                    <span>More than 24 hours have passed since payment for wrong plan purchases</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Dissatisfaction with AI-generated results (quality is subjective)
+                  <li className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
+                    <span>Dissatisfaction with AI-generated results (quality is subjective)</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
+            {/* How to Request a Refund */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-primary" />
+                  <Mail className="h-5 w-5 text-blue-600" />
                   How to Request a Refund
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">To request a refund, please follow these steps:</p>
-                <ol className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0 mt-0.5">1</span>
-                    Send an email to: <a href="mailto:21ashikur1234@gmail.com" className="text-primary hover:underline">21ashikur1234@gmail.com</a>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0 mt-0.5">2</span>
-                    Include your account email and transaction details
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0 mt-0.5">3</span>
-                    Explain the reason for your refund request
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0 mt-0.5">4</span>
-                    Provide your bKash number for refund processing
-                  </li>
-                </ol>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-primary" />
-                  Processing Time
-                </CardTitle>
-              </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Refund processing timeline:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Review of refund request: 1-2 business days
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Refund processing via bKash: 3-5 business days
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Email confirmation once refund is processed
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+                <p className="text-gray-600 mb-4">To request a refund, please follow these steps:</p>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      1
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Send an email to: 21ashikur1234@gmail.com</h3>
+                      <p className="text-sm text-gray-600">Include your account details and reason for refund</p>
+                    </div>
+                  </div>
 
-            <Card className="bg-blue-50 border-blue-200">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-blue-900 mb-2">Important Note</h3>
-                    <p className="text-blue-800">
-                      We strive to provide the best service possible. If you're experiencing issues with our AI tools 
-                      or have concerns about your purchase, please contact us before requesting a refund. We're often 
-                      able to resolve issues quickly and ensure you get the most value from our services.
-                    </p>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      2
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Provide Payment Information</h3>
+                      <p className="text-sm text-gray-600">Include your bKash transaction ID and payment date</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      3
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Wait for Review</h3>
+                      <p className="text-sm text-gray-600">We will review your request within 2-3 business days</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      4
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Receive Confirmation</h3>
+                      <p className="text-sm text-gray-600">If approved, refund will be processed within 5-7 business days</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            {/* Processing Time */}
+            <Card className="bg-gradient-to-r from-green-50 to-blue-50">
+              <CardContent className="pt-6">
+                <h3 className="text-lg font-semibold mb-3">Refund Processing Time</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium mb-2">Review Period</h4>
+                    <p className="text-sm text-gray-600">2-3 business days for request evaluation</p>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-2">Processing Time</h4>
+                    <p className="text-sm text-gray-600">5-7 business days for approved refunds</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Information */}
+            <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
               <CardContent className="pt-6 text-center">
-                <h3 className="font-semibold mb-2">Questions about our refund policy?</h3>
-                <p className="text-gray-600 mb-4">Contact us for clarification</p>
+                <h3 className="text-xl font-bold mb-2">Questions About Refunds?</h3>
+                <p className="text-gray-600 mb-4">
+                  If you have any questions about our refund policy, please don't hesitate to contact us.
+                </p>
                 <a 
                   href="mailto:21ashikur1234@gmail.com" 
-                  className="text-primary hover:underline font-medium"
+                  className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
                 >
+                  <Mail className="h-4 w-4" />
                   21ashikur1234@gmail.com
                 </a>
               </CardContent>

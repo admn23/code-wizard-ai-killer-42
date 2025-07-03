@@ -1,5 +1,6 @@
 
-import Header from '@/components/Header';
+import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Wrench, Bug, Sparkles, Zap, Shield, Plus } from 'lucide-react';
@@ -141,7 +142,13 @@ const Changelog = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO 
+        title="Changelog"
+        description="Stay updated with the latest features, improvements, and bug fixes in Coding Killer"
+        canonical="/changelog"
+      />
+      
+      <Navbar1 />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">

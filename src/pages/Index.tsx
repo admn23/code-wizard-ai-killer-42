@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Navbar1 } from '@/components/ui/navbar-1';
 import SEO from '@/components/SEO';
 import TypingAnimation from '@/components/TypingAnimation';
@@ -23,9 +24,7 @@ import {
   Play,
   ChevronRight,
   Star,
-  Users,
-  MessageCircle,
-  Github
+  Quote
 } from 'lucide-react';
 import FloatingCTA from '@/components/FloatingCTA';
 import CookieConsent from '@/components/CookieConsent';
@@ -41,29 +40,133 @@ const Index = () => {
     "Build APIs Faster"
   ];
 
-  const sampleCode = `// AI Generated React Component
-import React, { useState } from 'react';
+  const heroSampleCode = `// AI Generated React Component - Complete User Management System
+import React, { useState, useEffect, useCallback } from 'react';
+import { debounce } from 'lodash';
 
-const UserCard = ({ user }) => {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'moderator';
+  avatar?: string;
+  joinDate: string;
+  lastActive: string;
+  preferences: {
+    theme: 'light' | 'dark';
+    notifications: boolean;
+    language: string;
+  };
+}
+
+interface UserCardProps {
+  user: User;
+  onEdit: (user: User) => void;
+  onDelete: (userId: string) => void;
+}
+
+const UserCard: React.FC<UserCardProps> = ({ user, onEdit, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
+  const handleEdit = useCallback(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      onEdit(user);
+      setIsLoading(false);
+    }, 300);
+  }, [user, onEdit]);
+
+  const handleDelete = useCallback(() => {
+    if (window.confirm(\`Are you sure you want to delete \${user.name}?\`)) {
+      onDelete(user.id);
+    }
+  }, [user.id, user.name, onDelete]);
+
+  const getRoleBadgeColor = (role: string) => {
+    const colors = {
+      admin: 'bg-red-100 text-red-800',
+      moderator: 'bg-blue-100 text-blue-800',
+      user: 'bg-green-100 text-green-800'
+    };
+    return colors[role as keyof typeof colors] || colors.user;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const isOnline = () => {
+    const lastActive = new Date(user.lastActive);
+    const now = new Date();
+    const diffInMinutes = (now.getTime() - lastActive.getTime()) / (1000 * 60);
+    return diffInMinutes < 5;
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">{user.name}</h3>
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-200">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <img 
+              src={user.avatar || \`https://ui-avatars.com/api/?name=\${user.name}&background=random\`}
+              alt={user.name}
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            {isOnline() && (
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            )}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
+            <span className={\`px-2 py-1 rounded-full text-xs font-medium \${getRoleBadgeColor(user.role)}\`}>
+              {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            </span>
+          </div>
+        </div>
+        
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-blue-500 hover:text-blue-700"
+          className="text-blue-500 hover:text-blue-700 transition-colors duration-200 font-medium"
         >
           {isExpanded ? 'Show Less' : 'Show More'}
         </button>
       </div>
       
       {isExpanded && (
-        <div className="mt-4 space-y-2">
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
-          <p><strong>Joined:</strong> {user.joinDate}</p>
+        <div className="mt-4 space-y-3 animate-fadeIn">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-600"><strong>Email:</strong> {user.email}</p>
+              <p className="text-sm text-gray-600"><strong>Joined:</strong> {formatDate(user.joinDate)}</p>
+              <p className="text-sm text-gray-600"><strong>Last Active:</strong> {formatDate(user.lastActive)}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600"><strong>Theme:</strong> {user.preferences.theme}</p>
+              <p className="text-sm text-gray-600"><strong>Notifications:</strong> {user.preferences.notifications ? 'Enabled' : 'Disabled'}</p>
+              <p className="text-sm text-gray-600"><strong>Language:</strong> {user.preferences.language}</p>
+            </div>
+          </div>
+          
+          <div className="flex space-x-2 pt-3 border-t border-gray-200">
+            <button 
+              onClick={handleEdit}
+              disabled={isLoading}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50"
+            >
+              {isLoading ? 'Loading...' : 'Edit User'}
+            </button>
+            <button 
+              onClick={handleDelete}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200"
+            >
+              Delete User
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -71,6 +174,106 @@ const UserCard = ({ user }) => {
 };
 
 export default UserCard;`;
+
+  const seeAIActionCode = `// AI Generated API with Authentication & Validation
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
+
+const app = express();
+app.use(express.json());
+
+// Rate limiting middleware
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 requests per windowMs
+  message: 'Too many login attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid or expired token' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// User registration endpoint
+app.post('/api/auth/register', [
+  body('email').isEmail().normalizeEmail(),
+  body('password').isLength({ min: 8 }).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/),
+  body('name').trim().isLength({ min: 2, max: 50 })
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password, name } = req.body;
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: 'User already exists' });
+    }
+
+    // Hash password
+    const saltRounds = 12;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create user
+    const user = new User({
+      email,
+      password: hashedPassword,
+      name,
+      createdAt: new Date(),
+      isActive: true
+    });
+
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({
+      message: 'User created successfully',
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name
+      }
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});`;
 
   const features = [
     {
@@ -140,25 +343,37 @@ export default UserCard;`;
       title: "React Component Generator",
       description: "Generate a complete React component with props and state management",
       example: "Create a user profile card with hover effects",
-      result: "✅ Generated functional React component with TypeScript support"
+      result: "✅ Generated functional React component with TypeScript support",
+      icon: <Code className="h-6 w-6" />,
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600"
     },
     {
       title: "Bug Detection & Fix",
       description: "Automatically identify and fix common programming errors",
       example: "Fix memory leak in useEffect hook",
-      result: "✅ Identified missing dependency array and cleanup function"
+      result: "✅ Identified missing dependency array and cleanup function",
+      icon: <Bug className="h-6 w-6" />,
+      bgColor: "bg-red-50",
+      iconColor: "text-red-600"
     },
     {
       title: "API Endpoint Creation",
       description: "Build RESTful API endpoints with proper validation",
       example: "Create user authentication API with JWT",
-      result: "✅ Generated secure API with bcrypt hashing and middleware"
+      result: "✅ Generated secure API with bcrypt hashing and middleware",
+      icon: <Globe className="h-6 w-6" />,
+      bgColor: "bg-green-50",
+      iconColor: "text-green-600"
     },
     {
       title: "Database Query Optimization",
       description: "Optimize slow database queries for better performance",
       example: "Optimize complex JOIN query for user analytics",
-      result: "✅ Improved query performance by 85% with proper indexing"
+      result: "✅ Improved query performance by 85% with proper indexing",
+      icon: <Zap className="h-6 w-6" />,
+      bgColor: "bg-yellow-50",
+      iconColor: "text-yellow-600"
     }
   ];
 
@@ -239,6 +454,51 @@ export default UserCard;`;
     }
   ];
 
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Senior Developer at TechCorp",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      content: "Coding Killer has transformed my development workflow. The AI-generated code is incredibly accurate and saves me hours every day. The bug detection feature alone has prevented countless production issues.",
+      rating: 5
+    },
+    {
+      name: "Michael Chen",
+      role: "Full-Stack Developer",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      content: "As a freelancer, time is money. This tool helps me deliver projects faster without compromising quality. The code explanations are particularly helpful when working with unfamiliar technologies.",
+      rating: 5
+    },
+    {
+      name: "Emily Rodriguez",
+      role: "Tech Lead at StartupXYZ",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      content: "Our team's productivity has increased by 40% since adopting Coding Killer. The API generation tool is phenomenal - it creates production-ready endpoints with proper validation and security.",
+      rating: 5
+    },
+    {
+      name: "David Kim",
+      role: "Software Engineer",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      content: "The code refactoring tool is a game-changer. It not only improves code quality but also teaches me best practices. I've learned more about clean code in the past month than in years of experience.",
+      rating: 5
+    },
+    {
+      name: "Lisa Thompson",
+      role: "Junior Developer",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+      content: "As someone new to programming, the code explainer feature has been invaluable. It breaks down complex algorithms in a way that's easy to understand. Highly recommend for beginners!",
+      rating: 5
+    },
+    {
+      name: "Alex Johnson",
+      role: "DevOps Engineer",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      content: "The deployment script generator saves me tons of time. It creates robust, production-ready deployment scripts for various platforms. The security checker is also top-notch.",
+      rating: 5
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <SEO 
@@ -285,7 +545,7 @@ export default UserCard;`;
             <div className="lg:pl-8">
               <div className="h-96 w-full">
                 <CodeSlider 
-                  code={sampleCode}
+                  code={heroSampleCode}
                   language="javascript"
                   title="AI Generated Component"
                 />
@@ -298,7 +558,7 @@ export default UserCard;`;
       {/* Real-time Counter */}
       <RealtimeCounter />
 
-      {/* Powerful AI Tools Section - Moved before Success Stories */}
+      {/* Powerful AI Tools Section */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -326,10 +586,10 @@ export default UserCard;`;
         </div>
       </section>
 
-      {/* Success Showcase - Moved after Powerful AI Tools */}
+      {/* Success Showcase */}
       <SuccessShowcase />
 
-      {/* See AI in Action Section - Modern Grid Layout */}
+      {/* See AI in Action Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -339,11 +599,13 @@ export default UserCard;`;
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {aiDemoExamples.map((demo, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-primary/20 bg-white/80 backdrop-blur-sm">
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-primary/20 bg-white/80 backdrop-blur-sm overflow-hidden">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
-                      <Play className="h-6 w-6 text-primary" />
+                    <div className={`p-3 ${demo.bgColor} rounded-lg`}>
+                      <div className={demo.iconColor}>
+                        {demo.icon}
+                      </div>
                     </div>
                     <div className="flex items-center gap-1 text-sm text-gray-500">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
@@ -366,6 +628,17 @@ export default UserCard;`;
                       {demo.result}
                     </p>
                   </div>
+                  
+                  {/* Code Preview */}
+                  <div className="mb-4">
+                    <CodeSlider 
+                      code={seeAIActionCode}
+                      language="javascript"
+                      title="Generated Code Preview"
+                      maxHeight={200}
+                    />
+                  </div>
+                  
                   <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
                     Try This Tool
                     <ChevronRight className="h-4 w-4 ml-2" />
@@ -452,7 +725,7 @@ export default UserCard;`;
         </div>
       </section>
 
-      {/* Frequently Asked Questions - Updated Layout */}
+      {/* Frequently Asked Questions */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -460,54 +733,60 @@ export default UserCard;`;
             <p className="text-xl text-gray-600">Everything you need to know about our AI coding assistant</p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </div>
-            ))}
+          <div className="max-w-4xl mx-auto">
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg shadow-sm border border-gray-200">
+                  <AccordionTrigger className="px-6 py-4 text-left hover:no-underline">
+                    <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-4">
+                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
 
-      {/* Developer Community Section - Replaced Join Our Community */}
+      {/* Testimonials Section */}
       <section className="py-20 px-4 bg-gradient-to-r from-primary/10 to-primary/5">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold gradient-text mb-6">Join Our Developer Community</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Connect with thousands of developers, share your projects, get help, and stay updated with the latest AI coding trends.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">50,000+</h3>
-              <p className="text-gray-600">Active Developers</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <MessageCircle className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">24/7</h3>
-              <p className="text-gray-600">Community Support</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <Github className="h-12 w-12 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Open Source</h3>
-              <p className="text-gray-600">Collaborative Projects</p>
-            </div>
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold gradient-text mb-4">What Developers Say</h2>
+            <p className="text-xl text-gray-600">Join thousands of developers who trust Coding Killer</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              Join Discord Community
-            </Button>
-            <Button variant="outline" size="lg">
-              Follow on GitHub
-            </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <img 
+                      src={testimonial.avatar} 
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
+                      <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  
+                  <div className="relative">
+                    <Quote className="h-6 w-6 text-primary/20 absolute -top-2 -left-1" />
+                    <p className="text-gray-700 italic pl-6">{testimonial.content}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

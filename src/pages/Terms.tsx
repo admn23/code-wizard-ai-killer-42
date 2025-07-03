@@ -1,264 +1,221 @@
 
-import Header from '@/components/Header';
+import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, AlertTriangle, Scale, CreditCard, Shield, Ban } from 'lucide-react';
+import { FileText, Shield, AlertTriangle, Users } from 'lucide-react';
 
 const Terms = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO 
+        title="Terms of Service"
+        description="Terms of Service for Coding Killer - AI-powered coding assistant platform"
+        canonical="/terms"
+      />
+      
+      <Navbar1 />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold gradient-text mb-4">Terms of Service</h1>
             <p className="text-xl text-gray-600">
-              Please read these terms carefully before using our services
+              Terms and conditions for using Coding Killer services
             </p>
             <p className="text-sm text-gray-500 mt-2">Last updated: January 2024</p>
           </div>
 
           <div className="space-y-8">
+            {/* Acceptance of Terms */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                  Acceptance of Terms
+                  <FileText className="h-5 w-5 text-blue-600" />
+                  1. Acceptance of Terms
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  By accessing and using Coding Killer services, you accept and agree to be bound by the terms 
-                  and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  By accessing and using Coding Killer ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                </p>
+                <p>
+                  These Terms of Service ("Terms") govern your use of our website located at codingkiller.com (the "Service") operated by Coding Killer ("us", "we", or "our").
                 </p>
               </CardContent>
             </Card>
 
+            {/* Use License */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
-                  Acceptable Use Policy
+                  <Shield className="h-5 w-5 text-green-600" />
+                  2. Use License
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">You agree to use our services responsibly and not to:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Generate, request, or promote illegal, harmful, or offensive content
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Abuse or spam our AI services with excessive or automated requests
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Share your account credentials with others or create multiple accounts
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Attempt to reverse engineer, hack, or compromise our systems
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Use our service to violate any applicable laws or regulations
-                  </li>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  Permission is granted to temporarily download one copy of Coding Killer's materials for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                </p>
+                <ul>
+                  <li>modify or copy the materials</li>
+                  <li>use the materials for any commercial purpose or for any public display</li>
+                  <li>attempt to reverse engineer any software contained on the website</li>
+                  <li>remove any copyright or other proprietary notations from the materials</li>
                 </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-primary" />
-                  Fair Use and API Limits
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">To ensure fair access for all users:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Credit usage is tracked and limited based on your subscription plan
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Excessive usage may result in temporary rate limiting
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    API token limits are enforced to maintain service quality
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Commercial usage requires an appropriate subscription plan
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Ban className="h-5 w-5 text-red-500" />
-                  Account Suspension and Termination
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">We may suspend or terminate your account if you:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Violate our Acceptable Use Policy
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Fail to pay for services or dispute legitimate charges
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Engage in fraudulent or deceptive practices
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Cause harm to our service or other users
-                  </li>
-                </ul>
-                <p className="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg mt-4">
-                  <AlertTriangle className="h-4 w-4 inline mr-2" />
-                  Account suspension may result in loss of credits and access to generated content.
+                <p>
+                  This license shall automatically terminate if you violate any of these restrictions and may be terminated by us at any time.
                 </p>
               </CardContent>
             </Card>
 
+            {/* User Accounts */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-primary" />
-                  Credit Usage and Billing
+                  <Users className="h-5 w-5 text-purple-600" />
+                  3. User Accounts
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">Credit system rules:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Credits are consumed when you use AI tools and services
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Credits are non-refundable once used for AI processing
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Pro plan credits reset monthly; Free plan credits do not reset
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    All payments are processed securely through bKash
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Subscription renewals are automatic unless cancelled
-                  </li>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  When you create an account with us, you must provide information that is accurate, complete, and current at all times. You are responsible for safeguarding the password and for all activities that occur under your account.
+                </p>
+                <p>
+                  You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Payment Terms */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-orange-600" />
+                  4. Payment Terms
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  Our Service operates on a credit-based system. Credits are required to use AI-powered tools and features. Payment plans include:
+                </p>
+                <ul>
+                  <li><strong>Free Plan:</strong> 5 credits per month</li>
+                  <li><strong>Pro Plan:</strong> 500 credits per month ($10/month)</li>
+                  <li><strong>Enterprise Plan:</strong> 1,500 credits per month ($20/month)</li>
+                </ul>
+                <p>
+                  All payments are processed through bKash. Subscriptions are billed monthly and will automatically renew unless cancelled. Refunds are subject to our Refund Policy.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Prohibited Uses */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                  5. Prohibited Uses
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  You may not use our Service:
+                </p>
+                <ul>
+                  <li>For any unlawful purpose or to solicit others to perform acts contrary to the law</li>
+                  <li>To generate malicious code, viruses, or harmful software</li>
+                  <li>To violate any international, federal, provincial, or state regulations, rules, laws, or local ordinances</li>
+                  <li>To infringe upon or violate our intellectual property rights or the intellectual property rights of others</li>
+                  <li>To harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate</li>
+                  <li>To submit false or misleading information</li>
+                  <li>To interfere with or circumvent the security features of the Service</li>
                 </ul>
               </CardContent>
             </Card>
 
+            {/* Intellectual Property */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
-                  Intellectual Property
+                  <Shield className="h-5 w-5 text-indigo-600" />
+                  6. Intellectual Property Rights
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">Regarding content and intellectual property:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    You retain rights to code and content you input into our service
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    AI-generated content is provided as-is without warranty of originality
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    You are responsible for ensuring your use complies with applicable laws
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Our service, branding, and technology remain our intellectual property
-                  </li>
-                </ul>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  The Service and its original content, features, and functionality are and will remain the exclusive property of Coding Killer and its licensors. The Service is protected by copyright, trademark, and other laws.
+                </p>
+                <p>
+                  Code generated by our AI tools becomes your property upon generation. However, you acknowledge that similar code may be generated for other users, and you cannot claim exclusive rights to common programming patterns or widely-used code structures.
+                </p>
               </CardContent>
             </Card>
 
+            {/* Termination */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                  Disclaimers and Limitations
+                  7. Termination
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-gray-600">Important disclaimers:</p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-yellow-600 rounded-full mt-2 flex-shrink-0"></span>
-                    AI-generated code may contain errors and should be reviewed before use
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-yellow-600 rounded-full mt-2 flex-shrink-0"></span>
-                    We do not guarantee the accuracy or completeness of AI responses
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-yellow-600 rounded-full mt-2 flex-shrink-0"></span>
-                    Service availability is not guaranteed and may be interrupted
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="w-2 h-2 bg-yellow-600 rounded-full mt-2 flex-shrink-0"></span>
-                    We are not liable for any damages arising from use of our service
-                  </li>
-                </ul>
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.
+                </p>
+                <p>
+                  If you wish to terminate your account, you may simply discontinue using the Service or contact us to request account deletion.
+                </p>
               </CardContent>
             </Card>
 
+            {/* Disclaimer */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Scale className="h-5 w-5 text-primary" />
-                  Governing Law and Jurisdiction
+                  <FileText className="h-5 w-5 text-gray-600" />
+                  8. Disclaimer
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  These terms shall be governed by and construed in accordance with the laws of Bangladesh. 
-                  Any disputes arising under these terms shall be subject to the exclusive jurisdiction of 
-                  the courts of Bangladesh.
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  The information on this website is provided on an "as is" basis. To the fullest extent permitted by law, this Company:
+                </p>
+                <ul>
+                  <li>Excludes all representations and warranties relating to this website and its contents</li>
+                  <li>Excludes all liability for damages arising out of or in connection with your use of this website</li>
+                </ul>
+                <p>
+                  AI-generated code should be reviewed and tested before use in production environments. We do not guarantee the accuracy, completeness, or functionality of generated code.
                 </p>
               </CardContent>
             </Card>
 
+            {/* Changes to Terms */}
             <Card>
               <CardHeader>
-                <CardTitle>Changes to Terms</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-teal-600" />
+                  9. Changes to Terms
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  We reserve the right to modify these terms at any time. Changes will be effective immediately 
-                  upon posting. Your continued use of the service constitutes acceptance of the modified terms. 
-                  We recommend reviewing these terms periodically for updates.
+              <CardContent className="prose prose-gray max-w-none">
+                <p>
+                  We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect.
+                </p>
+                <p>
+                  By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms.
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="bg-blue-50 border-blue-200">
+            {/* Contact Information */}
+            <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
               <CardContent className="pt-6 text-center">
-                <h3 className="font-semibold text-blue-900 mb-2">Questions about our Terms?</h3>
-                <p className="text-blue-800 mb-4">Contact us for clarification</p>
+                <h3 className="text-xl font-bold mb-2">Contact Us</h3>
+                <p className="text-gray-600 mb-4">
+                  If you have any questions about these Terms of Service, please contact us:
+                </p>
                 <a 
                   href="mailto:21ashikur1234@gmail.com" 
                   className="text-primary hover:underline font-medium"

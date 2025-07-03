@@ -1,5 +1,6 @@
 
-import Header from '@/components/Header';
+import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
@@ -23,7 +24,13 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO 
+        title="About Us"
+        description="Learn about Coding Killer's mission to make coding effortless and accessible to everyone with AI-powered development tools"
+        canonical="/about"
+      />
+      
+      <Navbar1 />
       
       {/* Hero Section */}
       <section className="py-20 px-4">
@@ -125,7 +132,7 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-hero-gradient text-white">
+      <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/80 text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Start Building with AI?</h2>
           <p className="text-xl mb-8 opacity-90">

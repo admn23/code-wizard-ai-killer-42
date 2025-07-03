@@ -130,37 +130,51 @@ const Navbar1 = () => {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-4">
           {user ? (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <Button
-                onClick={handleSignOut}
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-              >
-                Sign Out
-              </Button>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <Link to="/signup">
-                <Button
-                  size="sm"
-                  className="bg-primary hover:bg-primary/90 text-white rounded-full"
-                >
-                  Get Started
+            <>
+              <Link to="/profile">
+                <Button variant="ghost" size="sm" className="rounded-full">
+                  Profile
                 </Button>
               </Link>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Button
+                  onClick={handleSignOut}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                >
+                  Sign Out
+                </Button>
+              </motion.div>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="rounded-full">
+                  Login
+                </Button>
+              </Link>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Link to="/signup">
+                  <Button
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-full"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </motion.div>
+            </>
           )}
         </div>
 
@@ -232,24 +246,38 @@ const Navbar1 = () => {
                 className="pt-6 space-y-4"
               >
                 {user ? (
-                  <Button
-                    onClick={() => {
-                      handleSignOut()
-                      toggleMenu()
-                    }}
-                    variant="outline"
-                    className="w-full rounded-full"
-                  >
-                    Sign Out
-                  </Button>
+                  <>
+                    <Link to="/profile" onClick={toggleMenu}>
+                      <Button variant="ghost" className="w-full rounded-full">
+                        Profile
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        handleSignOut()
+                        toggleMenu()
+                      }}
+                      variant="outline"
+                      className="w-full rounded-full"
+                    >
+                      Sign Out
+                    </Button>
+                  </>
                 ) : (
-                  <Link
-                    to="/signup"
-                    className="inline-flex items-center justify-center w-full px-5 py-3 text-base text-white bg-primary rounded-full hover:bg-primary/90 transition-colors"
-                    onClick={toggleMenu}
-                  >
-                    Get Started
-                  </Link>
+                  <>
+                    <Link to="/login" onClick={toggleMenu}>
+                      <Button variant="ghost" className="w-full rounded-full">
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="inline-flex items-center justify-center w-full px-5 py-3 text-base text-white bg-primary rounded-full hover:bg-primary/90 transition-colors"
+                      onClick={toggleMenu}
+                    >
+                      Get Started
+                    </Link>
+                  </>
                 )}
               </motion.div>
             </div>

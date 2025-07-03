@@ -1,5 +1,6 @@
 
 import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -70,6 +71,12 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-roboto">
+      <SEO 
+        title="Pricing"
+        description="Choose the perfect plan for your development needs. All plans include access to our complete suite of AI-powered coding tools."
+        canonical="/pricing"
+      />
+      
       <Navbar1 />
       
       <div className="container mx-auto px-4 py-16">
