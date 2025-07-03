@@ -1339,7 +1339,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
                   {/* Code Preview */}
                   <div className="mb-4">
-                    <CodeSlider
+                    <EnhancedCodeSlider
                       code={codeExamples[demo.codeType]}
                       language={demo.codeType}
                       title={`Generated ${demo.codeType.toUpperCase()} Code`}
