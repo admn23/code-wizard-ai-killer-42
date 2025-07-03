@@ -135,8 +135,6 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
     }, 2000);
   };
 
-  const manualScrollTimeout = useRef<NodeJS.Timeout>();
-
   // Stop auto scroll on manual interaction
   const handleManualInteraction = () => {
     setIsManualScrolling(true);
