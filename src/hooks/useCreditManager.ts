@@ -4,6 +4,34 @@ import { useUserData } from "@/hooks/useUserData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+// Utility function to safely log errors
+const logError = (context: string, error: any) => {
+  try {
+    if (error && typeof error === "object") {
+      console.error(context, {
+        message: error.message || "Unknown error",
+        code: error.code || "No code",
+        details: error.details || "No details",
+        hint: error.hint || "No hint",
+        statusCode: error.statusCode || "No status",
+        errorString: JSON.stringify(
+          error,
+          Object.getOwnPropertyNames(error),
+          2,
+        ),
+      });
+    } else {
+      console.error(context, String(error));
+    }
+  } catch (logErr) {
+    console.error(
+      context,
+      "Error occurred but could not be logged:",
+      String(error),
+    );
+  }
+};
+
 export const useCreditManager = () => {
   const { user } = useAuth();
   const { profile } = useUserData();
@@ -49,12 +77,7 @@ export const useCreditManager = () => {
         .eq("id", user.id);
 
       if (profileError) {
-        console.error("Error updating profile:", {
-          message: profileError.message,
-          details: profileError.details,
-          hint: profileError.hint,
-          code: profileError.code,
-        });
+        logError("Error updating profile:", profileError);
         toast.error("Failed to deduct credits");
         return false;
       }
@@ -76,12 +99,7 @@ export const useCreditManager = () => {
           .eq("user_id", user.id);
 
         if (creditsError) {
-          console.error("Error updating user credits:", {
-            message: creditsError.message,
-            details: creditsError.details,
-            hint: creditsError.hint,
-            code: creditsError.code,
-          });
+          logError("Error updating user credits:", creditsError);
         }
       } else {
         // Create new user_credits entry
@@ -95,12 +113,7 @@ export const useCreditManager = () => {
           });
 
         if (createCreditsError) {
-          console.error("Error creating user credits:", {
-            message: createCreditsError.message,
-            details: createCreditsError.details,
-            hint: createCreditsError.hint,
-            code: createCreditsError.code,
-          });
+          logError("Error creating user credits:", createCreditsError);
         }
       }
 
@@ -116,12 +129,7 @@ export const useCreditManager = () => {
         });
 
       if (activityError) {
-        console.error("Error logging activity:", {
-          message: activityError.message,
-          details: activityError.details,
-          hint: activityError.hint,
-          code: activityError.code,
-        });
+        logError("Error logging activity:", activityError);
       }
 
       toast.success(`${creditsToDeduct} credits deducted successfully`);
