@@ -89,7 +89,13 @@ function safeValidateEmail(email) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Bug Fixer"
+        description="Find and fix bugs in your code automatically with AI-powered analysis and solutions."
+        canonical="/tools/bug-fixer"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
