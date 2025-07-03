@@ -103,7 +103,7 @@ const Dashboard = () => {
   if (authLoading || dataLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <Navbar1 />
+        <Navbar2 />
         <div className="min-h-screen flex items-center justify-center">
           <div className="loading-dots">
             <span></span>
@@ -178,7 +178,7 @@ const Dashboard = () => {
         canonical="/dashboard"
       />
 
-      <Navbar1 />
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
