@@ -4,22 +4,55 @@ import { useUserData } from "@/hooks/useUserData";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-// Utility function to safely log errors
+// Enhanced utility function to safely log errors
 const logError = (context: string, error: any) => {
+  console.log("💳 CREDIT MANAGER - Logging error:", context);
+
   try {
     if (error && typeof error === "object") {
-      console.error("🚨", context, {
-        message: error.message || "Unknown error",
-        code: error.code || "No code",
-        details: error.details || "No details",
-        hint: error.hint || "No hint",
-        status: error.status || error.statusCode || "No status",
-      });
+      // Extract all possible error properties
+      const errorDetails = {
+        message: error.message || "No message provided",
+        code: error.code || "No error code",
+        details: error.details || "No additional details",
+        hint: error.hint || "No hint provided",
+        status: error.status || error.statusCode || "No status code",
+        name: error.name || "Unknown error type",
+      };
+
+      console.error("🚨 CREDIT ERROR:", context);
+      console.error("📋 Error Details:", errorDetails);
+
+      // Also log the raw error for debugging
+      console.error("🔍 Raw Error Object:", error);
+
+      // Try to stringify it safely
+      try {
+        const serialized = JSON.stringify(
+          error,
+          Object.getOwnPropertyNames(error),
+          2,
+        );
+        console.error("📄 Serialized Error:", serialized);
+      } catch (e) {
+        console.error("❌ Cannot serialize error object");
+      }
     } else {
-      console.error("🚨", context, String(error));
+      console.error(
+        "🚨 CREDIT ERROR:",
+        context,
+        "Non-object error:",
+        String(error),
+      );
     }
   } catch (logErr) {
-    console.error("🚨", context, "Error logging failed:", String(error));
+    console.error(
+      "🚨 CREDIT ERROR:",
+      context,
+      "Critical: Error logging completely failed",
+    );
+    console.error("Original error (forced string):", String(error));
+    console.error("Logging failure:", String(logErr));
   }
 };
 
