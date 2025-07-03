@@ -22,6 +22,34 @@ interface UserActivity {
   created_at: string;
 }
 
+// Utility function to safely log errors
+const logError = (context: string, error: any) => {
+  try {
+    if (error && typeof error === "object") {
+      console.error(context, {
+        message: error.message || "Unknown error",
+        code: error.code || "No code",
+        details: error.details || "No details",
+        hint: error.hint || "No hint",
+        statusCode: error.statusCode || "No status",
+        errorString: JSON.stringify(
+          error,
+          Object.getOwnPropertyNames(error),
+          2,
+        ),
+      });
+    } else {
+      console.error(context, String(error));
+    }
+  } catch (logErr) {
+    console.error(
+      context,
+      "Error occurred but could not be logged:",
+      String(error),
+    );
+  }
+};
+
 export const useUserData = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -29,9 +57,14 @@ export const useUserData = () => {
   const [loading, setLoading] = useState(true);
 
   const refetch = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log("Refetch called but no user logged in");
+      return;
+    }
 
+    console.log("Refetching user data for user:", user.id);
     setLoading(true);
+
     try {
       // Fetch user profile
       const { data: profileData, error: profileError } = await supabase
@@ -41,19 +74,17 @@ export const useUserData = () => {
         .single();
 
       if (profileError) {
-        // Check if it's just that no profile exists yet
         if (profileError.code === "PGRST116") {
-          console.log("No profile found for user, will create one");
+          console.log(
+            "No profile found for user during refetch, setting to null",
+          );
           setProfile(null);
         } else {
-          console.error("Error fetching profile:", {
-            message: profileError.message,
-            details: profileError.details,
-            hint: profileError.hint,
-            code: profileError.code,
-          });
+          logError("Error fetching profile (refetch):", profileError);
+          setProfile(null);
         }
       } else if (profileData) {
+        console.log("Profile fetched successfully:", profileData);
         setProfile(profileData);
       }
 
@@ -66,19 +97,18 @@ export const useUserData = () => {
         .limit(10);
 
       if (activitiesError) {
-        console.error("Error fetching activities:", {
-          message: activitiesError.message,
-          details: activitiesError.details,
-          hint: activitiesError.hint,
-          code: activitiesError.code,
-        });
-        // Set empty array if there's an error
+        logError("Error fetching activities (refetch):", activitiesError);
         setActivities([]);
       } else {
+        console.log(
+          "Activities fetched successfully:",
+          activitiesData?.length || 0,
+          "records",
+        );
         setActivities(activitiesData || []);
       }
     } catch (error) {
-      console.error("Error refetching user data:", error);
+      logError("Error refetching user data:", error);
       setProfile(null);
       setActivities([]);
     } finally {
@@ -88,17 +118,21 @@ export const useUserData = () => {
 
   useEffect(() => {
     if (!user) {
+      console.log("No user logged in, resetting state");
       setProfile(null);
       setActivities([]);
       setLoading(false);
       return;
     }
 
+    console.log("User logged in, fetching data for:", user.id, user.email);
+
     const fetchUserData = async () => {
       try {
         setLoading(true);
 
         // Fetch user profile
+        console.log("Fetching profile for user:", user.id);
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .select("*")
@@ -106,9 +140,8 @@ export const useUserData = () => {
           .single();
 
         if (profileError) {
-          // Check if it's just that no profile exists yet
           if (profileError.code === "PGRST116") {
-            console.log("No profile found for user, will create one");
+            console.log("No profile found, attempting to create one");
             // Create a basic profile for the user
             const { data: newProfile, error: createError } = await supabase
               .from("profiles")
@@ -124,28 +157,23 @@ export const useUserData = () => {
               .single();
 
             if (createError) {
-              console.error("Error creating profile:", {
-                message: createError.message,
-                details: createError.details,
-                hint: createError.hint,
-                code: createError.code,
-              });
+              logError("Error creating profile:", createError);
+              setProfile(null);
             } else {
+              console.log("Profile created successfully:", newProfile);
               setProfile(newProfile);
             }
           } else {
-            console.error("Error fetching profile:", {
-              message: profileError.message,
-              details: profileError.details,
-              hint: profileError.hint,
-              code: profileError.code,
-            });
+            logError("Error fetching profile:", profileError);
+            setProfile(null);
           }
         } else if (profileData) {
+          console.log("Profile found:", profileData);
           setProfile(profileData);
         }
 
         // Fetch recent activities
+        console.log("Fetching activities for user:", user.id);
         const { data: activitiesData, error: activitiesError } = await supabase
           .from("user_activities")
           .select("*")
@@ -154,19 +182,18 @@ export const useUserData = () => {
           .limit(10);
 
         if (activitiesError) {
-          console.error("Error fetching activities:", {
-            message: activitiesError.message,
-            details: activitiesError.details,
-            hint: activitiesError.hint,
-            code: activitiesError.code,
-          });
-          // Set empty array if there's an error
+          logError("Error fetching activities:", activitiesError);
           setActivities([]);
         } else {
+          console.log(
+            "Activities found:",
+            activitiesData?.length || 0,
+            "records",
+          );
           setActivities(activitiesData || []);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        logError("Error fetching user data:", error);
         setProfile(null);
         setActivities([]);
       } finally {
@@ -188,7 +215,7 @@ export const useUserData = () => {
           filter: `id=eq.${user.id}`,
         },
         (payload) => {
-          console.log("Profile updated:", payload);
+          console.log("Profile updated via realtime:", payload);
           if (payload.eventType === "UPDATE" && payload.new) {
             setProfile(payload.new as UserProfile);
           }
@@ -208,7 +235,7 @@ export const useUserData = () => {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log("New activity:", payload);
+          console.log("New activity via realtime:", payload);
           if (payload.new) {
             setActivities((prev) => [
               payload.new as UserActivity,
@@ -220,6 +247,7 @@ export const useUserData = () => {
       .subscribe();
 
     return () => {
+      console.log("Cleaning up realtime subscriptions");
       supabase.removeChannel(profileChannel);
       supabase.removeChannel(activitiesChannel);
     };
