@@ -71,15 +71,39 @@ const Profile = () => {
       toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (error) {
-      const errorMessage = error?.message || "Unknown error occurred";
-      const errorCode = error?.code || "No error code";
-      const errorDetails = error?.details || "No additional details";
+      // Comprehensive error handling to prevent [object Object] display
+      let errorMessage = "Unknown error occurred";
+      let errorCode = "No error code";
+      let errorDetails = "No additional details";
+
+      if (error && typeof error === "object") {
+        errorMessage =
+          error.message ||
+          error.error_description ||
+          error.description ||
+          "Unknown error occurred";
+        errorCode =
+          error.code || error.error_code || error.status || "No error code";
+        errorDetails =
+          error.details ||
+          error.hint ||
+          error.error_hint ||
+          "No additional details";
+      } else if (error) {
+        errorMessage = String(error);
+      }
+
+      // Ensure message is always a string
+      errorMessage = String(errorMessage);
+      errorCode = String(errorCode);
+      errorDetails = String(errorDetails);
 
       console.error("Error updating profile:", {
         message: errorMessage,
         code: errorCode,
         details: errorDetails,
         timestamp: new Date().toISOString(),
+        originalError: error,
       });
 
       toast.error(`Failed to update profile: ${errorMessage}`);
