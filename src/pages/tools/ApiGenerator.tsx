@@ -352,7 +352,13 @@ if __name__ == '__main__':
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI API Generator"
+        description="Generate REST API endpoints with proper routing, validation, and authentication using AI."
+        canonical="/tools/api-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

@@ -94,7 +94,13 @@ This code snippet demonstrates a typical React functional component with state m
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Code Explainer"
+        description="Get detailed explanations of complex code snippets and algorithms with AI-powered analysis."
+        canonical="/tools/code-explainer"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

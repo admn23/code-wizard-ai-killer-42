@@ -107,7 +107,13 @@ export default example;`,
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Code Generator"
+        description="Generate high-quality code from natural language descriptions using advanced AI."
+        canonical="/tools/code-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
