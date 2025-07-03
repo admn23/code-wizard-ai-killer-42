@@ -57,16 +57,34 @@ const Profile = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          full_name: formData.full_name,
-          email: formData.email,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", user.id);
+      // First, try using the secure function approach
+      const { error: functionError } = await supabase.rpc(
+        "update_user_profile",
+        {
+          profile_id: user.id,
+          new_full_name: formData.full_name,
+          new_email: formData.email,
+        },
+      );
 
-      if (error) throw error;
+      if (functionError) {
+        console.log(
+          "Function approach failed, trying direct update:",
+          functionError,
+        );
+
+        // Fallback to direct table update
+        const { error: directError } = await supabase
+          .from("profiles")
+          .update({
+            full_name: formData.full_name,
+            email: formData.email,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", user.id);
+
+        if (directError) throw directError;
+      }
 
       toast.success("Profile updated successfully");
       setIsEditing(false);
@@ -98,12 +116,23 @@ const Profile = () => {
       errorCode = String(errorCode);
       errorDetails = String(errorDetails);
 
+      // Special handling for permission errors
+      if (errorMessage.includes("permission denied") || errorCode === "42501") {
+        errorMessage =
+          "Permission denied. Please try logging out and logging back in, or contact support if the issue persists.";
+      }
+
       console.error("Error updating profile:", {
         message: errorMessage,
         code: errorCode,
         details: errorDetails,
         timestamp: new Date().toISOString(),
         originalError: error,
+        userId: user.id,
+        attemptedUpdate: {
+          full_name: formData.full_name,
+          email: formData.email,
+        },
       });
 
       toast.error(`Failed to update profile: ${errorMessage}`);
