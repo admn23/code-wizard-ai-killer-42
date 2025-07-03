@@ -40,6 +40,16 @@ const Dashboard = () => {
     lastUpdate: new Date(),
   });
 
+  // Debug logging
+  useEffect(() => {
+    console.log("Dashboard - User state:", {
+      user: user ? { id: user.id, email: user.email } : null,
+      authLoading,
+      profile,
+      dataLoading,
+    });
+  }, [user, authLoading, profile, dataLoading]);
+
   useEffect(() => {
     if (!authLoading && !user) {
       navigate("/login");
