@@ -207,9 +207,6 @@ const Dashboard = () => {
             </p>
           </div>
 
-          {/* Temporary error testing */}
-          <ErrorTest />
-
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             {/* Credit Balance */}
