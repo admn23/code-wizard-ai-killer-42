@@ -1296,80 +1296,150 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
       <SuccessShowcase />
 
       {/* See AI in Action Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
+      <section className="py-20 px-4 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold gradient-text mb-4">
               See AI in Action
             </h2>
-            <p className="text-xl text-gray-600">
-              Watch how our AI transforms your development workflow
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Watch how our AI generates clean, functional code from simple
+              descriptions. From React components to complex algorithms, our AI
+              delivers production-ready code in seconds.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {aiDemoExamples.map((demo, index) => (
-              <Card
-                key={index}
-                className="group hover:shadow-xl transition-all duration-300 border-primary/20 bg-white/80 backdrop-blur-sm overflow-hidden"
-              >
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 ${demo.bgColor} rounded-lg`}>
-                      <div className={demo.iconColor}>{demo.icon}</div>
+              <div key={index} className="group relative">
+                <Card className="h-full hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-lg overflow-hidden">
+                  {/* Header with features */}
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`p-3 ${demo.bgColor} rounded-xl shadow-lg`}
+                        >
+                          <div className={demo.iconColor}>{demo.icon}</div>
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors">
+                            {demo.title}
+                          </h3>
+                          <div className="flex items-center gap-1 text-sm text-gray-500">
+                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            <span>4.9</span>
+                            <span className="mx-1">•</span>
+                            <span>2-5 seconds</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-500">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span>4.9</span>
+
+                    <p className="text-gray-600 mb-4">{demo.description}</p>
+
+                    {/* Feature highlights */}
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                      <div className="bg-green-50 text-green-700 px-2 py-1 rounded text-xs text-center">
+                        <Check className="h-3 w-3 inline mr-1" />
+                        Instant code generation
+                      </div>
+                      <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs text-center">
+                        <Zap className="h-3 w-3 inline mr-1" />
+                        Best practices included
+                      </div>
+                      <div className="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs text-center">
+                        <Globe className="h-3 w-3 inline mr-1" />
+                        Multiple frameworks supported
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
-                    {demo.title}
-                  </CardTitle>
-                  <CardDescription className="text-gray-600">
-                    {demo.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-gray-700 mb-2">
-                      <strong>Example:</strong> {demo.example}
-                    </p>
-                    <p className="text-sm text-green-600">{demo.result}</p>
-                  </div>
+                  </CardHeader>
 
-                  {/* Code Preview */}
-                  <div className="mb-4">
-                    <EnhancedCodeSlider
-                      code={codeExamples[demo.codeType]}
-                      language={demo.codeType}
-                      title={`Generated ${demo.codeType.toUpperCase()} Code`}
-                      maxHeight={200}
-                      enableAutoScroll={true}
-                    />
-                  </div>
+                  <CardContent className="pt-0">
+                    {/* Example showcase */}
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 mb-4 border-l-4 border-primary">
+                      <div className="flex items-start gap-3">
+                        <div className="bg-primary/10 rounded-full p-2">
+                          <Play className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-700 mb-1">
+                            <strong>Example Request:</strong>
+                          </p>
+                          <p className="text-sm text-gray-600 italic mb-2">
+                            "{demo.example}"
+                          </p>
+                          <p className="text-sm font-medium text-green-600">
+                            {demo.result}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-                  <Link to={demo.toolPath}>
-                    <Button
-                      variant="outline"
-                      className="w-full group-hover:bg-primary group-hover:text-white transition-colors"
-                    >
-                      Try This Tool
-                      <ChevronRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                    {/* Code Preview */}
+                    <div className="mb-6">
+                      <EnhancedCodeSlider
+                        code={codeExamples[demo.codeType]}
+                        language={demo.codeType}
+                        title={`Generated ${demo.codeType.toUpperCase()} Code`}
+                        maxHeight={250}
+                        enableAutoScroll={true}
+                      />
+                    </div>
+
+                    {/* Action button */}
+                    <Link to={demo.toolPath}>
+                      <Button
+                        className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02]"
+                        size="lg"
+                      >
+                        <Play className="h-4 w-4 mr-2" />
+                        Try It Now
+                        <ChevronRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+
+                {/* Floating indicator */}
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-green-500 to-blue-500 text-white text-xs px-2 py-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  Live Demo
+                </div>
+              </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <Link to="/tools">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Explore All Tools
-                <ChevronRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+          {/* Bottom CTA section */}
+          <div className="text-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-primary/20">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Ready to Experience AI-Powered Development?
+            </h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Join thousands of developers who are already using our AI tools to
+              write better code faster. Start with any tool and see the magic
+              happen instantly.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/tools">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 shadow-lg"
+                >
+                  <Zap className="h-5 w-5 mr-2" />
+                  Explore All Tools
+                  <ChevronRight className="h-5 w-5 ml-2" />
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-primary text-primary hover:bg-primary hover:text-white"
+                >
+                  Start Free Trial
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
