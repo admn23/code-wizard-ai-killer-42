@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Navbar1 } from '@/components/ui/navbar-1';
+import SEO from '@/components/SEO';
+import TypingAnimation from '@/components/TypingAnimation';
+import CodeSlider from '@/components/CodeSlider';
 import { 
   Code, 
   Bug, 
@@ -16,18 +19,59 @@ import {
   BookOpen,
   Shield,
   Sparkles,
-  Check
+  Check,
+  Play,
+  ChevronRight,
+  Star,
+  Users,
+  MessageCircle,
+  Github
 } from 'lucide-react';
 import FloatingCTA from '@/components/FloatingCTA';
 import CookieConsent from '@/components/CookieConsent';
 import SuccessShowcase from '@/components/SuccessShowcase';
 import RealtimeCounter from '@/components/RealtimeCounter';
-import SocialMediaCTA from '@/components/SocialMediaCTA';
-import AIDemo from '@/components/AIDemo';
-import FAQ from '@/components/FAQ';
-import CodeSlideDemo from '@/components/CodeSlideDemo';
 
 const Index = () => {
+  const typingTexts = [
+    "Generate Code with AI",
+    "Fix Bugs Instantly", 
+    "Optimize Performance",
+    "Create Documentation",
+    "Build APIs Faster"
+  ];
+
+  const sampleCode = `// AI Generated React Component
+import React, { useState } from 'react';
+
+const UserCard = ({ user }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">{user.name}</h3>
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-blue-500 hover:text-blue-700"
+        >
+          {isExpanded ? 'Show Less' : 'Show More'}
+        </button>
+      </div>
+      
+      {isExpanded && (
+        <div className="mt-4 space-y-2">
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Role:</strong> {user.role}</p>
+          <p><strong>Joined:</strong> {user.joinDate}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UserCard;`;
+
   const features = [
     {
       icon: <Code className="h-8 w-8" />,
@@ -91,21 +135,30 @@ const Index = () => {
     }
   ];
 
-  const steps = [
+  const aiDemoExamples = [
     {
-      step: "1",
-      title: "Choose Your Plan",
-      description: "Select a subscription plan that fits your coding needs"
+      title: "React Component Generator",
+      description: "Generate a complete React component with props and state management",
+      example: "Create a user profile card with hover effects",
+      result: "✅ Generated functional React component with TypeScript support"
     },
     {
-      step: "2",
-      title: "Use AI Tools",
-      description: "Access our comprehensive suite of AI-powered coding tools"
+      title: "Bug Detection & Fix",
+      description: "Automatically identify and fix common programming errors",
+      example: "Fix memory leak in useEffect hook",
+      result: "✅ Identified missing dependency array and cleanup function"
     },
     {
-      step: "3",
-      title: "Code Smarter",
-      description: "Write better code faster with AI assistance and automation"
+      title: "API Endpoint Creation",
+      description: "Build RESTful API endpoints with proper validation",
+      example: "Create user authentication API with JWT",
+      result: "✅ Generated secure API with bcrypt hashing and middleware"
+    },
+    {
+      title: "Database Query Optimization",
+      description: "Optimize slow database queries for better performance",
+      example: "Optimize complex JOIN query for user analytics",
+      result: "✅ Improved query performance by 85% with proper indexing"
     }
   ];
 
@@ -159,8 +212,42 @@ const Index = () => {
     }
   ];
 
+  const faqs = [
+    {
+      question: "How does the AI code generation work?",
+      answer: "Our AI uses advanced machine learning models trained on millions of code repositories to understand your requirements and generate high-quality, production-ready code in any programming language."
+    },
+    {
+      question: "What programming languages are supported?",
+      answer: "We support all major programming languages including JavaScript, Python, Java, C++, Go, Rust, TypeScript, PHP, Ruby, and many more. The AI can also work with frameworks and libraries."
+    },
+    {
+      question: "How accurate is the bug detection?",
+      answer: "Our AI bug detection has a 95% accuracy rate for common programming errors, memory leaks, security vulnerabilities, and performance issues. It continuously learns from new patterns."
+    },
+    {
+      question: "Can I use this for commercial projects?",
+      answer: "Yes! All generated code is yours to use in any project, including commercial applications. We don't claim any ownership over the code you generate."
+    },
+    {
+      question: "What if I run out of credits?",
+      answer: "You can upgrade your plan anytime or purchase additional credits. We also offer custom enterprise plans for high-volume usage."
+    },
+    {
+      question: "Is my code data secure?",
+      answer: "Absolutely. We use enterprise-grade encryption and never store your code permanently. All processing is done securely and your intellectual property remains yours."
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white font-roboto">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <SEO 
+        title="Home"
+        description="AI-powered coding assistant that helps developers write better code faster with intelligent code generation, bug fixing, optimization, and more."
+        keywords="AI coding assistant, code generator, bug fixer, code optimization, programming tools"
+        canonical="/"
+      />
+      
       <Navbar1 />
       
       {/* Hero Section */}
@@ -172,6 +259,11 @@ const Index = () => {
                 <span className="gradient-text">AI Powered</span><br />
                 <span className="text-gray-900">Coding Assistant</span>
               </h1>
+              
+              <div className="text-xl md:text-2xl mb-6 min-h-[2rem]">
+                <TypingAnimation texts={typingTexts} />
+              </div>
+              
               <p className="text-xl md:text-2xl text-gray-600 mb-8">
                 Revolutionize your development workflow with AI-powered code generation, 
                 debugging, optimization, and more. Code smarter, not harder.
@@ -192,7 +284,11 @@ const Index = () => {
             
             <div className="lg:pl-8">
               <div className="h-96 w-full">
-                <CodeSlideDemo />
+                <CodeSlider 
+                  code={sampleCode}
+                  language="javascript"
+                  title="AI Generated Component"
+                />
               </div>
             </div>
           </div>
@@ -202,10 +298,7 @@ const Index = () => {
       {/* Real-time Counter */}
       <RealtimeCounter />
 
-      {/* Success Showcase */}
-      <SuccessShowcase />
-
-      {/* Features Grid */}
+      {/* Powerful AI Tools Section - Moved before Success Stories */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -233,11 +326,68 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AI Demo */}
-      <AIDemo />
+      {/* Success Showcase - Moved after Powerful AI Tools */}
+      <SuccessShowcase />
+
+      {/* See AI in Action Section - Modern Grid Layout */}
+      <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold gradient-text mb-4">See AI in Action</h2>
+            <p className="text-xl text-gray-600">Watch how our AI transforms your development workflow</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {aiDemoExamples.map((demo, index) => (
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-primary/20 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="p-3 bg-primary/10 rounded-lg">
+                      <Play className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <span>4.9</span>
+                    </div>
+                  </div>
+                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                    {demo.title}
+                  </CardTitle>
+                  <CardDescription className="text-gray-600">
+                    {demo.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-gray-700 mb-2">
+                      <strong>Example:</strong> {demo.example}
+                    </p>
+                    <p className="text-sm text-green-600">
+                      {demo.result}
+                    </p>
+                  </div>
+                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-colors">
+                    Try This Tool
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link to="/tools">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Explore All Tools
+                <ChevronRight className="h-5 w-5 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Compare Plans Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary/5 to-primary/10">
+      <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold gradient-text mb-4">
@@ -302,36 +452,68 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <FAQ />
-
-      {/* How It Works */}
-      <section className="py-20 px-4 bg-white">
+      {/* Frequently Asked Questions - Updated Layout */}
+      <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 gradient-text">How It Works</h2>
-            <p className="text-xl text-gray-600">Get started with AI-powered coding in 3 simple steps</p>
+            <h2 className="text-4xl font-bold gradient-text mb-4">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-600">Everything you need to know about our AI coding assistant</p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} className="text-center animate-scale-in">
-                <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">
-                  {step.step}
-                </div>
-                <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+
+          <div className="max-w-4xl mx-auto space-y-6">
+            {faqs.map((faq, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  {faq.question}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {faq.answer}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Social Media CTA */}
-      <SocialMediaCTA />
+      {/* Developer Community Section - Replaced Join Our Community */}
+      <section className="py-20 px-4 bg-gradient-to-r from-primary/10 to-primary/5">
+        <div className="container mx-auto text-center">
+          <h2 className="text-4xl font-bold gradient-text mb-6">Join Our Developer Community</h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Connect with thousands of developers, share your projects, get help, and stay updated with the latest AI coding trends.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">50,000+</h3>
+              <p className="text-gray-600">Active Developers</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <MessageCircle className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">24/7</h3>
+              <p className="text-gray-600">Community Support</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <Github className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Open Source</h3>
+              <p className="text-gray-600">Collaborative Projects</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              Join Discord Community
+            </Button>
+            <Button variant="outline" size="lg">
+              Follow on GitHub
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-hero-gradient text-white">
+      <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/80 text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6">Ready to Code Smarter?</h2>
           <p className="text-xl mb-8 opacity-90">
@@ -351,9 +533,11 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">CK</span>
-                </div>
+                <img 
+                  src="/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png" 
+                  alt="Coding Killer Logo" 
+                  className="w-8 h-8"
+                />
                 <span className="text-xl font-bold">Coding Killer</span>
               </div>
               <p className="text-gray-400">
