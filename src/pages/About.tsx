@@ -1,5 +1,5 @@
 
-import { Navbar1 } from '@/components/ui/navbar-1';
+import { Navbar2 } from '@/components/ui/navbar-2';
 import SEO from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,7 +30,7 @@ const About = () => {
         canonical="/about"
       />
       
-      <Navbar1 />
+      <Navbar2 />
       
       {/* Hero Section */}
       <section className="py-20 px-4">

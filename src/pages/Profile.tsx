@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserData } from '@/hooks/useUserData';
-import { Navbar1 } from '@/components/ui/navbar-1';
+import { Navbar2 } from '@/components/ui/navbar-2';
 import SEO from '@/components/SEO';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -66,7 +66,7 @@ const Profile = () => {
   if (authLoading || dataLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <Navbar1 />
+        <Navbar2 />
         <div className="min-h-screen flex items-center justify-center">
           <div className="loading-dots">
             <span></span>
@@ -95,7 +95,7 @@ const Profile = () => {
         canonical="/profile"
       />
       
-      <Navbar1 />
+      <Navbar2 />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

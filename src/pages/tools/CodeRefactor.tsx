@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Navbar1 } from '@/components/ui/navbar-1';
+import { Navbar2 } from '@/components/ui/navbar-2';
 import SEO from '@/components/SEO';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -70,7 +70,7 @@ ${inputCode}
         canonical="/tools/code-refactor"
       />
       
-      <Navbar1 />
+      <Navbar2 />
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">

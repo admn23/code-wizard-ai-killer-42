@@ -1571,9 +1571,13 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <img
-                  src="/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png"
+                  src="https://i.postimg.cc/mkqZncXQ/Chat-GPT-Image-Jul-2-2025-04-29-00-PM-min.png"
                   alt="Coding Killer Logo"
-                  className="w-8 h-8"
+                  className="w-8 h-8 rounded object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png";
+                  }}
                 />
                 <span className="text-xl font-bold">Coding Killer</span>
               </div>
