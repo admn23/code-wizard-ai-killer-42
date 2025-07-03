@@ -1,86 +1,88 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Copy, ChevronUp, ChevronDown } from 'lucide-react';
-import { toast } from 'sonner';
+import { Card } from '@/components/ui/card';
+import { ChevronLeft, ChevronRight, Copy, Check } from 'lucide-react';
 
 interface CodeSliderProps {
   code: string;
   language?: string;
-  maxHeight?: number;
 }
 
-const CodeSlider: React.FC<CodeSliderProps> = ({ 
-  code, 
-  language = 'javascript',
-  maxHeight = 400 
-}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const CodeSlider = ({ code, language = 'javascript' }: CodeSliderProps) => {
+  const [copied, setCopied] = useState(false);
   
+  const lines = code.split('\n');
+  const [currentLine, setCurrentLine] = useState(0);
+  const visibleLines = 10;
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(code);
-      toast.success('Code copied to clipboard!');
-    } catch (error) {
-      toast.error('Failed to copy code');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy code:', err);
     }
   };
 
-  const codeLines = code.split('\n');
-  const shouldShowSlider = codeLines.length > 15;
+  const nextLines = () => {
+    if (currentLine + visibleLines < lines.length) {
+      setCurrentLine(prev => prev + visibleLines);
+    }
+  };
+
+  const prevLines = () => {
+    if (currentLine > 0) {
+      setCurrentLine(prev => Math.max(0, prev - visibleLines));
+    }
+  };
+
+  const visibleCode = lines.slice(currentLine, currentLine + visibleLines).join('\n');
 
   return (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
-      <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
-        <span className="text-sm text-gray-300 font-mono uppercase tracking-wide">{language}</span>
-        <Button
-          onClick={copyToClipboard}
-          size="sm"
-          variant="ghost"
-          className="text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
-        >
-          <Copy className="h-4 w-4 mr-1" />
-          Copy
-        </Button>
-      </div>
-      
-      <div 
-        className={`overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 transition-all duration-300 ${
-          shouldShowSlider && !isExpanded ? 'max-h-96' : 'max-h-none'
-        }`}
-        style={{ 
-          maxHeight: shouldShowSlider && !isExpanded ? `${maxHeight}px` : 'none',
-          scrollbarWidth: 'thin'
-        }}
-      >
-        <pre className="p-4 text-sm text-gray-100 font-mono whitespace-pre-wrap leading-relaxed">
-          <code className={`language-${language}`}>{code}</code>
-        </pre>
-      </div>
-      
-      {shouldShowSlider && (
-        <div className={`${isExpanded ? 'relative' : 'absolute bottom-0'} left-0 right-0 ${!isExpanded ? 'bg-gradient-to-t from-gray-900 to-transparent' : 'bg-gray-800 border-t border-gray-700'} p-3 flex justify-center`}>
+    <Card className="p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium text-muted-foreground">
+            {language} ({lines.length} lines)
+          </span>
+          <span className="text-xs text-muted-foreground">
+            Lines {currentLine + 1}-{Math.min(currentLine + visibleLines, lines.length)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
           <Button
-            onClick={() => setIsExpanded(!isExpanded)}
+            variant="outline"
             size="sm"
-            variant="secondary"
-            className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-200 transition-colors"
+            onClick={prevLines}
+            disabled={currentLine === 0}
           >
-            {isExpanded ? (
-              <>
-                <ChevronUp className="h-4 w-4 mr-1" />
-                Show Less
-              </>
-            ) : (
-              <>
-                <ChevronDown className="h-4 w-4 mr-1" />
-                Show More ({codeLines.length} lines)
-              </>
-            )}
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={nextLines}
+            disabled={currentLine + visibleLines >= lines.length}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={copyToClipboard}
+          >
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
         </div>
-      )}
-    </div>
+      </div>
+      <div className="code-slider">
+        <pre className="bg-secondary p-4 rounded-lg overflow-x-auto text-sm">
+          <code className="language-javascript">{visibleCode}</code>
+        </pre>
+      </div>
+    </Card>
   );
 };
 

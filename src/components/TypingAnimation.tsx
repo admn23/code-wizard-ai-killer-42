@@ -2,49 +2,30 @@
 import { useState, useEffect } from 'react';
 
 interface TypingAnimationProps {
-  texts: string[];
+  text: string;
   speed?: number;
-  deleteSpeed?: number;
-  delayBetweenTexts?: number;
+  className?: string;
 }
 
-const TypingAnimation = ({ 
-  texts, 
-  speed = 100, 
-  deleteSpeed = 50, 
-  delayBetweenTexts = 2000 
-}: TypingAnimationProps) => {
+const TypingAnimation = ({ text, speed = 50, className = "" }: TypingAnimationProps) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentText = texts[currentIndex];
-    
-    const timeout = setTimeout(() => {
-      if (isDeleting) {
-        setDisplayText(currentText.substring(0, displayText.length - 1));
-        
-        if (displayText === '') {
-          setIsDeleting(false);
-          setCurrentIndex((prevIndex) => (prevIndex + 1) % texts.length);
-        }
-      } else {
-        setDisplayText(currentText.substring(0, displayText.length + 1));
-        
-        if (displayText === currentText) {
-          setTimeout(() => setIsDeleting(true), delayBetweenTexts);
-        }
-      }
-    }, isDeleting ? deleteSpeed : speed);
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
 
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, currentIndex, texts, speed, deleteSpeed, delayBetweenTexts]);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text, speed]);
 
   return (
-    <span className="text-primary font-semibold">
+    <span className={`${className} relative`}>
       {displayText}
-      <span className="animate-pulse">|</span>
+      <span className="animate-pulse text-primary">|</span>
     </span>
   );
 };

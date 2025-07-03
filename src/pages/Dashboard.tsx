@@ -1,8 +1,9 @@
+
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserData } from '@/hooks/useUserData';
-import { Navbar1 } from '@/components/ui/navbar-1';
+import Header from '@/components/Header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -19,7 +20,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import SEO from '@/components/SEO';
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -77,7 +77,7 @@ const Dashboard = () => {
 
   const creditsRemaining = profile?.credits_remaining || 0;
   const planType = profile?.plan_type || 'Free';
-  const maxCredits = planType === 'Pro' ? 500 : 5;
+  const maxCredits = planType === 'Pro' ? 500 : 5; // Free plan gets 5 credits
   const progressValue = (creditsRemaining / maxCredits) * 100;
 
   const formatTimeAgo = (dateString: string) => {
@@ -93,13 +93,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <SEO 
-        title="Dashboard"
-        description="Access your AI coding tools dashboard. View credits, usage statistics, and manage your account."
-        keywords="dashboard, ai tools, coding, credits, usage"
-      />
-      
-      <Navbar1 />
+      <Header />
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
