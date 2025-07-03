@@ -1,9 +1,8 @@
-
-import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useUserData } from '@/hooks/useUserData';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUserData } from "@/hooks/useUserData";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const useCreditManager = () => {
   const { user } = useAuth();
@@ -16,18 +15,20 @@ export const useCreditManager = () => {
   };
 
   const deductCredits = async (
-    toolName: string, 
+    toolName: string,
     creditsToDeduct: number,
     inputData?: string,
-    outputData?: string
+    outputData?: string,
   ): Promise<boolean> => {
     if (!user || !profile) {
-      toast.error('Please log in to use this tool');
+      toast.error("Please log in to use this tool");
       return false;
     }
 
     if (!checkCredits(creditsToDeduct)) {
-      toast.error(`Insufficient credits! You need ${creditsToDeduct} credits but only have ${profile.credits_remaining || 0}`);
+      toast.error(
+        `Insufficient credits! You need ${creditsToDeduct} credits but only have ${profile.credits_remaining || 0}`,
+      );
       return false;
     }
 
@@ -39,53 +40,61 @@ export const useCreditManager = () => {
       const newTasksCount = (profile.tasks_this_month || 0) + 1;
 
       const { error: profileError } = await supabase
-        .from('profiles')
-        .update({ 
+        .from("profiles")
+        .update({
           credits_remaining: newCredits,
           tasks_this_month: newTasksCount,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (profileError) {
-        console.error('Error updating profile:', profileError);
-        toast.error('Failed to deduct credits');
+        console.error("Error updating profile:", profileError);
+        toast.error("Failed to deduct credits");
         return false;
       }
 
       // Update credits in user_credits table
       const { error: creditsError } = await supabase
-        .from('user_credits')
-        .update({ 
+        .from("user_credits")
+        .update({
           credits_remaining: newCredits,
-          last_updated: new Date().toISOString()
+          last_updated: new Date().toISOString(),
         })
-        .eq('user_id', user.id);
+        .eq("user_id", user.id);
 
       if (creditsError) {
-        console.error('Error updating user credits:', creditsError);
+        console.error("Error updating user credits:", creditsError);
       }
 
       // Log activity
       const { error: activityError } = await supabase
-        .from('user_activities')
+        .from("user_activities")
         .insert({
           user_id: user.id,
           tool_name: toolName,
           credits_used: creditsToDeduct,
           input_data: inputData,
-          output_data: outputData
+          output_data: outputData,
         });
 
       if (activityError) {
-        console.error('Error logging activity:', activityError);
+        console.error("Error logging activity:", activityError);
       }
 
       toast.success(`${creditsToDeduct} credits deducted successfully`);
+
+      // Trigger a custom event for real-time UI updates
+      window.dispatchEvent(
+        new CustomEvent("creditsUpdated", {
+          detail: { newCredits, toolName, creditsUsed: creditsToDeduct },
+        }),
+      );
+
       return true;
     } catch (error) {
-      console.error('Error in credit deduction:', error);
-      toast.error('Failed to deduct credits');
+      console.error("Error in credit deduction:", error);
+      toast.error("Failed to deduct credits");
       return false;
     } finally {
       setIsDeducting(false);
@@ -96,6 +105,6 @@ export const useCreditManager = () => {
     checkCredits,
     deductCredits,
     isDeducting,
-    currentCredits: profile?.credits_remaining || 0
+    currentCredits: profile?.credits_remaining || 0,
   };
 };
