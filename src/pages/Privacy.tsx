@@ -1,21 +1,32 @@
-
-import Header from '@/components/Header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, Database, Eye, Lock, Mail, Globe } from 'lucide-react';
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Shield, Database, Eye, Lock, Mail, Globe } from "lucide-react";
 
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="Privacy Policy"
+        description="Learn how Coding Killer collects, uses, and protects your data. Our comprehensive privacy policy explains your rights and our data practices."
+        keywords="privacy policy, data protection, user privacy, coding killer privacy"
+        canonical="/privacy"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold gradient-text mb-4">Privacy Policy</h1>
+            <h1 className="text-4xl font-bold gradient-text mb-4">
+              Privacy Policy
+            </h1>
             <p className="text-xl text-gray-600">
               Learn how we collect, use, and protect your data
             </p>
-            <p className="text-sm text-gray-500 mt-2">Last updated: January 2024</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Last updated: January 2024
+            </p>
           </div>
 
           <div className="space-y-8">
@@ -27,10 +38,14 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">We collect the following types of information:</p>
+                <p className="text-gray-600">
+                  We collect the following types of information:
+                </p>
                 <div className="space-y-3">
                   <div>
-                    <h4 className="font-semibold text-gray-800">Personal Information</h4>
+                    <h4 className="font-semibold text-gray-800">
+                      Personal Information
+                    </h4>
                     <ul className="space-y-1 text-gray-600 ml-4">
                       <li>• Full name and email address</li>
                       <li>• Phone number (for payment verification)</li>
@@ -38,7 +53,9 @@ const Privacy = () => {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800">Usage Information</h4>
+                    <h4 className="font-semibold text-gray-800">
+                      Usage Information
+                    </h4>
                     <ul className="space-y-1 text-gray-600 ml-4">
                       <li>• AI tool usage logs and history</li>
                       <li>• Code inputs and generated outputs</li>
@@ -58,7 +75,9 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">We use your information for the following purposes:</p>
+                <p className="text-gray-600">
+                  We use your information for the following purposes:
+                </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -92,7 +111,9 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">We are committed to protecting your privacy:</p>
+                <p className="text-gray-600">
+                  We are committed to protecting your privacy:
+                </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
@@ -100,11 +121,13 @@ const Privacy = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                    Your code inputs are processed by OpenAI only for generating responses
+                    Your code inputs are processed by OpenAI only for generating
+                    responses
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                    We use Supabase for secure data storage and user authentication
+                    We use Supabase for secure data storage and user
+                    authentication
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
@@ -122,7 +145,9 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">We implement strong security measures:</p>
+                <p className="text-gray-600">
+                  We implement strong security measures:
+                </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -134,7 +159,8 @@ const Privacy = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
-                    Access to your data is strictly limited to authorized personnel
+                    Access to your data is strictly limited to authorized
+                    personnel
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -152,7 +178,9 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">We use cookies and similar technologies for:</p>
+                <p className="text-gray-600">
+                  We use cookies and similar technologies for:
+                </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -168,7 +196,8 @@ const Privacy = () => {
                   </li>
                 </ul>
                 <p className="text-sm text-gray-500 mt-4">
-                  You can control cookie settings through your browser preferences.
+                  You can control cookie settings through your browser
+                  preferences.
                 </p>
               </CardContent>
             </Card>
@@ -181,7 +210,9 @@ const Privacy = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-600">You have the following rights regarding your data:</p>
+                <p className="text-gray-600">
+                  You have the following rights regarding your data:
+                </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start gap-2">
                     <span className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></span>
@@ -201,8 +232,11 @@ const Privacy = () => {
                   </li>
                 </ul>
                 <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg mt-4">
-                  To exercise these rights, contact us at: 
-                  <a href="mailto:21ashikur1234@gmail.com" className="text-primary hover:underline ml-1">
+                  To exercise these rights, contact us at:
+                  <a
+                    href="mailto:21ashikur1234@gmail.com"
+                    className="text-primary hover:underline ml-1"
+                  >
                     21ashikur1234@gmail.com
                   </a>
                 </p>
@@ -218,23 +252,40 @@ const Privacy = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">
-                  If you have questions about this Privacy Policy or our data practices, please contact us:
+                  If you have questions about this Privacy Policy or our data
+                  practices, please contact us:
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-800">Coding Killer Privacy Team</p>
-                  <p className="text-gray-600">Email: <a href="mailto:21ashikur1234@gmail.com" className="text-primary hover:underline">21ashikur1234@gmail.com</a></p>
-                  <p className="text-gray-600">Response time: Within 48 hours</p>
+                  <p className="font-semibold text-gray-800">
+                    Coding Killer Privacy Team
+                  </p>
+                  <p className="text-gray-600">
+                    Email:{" "}
+                    <a
+                      href="mailto:21ashikur1234@gmail.com"
+                      className="text-primary hover:underline"
+                    >
+                      21ashikur1234@gmail.com
+                    </a>
+                  </p>
+                  <p className="text-gray-600">
+                    Response time: Within 48 hours
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="bg-blue-50 border-blue-200">
               <CardContent className="pt-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Policy Updates</h3>
+                <h3 className="font-semibold text-blue-900 mb-2">
+                  Policy Updates
+                </h3>
                 <p className="text-blue-800">
-                  We may update this Privacy Policy from time to time. We will notify you of any significant 
-                  changes via email or through our service. Your continued use of Coding Killer after such 
-                  modifications constitutes acceptance of the updated Privacy Policy.
+                  We may update this Privacy Policy from time to time. We will
+                  notify you of any significant changes via email or through our
+                  service. Your continued use of Coding Killer after such
+                  modifications constitutes acceptance of the updated Privacy
+                  Policy.
                 </p>
               </CardContent>
             </Card>
