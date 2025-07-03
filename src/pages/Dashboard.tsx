@@ -29,6 +29,7 @@ import {
   Activity,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import ErrorTest from "@/components/ErrorTest";
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -201,6 +202,9 @@ const Dashboard = () => {
             Ready to code smarter with AI assistance?
           </p>
         </div>
+
+        {/* Temporary error testing */}
+        <ErrorTest />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
