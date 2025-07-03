@@ -24,25 +24,29 @@ interface UserActivity {
 
 // Utility function to safely log errors
 const logError = (context: string, error: any) => {
+  console.log("🔍 DEBUG - logError called with:", context, typeof error);
   try {
     if (error && typeof error === "object") {
-      console.error(context, {
+      const errorInfo = {
         message: error.message || "Unknown error",
         code: error.code || "No code",
         details: error.details || "No details",
         hint: error.hint || "No hint",
         statusCode: error.statusCode || "No status",
+        fullErrorObject: error,
         errorString: JSON.stringify(
           error,
           Object.getOwnPropertyNames(error),
           2,
         ),
-      });
+      };
+      console.error("🚨", context, errorInfo);
     } else {
-      console.error(context, String(error));
+      console.error("🚨", context, String(error));
     }
   } catch (logErr) {
     console.error(
+      "🚨",
       context,
       "Error occurred but could not be logged:",
       String(error),
