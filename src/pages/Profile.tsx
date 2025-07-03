@@ -166,8 +166,12 @@ const Profile = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
-                        disabled={!isEditing}
+                        disabled={true}
+                        className="bg-gray-50 cursor-not-allowed"
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Email cannot be changed for security reasons
+                      </p>
                     </div>
                   </div>
 

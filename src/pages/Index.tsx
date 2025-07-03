@@ -1295,150 +1295,271 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
       {/* Success Showcase */}
       <SuccessShowcase />
 
-      {/* See AI in Action Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold gradient-text mb-4">
-              See AI in Action
+      {/* See AI in Action Section - Enhanced Modern Grid */}
+      <section className="py-24 px-4 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/2 -right-1/2 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-1/2 -left-1/2 w-96 h-96 bg-gradient-to-tr from-green-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
+          {/* Enhanced Header */}
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary/20 rounded-full px-6 py-2 mb-6">
+              <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+              <span className="text-sm font-medium text-primary">
+                Live AI Demo
+              </span>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            </div>
+
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+              <span className="gradient-text">See AI in Action</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch how our AI generates clean, functional code from simple
-              descriptions. From React components to complex algorithms, our AI
-              delivers production-ready code in seconds.
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+              Experience the future of coding with our AI-powered tools. Watch
+              real-time code generation, intelligent debugging, and automated
+              optimization in action. Production-ready code in seconds.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Advanced Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-8 mb-16">
             {aiDemoExamples.map((demo, index) => (
-              <div key={index} className="group relative">
-                <Card className="h-full hover:shadow-2xl transition-all duration-500 border-0 bg-white/90 backdrop-blur-lg overflow-hidden">
-                  {/* Header with features */}
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
+              <div
+                key={index}
+                className={`group relative transform transition-all duration-700 hover:scale-[1.02] ${
+                  index % 2 === 0 ? "lg:translate-y-8" : "lg:-translate-y-4"
+                }`}
+                style={{ animationDelay: `${index * 200}ms` }}
+              >
+                {/* Glowing border effect */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-blue-500 to-purple-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur"></div>
+
+                <Card className="relative h-full bg-white/95 backdrop-blur-xl border-0 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                  {/* Animated top border */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+
+                  {/* Premium badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
+                      ⚡ Instant
+                    </div>
+                  </div>
+
+                  <CardHeader className="pb-6 pt-8">
+                    {/* Enhanced icon design */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="flex items-center gap-4">
                         <div
-                          className={`p-3 ${demo.bgColor} rounded-xl shadow-lg`}
+                          className={`relative p-4 ${demo.bgColor} rounded-2xl shadow-xl group-hover:scale-110 transition-transform duration-300`}
                         >
-                          <div className={demo.iconColor}>{demo.icon}</div>
+                          <div
+                            className={`${demo.iconColor} transform group-hover:rotate-12 transition-transform duration-300`}
+                          >
+                            {demo.icon}
+                          </div>
+                          {/* Pulse ring */}
+                          <div className="absolute inset-0 rounded-2xl bg-current opacity-20 animate-ping"></div>
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors">
+                          <h3 className="font-bold text-xl text-gray-900 group-hover:text-primary transition-colors duration-300 mb-2">
                             {demo.title}
                           </h3>
-                          <div className="flex items-center gap-1 text-sm text-gray-500">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <span>4.9</span>
-                            <span className="mx-1">•</span>
-                            <span>2-5 seconds</span>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <span className="text-sm font-medium">4.9</span>
+                            </div>
+                            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                            <span className="text-sm text-green-600 font-medium">
+                              2-5 sec
+                            </span>
+                            <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                            <div className="flex items-center gap-1">
+                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                              <span className="text-sm text-gray-600">
+                                Live
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <p className="text-gray-600 mb-4">{demo.description}</p>
+                    <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                      {demo.description}
+                    </p>
 
-                    {/* Feature highlights */}
-                    <div className="grid grid-cols-3 gap-2 mb-4">
-                      <div className="bg-green-50 text-green-700 px-2 py-1 rounded text-xs text-center">
-                        <Check className="h-3 w-3 inline mr-1" />
-                        Instant code generation
+                    {/* Advanced feature highlights */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                      <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-2 rounded-xl text-sm font-medium border border-emerald-200">
+                        <Check className="h-4 w-4 text-emerald-600" />
+                        <span>Instant Generate</span>
                       </div>
-                      <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs text-center">
-                        <Zap className="h-3 w-3 inline mr-1" />
-                        Best practices included
+                      <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-xl text-sm font-medium border border-blue-200">
+                        <Zap className="h-4 w-4 text-blue-600" />
+                        <span>Best Practices</span>
                       </div>
-                      <div className="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs text-center">
-                        <Globe className="h-3 w-3 inline mr-1" />
-                        Multiple frameworks supported
+                      <div className="flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-2 rounded-xl text-sm font-medium border border-purple-200">
+                        <Globe className="h-4 w-4 text-purple-600" />
+                        <span>Multi Framework</span>
                       </div>
                     </div>
                   </CardHeader>
 
-                  <CardContent className="pt-0">
-                    {/* Example showcase */}
-                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 mb-4 border-l-4 border-primary">
-                      <div className="flex items-start gap-3">
-                        <div className="bg-primary/10 rounded-full p-2">
-                          <Play className="h-4 w-4 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-700 mb-1">
-                            <strong>Example Request:</strong>
-                          </p>
-                          <p className="text-sm text-gray-600 italic mb-2">
-                            "{demo.example}"
-                          </p>
-                          <p className="text-sm font-medium text-green-600">
-                            {demo.result}
-                          </p>
+                  <CardContent className="pt-0 pb-8">
+                    {/* Enhanced example showcase */}
+                    <div className="relative bg-gradient-to-br from-gray-50 to-gray-100/80 rounded-2xl p-6 mb-6 border border-gray-200/50 overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
+                      <div className="relative">
+                        <div className="flex items-start gap-4">
+                          <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-3 shadow-lg">
+                            <Play className="h-5 w-5 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-sm font-bold text-gray-800">
+                                Example Request
+                              </span>
+                              <div className="h-1 w-1 bg-gray-400 rounded-full"></div>
+                              <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                                Natural Language
+                              </span>
+                            </div>
+                            <p className="text-gray-700 italic mb-3 font-medium">
+                              "{demo.example}"
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <Check className="h-4 w-4 text-green-600" />
+                              <span className="text-sm font-semibold text-green-700">
+                                {demo.result}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Code Preview */}
-                    <div className="mb-6">
+                    {/* Enhanced code preview */}
+                    <div className="mb-8">
+                      <div className="bg-gray-900 rounded-t-xl px-4 py-3 flex items-center gap-3">
+                        <div className="flex gap-2">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                        <span className="text-gray-400 text-sm font-medium">
+                          Generated {demo.codeType.toUpperCase()} Code
+                        </span>
+                        <div className="ml-auto flex items-center gap-2">
+                          <div className="bg-green-500 w-2 h-2 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-xs">
+                            Live Preview
+                          </span>
+                        </div>
+                      </div>
                       <EnhancedCodeSlider
                         code={codeExamples[demo.codeType]}
                         language={demo.codeType}
-                        title={`Generated ${demo.codeType.toUpperCase()} Code`}
-                        maxHeight={250}
+                        title=""
+                        maxHeight={280}
                         enableAutoScroll={true}
                       />
                     </div>
 
-                    {/* Action button */}
+                    {/* Enhanced action button */}
                     <Link to={demo.toolPath}>
                       <Button
-                        className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02]"
+                        className="w-full bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 text-white shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] font-semibold text-lg py-6 rounded-xl relative overflow-hidden"
                         size="lg"
                       >
-                        <Play className="h-4 w-4 mr-2" />
-                        Try It Now
-                        <ChevronRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                        <div className="relative flex items-center justify-center gap-3">
+                          <Play className="h-5 w-5" />
+                          <span>Try It Now</span>
+                          <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
                       </Button>
                     </Link>
                   </CardContent>
-                </Card>
 
-                {/* Floating indicator */}
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-green-500 to-blue-500 text-white text-xs px-2 py-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                  Live Demo
-                </div>
+                  {/* Floating live indicator */}
+                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-3 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110">
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      <span className="font-bold">Live Demo</span>
+                    </div>
+                  </div>
+                </Card>
               </div>
             ))}
           </div>
 
-          {/* Bottom CTA section */}
-          <div className="text-center bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-primary/20">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to Experience AI-Powered Development?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Join thousands of developers who are already using our AI tools to
-              write better code faster. Start with any tool and see the magic
-              happen instantly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/tools">
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 shadow-lg"
-                >
-                  <Zap className="h-5 w-5 mr-2" />
-                  Explore All Tools
-                  <ChevronRight className="h-5 w-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-primary text-primary hover:bg-primary hover:text-white"
-                >
-                  Start Free Trial
-                </Button>
-              </Link>
+          {/* Enhanced Bottom CTA section */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-blue-500/5 to-purple-500/5 rounded-3xl transform rotate-1"></div>
+            <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-12 border border-primary/20 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/10 to-blue-500/10 rounded-full px-6 py-2 mb-6">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold text-primary">
+                    Join 50,000+ Developers
+                  </span>
+                </div>
+
+                <h3 className="text-4xl font-bold text-gray-900 mb-6">
+                  Ready to Experience{" "}
+                  <span className="gradient-text">AI-Powered Development?</span>
+                </h3>
+                <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                  Transform your coding workflow with cutting-edge AI tools.
+                  Generate, debug, optimize, and deploy faster than ever before.
+                  Start building the future today.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                  <Link to="/tools">
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-xl hover:shadow-2xl text-lg px-8 py-4 rounded-xl font-semibold relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                      <div className="relative flex items-center gap-3">
+                        <Zap className="h-6 w-6" />
+                        <span>Explore All Tools</span>
+                        <ChevronRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
+                    >
+                      Start Free Trial
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Trust indicators */}
+                <div className="flex items-center justify-center gap-8 mt-10 pt-8 border-t border-gray-200">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">2.5M+</div>
+                    <div className="text-sm text-gray-600">Lines Generated</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">99.9%</div>
+                    <div className="text-sm text-gray-600">Uptime</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">4.9/5</div>
+                    <div className="text-sm text-gray-600">User Rating</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
