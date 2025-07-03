@@ -6,29 +6,55 @@ import { toast } from "sonner";
 
 // Utility function to safely log errors
 const logError = (context: string, error: any) => {
+  console.log(
+    "🔍 CREDIT DEBUG - logError called with:",
+    context,
+    typeof error,
+    error,
+  );
+
   try {
     if (error && typeof error === "object") {
-      console.error(context, {
-        message: error.message || "Unknown error",
-        code: error.code || "No code",
-        details: error.details || "No details",
-        hint: error.hint || "No hint",
-        statusCode: error.statusCode || "No status",
-        errorString: JSON.stringify(
-          error,
-          Object.getOwnPropertyNames(error),
-          2,
-        ),
+      // Create a safe serializable object
+      const safeError: any = {};
+
+      // Copy basic properties
+      if (error.message) safeError.message = error.message;
+      if (error.code) safeError.code = error.code;
+      if (error.details) safeError.details = error.details;
+      if (error.hint) safeError.hint = error.hint;
+      if (error.statusCode) safeError.statusCode = error.statusCode;
+      if (error.status) safeError.status = error.status;
+
+      // Get all enumerable properties
+      Object.keys(error).forEach((key) => {
+        try {
+          const value = error[key];
+          if (
+            value !== undefined &&
+            value !== null &&
+            typeof value !== "function"
+          ) {
+            safeError[key] = value;
+          }
+        } catch (e) {
+          safeError[key] = `[Error accessing property: ${e}]`;
+        }
       });
+
+      console.error("🚨 CREDIT", context);
+      console.error("   📝 Error Message:", safeError.message || "No message");
+      console.error("   🔢 Error Code:", safeError.code || "No code");
+      console.error("   📋 Details:", safeError.details || "No details");
+      console.error("   💡 Hint:", safeError.hint || "No hint");
+      console.error("   📦 Full Error Object:", safeError);
     } else {
-      console.error(context, String(error));
+      console.error("🚨 CREDIT", context, "Non-object error:", String(error));
     }
   } catch (logErr) {
-    console.error(
-      context,
-      "Error occurred but could not be logged:",
-      String(error),
-    );
+    console.error("🚨 CREDIT", context, "CRITICAL: Error logging failed");
+    console.error("   Original error (string):", String(error));
+    console.error("   Logging error:", String(logErr));
   }
 };
 
