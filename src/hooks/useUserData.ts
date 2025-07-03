@@ -196,7 +196,7 @@ export const useUserData = () => {
 
     console.log("User logged in, fetching data for:", user.id, user.email);
 
-    const fetchUserData = async () => {
+    const fetchUserData = async (retryCount = 0) => {
       try {
         setLoading(true);
 
@@ -242,6 +242,51 @@ export const useUserData = () => {
               updated_at: new Date().toISOString(),
             };
             setProfile(fallbackProfile);
+          } else if (
+            profileError?.message?.includes("Failed to fetch") ||
+            profileError?.message?.includes("TypeError") ||
+            profileError?.message?.includes("NetworkError") ||
+            profileError?.details?.includes("Failed to fetch")
+          ) {
+            // Network connectivity issues
+            if (retryCount < 2) {
+              console.log(
+                `Network error fetching profile (attempt ${retryCount + 1}/3):`,
+                profileError?.message,
+              );
+              logError(
+                `Network error fetching profile (attempt ${retryCount + 1}/3):`,
+                profileError,
+              );
+              // Retry after a delay
+              setTimeout(
+                () => {
+                  fetchUserData(retryCount + 1);
+                },
+                (retryCount + 1) * 2000,
+              ); // 2s, 4s delays
+              return;
+            } else {
+              // Max retries reached, use fallback
+              console.log(
+                "Network error fetching profile (max retries reached) - using offline fallback",
+              );
+              logError(
+                "Network error fetching profile (max retries reached):",
+                "Using offline fallback",
+              );
+              const fallbackProfile = {
+                id: user.id,
+                email: user.email,
+                full_name: user.user_metadata?.full_name || "User",
+                plan_type: "Free",
+                credits_remaining: 5,
+                tasks_this_month: 0,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              };
+              setProfile(fallbackProfile);
+            }
           } else {
             logError("Error fetching profile:", profileError);
             // Still provide a fallback profile even on other errors
@@ -263,31 +308,54 @@ export const useUserData = () => {
         }
 
         // Fetch recent activities
-        console.log("Fetching activities for user:", user.id);
-        const { data: activitiesData, error: activitiesError } = await supabase
-          .from("user_activities")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(10);
+        try {
+          console.log("Fetching activities for user:", user.id);
+          const { data: activitiesData, error: activitiesError } =
+            await supabase
+              .from("user_activities")
+              .select("*")
+              .eq("user_id", user.id)
+              .order("created_at", { ascending: false })
+              .limit(10);
 
-        if (activitiesError) {
-          if (activitiesError.code === "42501") {
-            console.log(
-              "Permission denied for activities table - this is expected for new users",
-            );
-            setActivities([]);
+          if (activitiesError) {
+            if (activitiesError.code === "42501") {
+              console.log(
+                "Permission denied for activities table - this is expected for new users",
+              );
+              setActivities([]);
+            } else if (
+              activitiesError?.message?.includes("Failed to fetch") ||
+              activitiesError?.message?.includes("TypeError") ||
+              activitiesError?.message?.includes("NetworkError") ||
+              activitiesError?.details?.includes("Failed to fetch")
+            ) {
+              // Network issues for activities - just set empty array, don't retry
+              console.log(
+                "Network error fetching activities - using empty activities",
+              );
+              logError(
+                "Network error fetching activities:",
+                "Using empty activities",
+              );
+              setActivities([]);
+            } else {
+              logError("Error fetching activities:", activitiesError);
+              setActivities([]);
+            }
           } else {
-            logError("Error fetching activities:", activitiesError);
-            setActivities([]);
+            console.log(
+              "Activities found:",
+              activitiesData?.length || 0,
+              "records",
+            );
+            setActivities(activitiesData || []);
           }
-        } else {
-          console.log(
-            "Activities found:",
-            activitiesData?.length || 0,
-            "records",
-          );
-          setActivities(activitiesData || []);
+        } catch (activityFetchError) {
+          // Catch any network exceptions
+          console.log("Exception fetching activities:", activityFetchError);
+          logError("Exception fetching activities:", activityFetchError);
+          setActivities([]);
         }
       } catch (error) {
         logError("Error fetching user data:", error);
