@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Maximize2, Minimize2 } from "lucide-react";
 import { toast } from "sonner";
-
 interface EnhancedCodeSliderProps {
   code: string;
   language?: string;
@@ -10,13 +9,12 @@ interface EnhancedCodeSliderProps {
   maxHeight?: number;
   enableAutoScroll?: boolean;
 }
-
 const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
   code,
   language = "javascript",
   title = "Generated Code",
   maxHeight = 400,
-  enableAutoScroll = false,
+  enableAutoScroll = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -28,7 +26,6 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>();
   const manualScrollTimeout = useRef<NodeJS.Timeout>();
-
   const copyToClipboard = async () => {
     try {
       // Try modern clipboard API first
@@ -52,7 +49,6 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
       textArea.style.opacity = "0";
       textArea.setAttribute("readonly", "");
       textArea.setAttribute("contenteditable", "true");
-
       document.body.appendChild(textArea);
 
       // For mobile devices
@@ -69,32 +65,24 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
         textArea.select();
         textArea.setSelectionRange(0, textArea.value.length);
       }
-
       let successful = false;
       try {
         successful = document.execCommand("copy");
       } catch (err) {
         console.log("execCommand failed, trying selection...");
       }
-
       document.body.removeChild(textArea);
-
       if (successful) {
         toast.success("Code copied to clipboard!");
       } else {
         // Final fallback - just show the user a message
-        toast.info(
-          "Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)",
-        );
+        toast.info("Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)");
       }
     } catch (error) {
       console.log("Copy operation failed:", error);
-      toast.info(
-        "Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)",
-      );
+      toast.info("Please manually select and copy the code using Ctrl+C (Cmd+C on Mac)");
     }
   };
-
   const codeLines = code.split("\n");
   const lineHeight = 24; // Approximate line height in pixels
   const totalHeight = codeLines.length * lineHeight;
@@ -102,20 +90,13 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
 
   // Smooth scroll animation on hover
   useEffect(() => {
-    if (
-      !enableAutoScroll ||
-      !shouldShowSlider ||
-      !isHovered ||
-      !codeRef.current ||
-      isManualScrolling
-    ) {
+    if (!enableAutoScroll || !shouldShowSlider || !isHovered || !codeRef.current || isManualScrolling) {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         setIsAutoScrolling(false);
       }
       return;
     }
-
     setIsAutoScrolling(true);
     let startTime: number;
     const duration = Math.max(4000, codeLines.length * 120); // Slightly slower for better readability
@@ -125,17 +106,13 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
       const progress = Math.min((currentTime - startTime) / duration, 1);
 
       // Easing function for smooth animation
-      const easeInOutQuad = (t: number) =>
-        t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const easeInOutQuad = (t: number) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
       const easedProgress = easeInOutQuad(progress);
-
       const maxScroll = totalHeight - maxHeight;
       const newScrollPosition = easedProgress * maxScroll;
-
       if (!isManualScrolling) {
         setScrollPosition(newScrollPosition);
       }
-
       if (progress < 1 && isHovered && !isManualScrolling) {
         animationRef.current = requestAnimationFrame(animate);
       } else if (progress >= 1 && !isManualScrolling) {
@@ -151,23 +128,14 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
         setIsAutoScrolling(false);
       }
     };
-
     animationRef.current = requestAnimationFrame(animate);
-
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         setIsAutoScrolling(false);
       }
     };
-  }, [
-    isHovered,
-    shouldShowSlider,
-    totalHeight,
-    maxHeight,
-    codeLines.length,
-    isManualScrolling,
-  ]);
+  }, [isHovered, shouldShowSlider, totalHeight, maxHeight, codeLines.length, isManualScrolling]);
 
   // Reset scroll position when not hovering
   useEffect(() => {
@@ -182,7 +150,6 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
       setIsManualScrolling(true);
       setIsAutoScrolling(false);
     }
-
     const scrollTop = e.currentTarget.scrollTop;
     setScrollPosition(scrollTop);
 
@@ -203,26 +170,15 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
       cancelAnimationFrame(animationRef.current);
     }
   };
-
   const handleMouseEnter = () => {
     if (shouldShowSlider) {
       setIsHovered(true);
     }
   };
-
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-
-  return (
-    <div
-      ref={containerRef}
-      className={`relative bg-gray-900 rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 ${
-        isFullscreen ? "fixed inset-4 z-50 shadow-2xl" : ""
-      } ${isHovered ? "shadow-2xl scale-[1.02]" : ""}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+  return <div ref={containerRef} className={`relative bg-gray-900 rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 shadow-2xl" : ""} ${isHovered ? "shadow-2xl scale-[1.02]" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {/* Header */}
       <div className="flex items-center justify-between p-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-3">
@@ -235,90 +191,45 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
           <span className="text-xs text-gray-500 bg-gray-700 px-2 py-1 rounded">
             {language}
           </span>
-          {shouldShowSlider && (
-            <div className="flex items-center gap-2">
+          {shouldShowSlider && <div className="flex items-center gap-2">
               <span className="text-xs text-blue-400 bg-blue-900/30 px-2 py-1 rounded">
-                {enableAutoScroll
-                  ? isAutoScrolling
-                    ? "Auto-scrolling"
-                    : isManualScrolling
-                      ? "Manual scroll"
-                      : "Hover to auto-scroll"
-                  : "Scroll to view"}{" "}
+                {enableAutoScroll ? isAutoScrolling ? "Auto-scrolling" : isManualScrolling ? "Manual scroll" : "Hover to auto-scroll" : "Scroll to view"}{" "}
                 • {codeLines.length} lines
               </span>
-              {isManualScrolling && (
-                <button
-                  onClick={() => {
-                    setIsManualScrolling(false);
-                    setScrollPosition(0);
-                  }}
-                  className="text-xs text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded hover:bg-yellow-900/50 transition-colors"
-                >
+              {isManualScrolling && <button onClick={() => {
+            setIsManualScrolling(false);
+            setScrollPosition(0);
+          }} className="text-xs text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded hover:bg-yellow-900/50 transition-colors">
                   Reset
-                </button>
-              )}
-            </div>
-          )}
+                </button>}
+            </div>}
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            size="sm"
-            variant="ghost"
-            className="text-gray-300 hover:text-white hover:bg-gray-700 h-7 w-7 p-0"
-          >
-            {isFullscreen ? (
-              <Minimize2 className="h-3 w-3" />
-            ) : (
-              <Maximize2 className="h-3 w-3" />
-            )}
+          <Button onClick={() => setIsFullscreen(!isFullscreen)} size="sm" variant="ghost" className="text-gray-300 hover:text-white hover:bg-gray-700 h-7 w-7 p-0">
+            {isFullscreen ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
           </Button>
-          <Button
-            onClick={copyToClipboard}
-            size="sm"
-            variant="ghost"
-            className="text-gray-300 hover:text-white hover:bg-gray-700"
-          >
-            <Copy className="h-4 w-4 mr-1" />
-            Copy
-          </Button>
+          
         </div>
       </div>
 
       {/* Code Content */}
-      <div
-        ref={codeRef}
-        className="relative"
-        style={{
-          height: isFullscreen ? "calc(100vh - 8rem)" : `${maxHeight}px`,
-          overflow: isManualScrolling || !shouldShowSlider ? "auto" : "hidden",
-        }}
-        onScroll={handleScroll}
-        onWheel={handleManualInteraction}
-        onMouseDown={handleManualInteraction}
-        onTouchStart={handleManualInteraction}
-      >
-        <div
-          ref={scrollRef}
-          className={`${isManualScrolling ? "" : "transition-transform duration-200 ease-linear"}`}
-          style={{
-            transform: isManualScrolling
-              ? "none"
-              : `translateY(-${scrollPosition}px)`,
-            height: shouldShowSlider ? `${totalHeight}px` : "auto",
-            minHeight: "100%",
-          }}
-        >
+      <div ref={codeRef} className="relative" style={{
+      height: isFullscreen ? "calc(100vh - 8rem)" : `${maxHeight}px`,
+      overflow: isManualScrolling || !shouldShowSlider ? "auto" : "hidden"
+    }} onScroll={handleScroll} onWheel={handleManualInteraction} onMouseDown={handleManualInteraction} onTouchStart={handleManualInteraction}>
+        <div ref={scrollRef} className={`${isManualScrolling ? "" : "transition-transform duration-200 ease-linear"}`} style={{
+        transform: isManualScrolling ? "none" : `translateY(-${scrollPosition}px)`,
+        height: shouldShowSlider ? `${totalHeight}px` : "auto",
+        minHeight: "100%"
+      }}>
           <pre className="p-4 text-sm text-gray-100 font-mono whitespace-pre-wrap leading-relaxed h-full">
             <code className={`language-${language}`}>{code}</code>
           </pre>
         </div>
 
         {/* Scroll indicators */}
-        {shouldShowSlider && !isFullscreen && (
-          <>
+        {shouldShowSlider && !isFullscreen && <>
             {/* Top fade */}
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-gray-900 to-transparent pointer-events-none z-10" />
 
@@ -326,41 +237,22 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none z-10" />
 
             {/* Scroll progress indicator */}
-            {isHovered && (
-              <div className="absolute right-2 top-2 bottom-2 w-1 bg-gray-700 rounded-full">
-                <div
-                  className="bg-blue-500 rounded-full transition-all duration-200 ease-linear"
-                  style={{
-                    height: `${Math.min(100, (scrollPosition / (totalHeight - maxHeight)) * 100)}%`,
-                    width: "100%",
-                  }}
-                />
-              </div>
-            )}
-          </>
-        )}
+            {isHovered && <div className="absolute right-2 top-2 bottom-2 w-1 bg-gray-700 rounded-full">
+                <div className="bg-blue-500 rounded-full transition-all duration-200 ease-linear" style={{
+            height: `${Math.min(100, scrollPosition / (totalHeight - maxHeight) * 100)}%`,
+            width: "100%"
+          }} />
+              </div>}
+          </>}
       </div>
 
       {/* Fullscreen backdrop */}
-      {isFullscreen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40"
-          onClick={() => setIsFullscreen(false)}
-        />
-      )}
+      {isFullscreen && <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setIsFullscreen(false)} />}
 
       {/* Hover instruction */}
-      {enableAutoScroll &&
-        shouldShowSlider &&
-        !isHovered &&
-        !isFullscreen &&
-        !isManualScrolling && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800/90 text-gray-300 px-3 py-1 rounded-full text-xs animate-pulse">
+      {enableAutoScroll && shouldShowSlider && !isHovered && !isFullscreen && !isManualScrolling && <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800/90 text-gray-300 px-3 py-1 rounded-full text-xs animate-pulse">
             Hover for auto-scroll • Scroll manually to control
-          </div>
-        )}
-    </div>
-  );
+          </div>}
+    </div>;
 };
-
 export default EnhancedCodeSlider;

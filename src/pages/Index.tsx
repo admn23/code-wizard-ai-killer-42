@@ -1,56 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Navbar2 } from "@/components/ui/navbar-2";
 import SEO from "@/components/SEO";
 import TypingAnimation from "@/components/TypingAnimation";
 import CodeSlider from "@/components/CodeSlider";
 import EnhancedCodeSlider from "@/components/EnhancedCodeSlider";
-import {
-  Code,
-  Bug,
-  FileText,
-  Wrench,
-  Zap,
-  TestTube,
-  Globe,
-  Settings,
-  Rocket,
-  BookOpen,
-  Shield,
-  Sparkles,
-  Check,
-  Play,
-  ChevronRight,
-  Star,
-  Quote,
-} from "lucide-react";
+import { Code, Bug, FileText, Wrench, Zap, TestTube, Globe, Settings, Rocket, BookOpen, Shield, Sparkles, Check, Play, ChevronRight, Star, Quote } from "lucide-react";
 import FloatingCTA from "@/components/FloatingCTA";
 import CookieConsent from "@/components/CookieConsent";
 import SuccessShowcase from "@/components/SuccessShowcase";
 import RealtimeCounter from "@/components/RealtimeCounter";
-
 const Index = () => {
-  const typingTexts = [
-    "Generate Code with AI",
-    "Fix Bugs Instantly",
-    "Optimize Performance",
-    "Create Documentation",
-    "Build APIs Faster",
-  ];
-
+  const typingTexts = ["Generate Code with AI", "Fix Bugs Instantly", "Optimize Performance", "Create Documentation", "Build APIs Faster"];
   const heroSampleCode = `// AI Generated E-commerce System - Complete Implementation (150+ lines)
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
@@ -405,7 +368,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default ProductCard;`;
-
   const codeExamples = {
     javascript: `// AI Generated React Component - Real-time Chat System
 import React, { useState, useEffect, useRef } from 'react';
@@ -927,276 +889,184 @@ SELECT
 FROM products p
 LEFT JOIN product_reviews pr ON p.id = pr.product_id AND pr.is_approved = true
 LEFT JOIN order_items oi ON p.id = oi.product_id
-GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
+GROUP BY p.id, p.name, p.price, p.stock_quantity;`
   };
-
-  const features = [
-    {
-      icon: <Code className="h-8 w-8" />,
-      title: "AI Code Generator",
-      description:
-        "Generate code from natural language descriptions in any programming language",
-    },
-    {
-      icon: <Bug className="h-8 w-8" />,
-      title: "AI Bug Fixer",
-      description:
-        "Automatically detect and fix bugs in your code with AI-powered solutions",
-    },
-    {
-      icon: <FileText className="h-8 w-8" />,
-      title: "Code Explainer",
-      description:
-        "Get detailed explanations of complex code snippets and algorithms",
-    },
-    {
-      icon: <Wrench className="h-8 w-8" />,
-      title: "Code Refactor",
-      description:
-        "Improve code quality and maintainability with intelligent refactoring",
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Code Optimizer",
-      description: "Optimize your code for better performance and efficiency",
-    },
-    {
-      icon: <TestTube className="h-8 w-8" />,
-      title: "Unit Test Generator",
-      description:
-        "Generate comprehensive unit tests for your functions and methods",
-    },
-    {
-      icon: <Globe className="h-8 w-8" />,
-      title: "API Generator",
-      description:
-        "Create REST API endpoints with proper routing and validation",
-    },
-    {
-      icon: <Settings className="h-8 w-8" />,
-      title: "Config Generator",
-      description:
-        "Generate configuration files for popular frameworks and tools",
-    },
-    {
-      icon: <Rocket className="h-8 w-8" />,
-      title: "Deployment Scripts",
-      description:
-        "Create deployment scripts for various platforms and environments",
-    },
-    {
-      icon: <BookOpen className="h-8 w-8" />,
-      title: "Documentation Generator",
-      description: "Generate comprehensive documentation for your codebase",
-    },
-    {
-      icon: <Sparkles className="h-8 w-8" />,
-      title: "Lint Fixer",
-      description: "Automatically fix linting errors and improve code style",
-    },
-    {
-      icon: <Shield className="h-8 w-8" />,
-      title: "Security Checker",
-      description: "Scan your code for security vulnerabilities and get fixes",
-    },
-  ];
-
-  const aiDemoExamples = [
-    {
-      title: "React Component Generator",
-      description:
-        "Generate complete React components with hooks and TypeScript",
-      example: "Create a real-time chat system with WebSocket",
-      result: "✅ Generated React component with real-time messaging",
-      icon: <Code className="h-6 w-6" />,
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      codeType: "javascript",
-      toolPath: "/tools/code-generator",
-    },
-    {
-      title: "Python API Development",
-      description: "Build Flask/Django APIs with authentication and caching",
-      example: "Create e-commerce product management API",
-      result: "✅ Generated Flask API with Redis caching and JWT auth",
-      icon: <Globe className="h-6 w-6" />,
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-      codeType: "python",
-      toolPath: "/tools/api-generator",
-    },
-    {
-      title: "Java Microservices",
-      description: "Generate Spring Boot microservices with Kafka integration",
-      example: "Build user service with event-driven architecture",
-      result: "✅ Created Spring Boot service with Kafka messaging",
-      icon: <Zap className="h-6 w-6" />,
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-      codeType: "java",
-      toolPath: "/tools/code-generator",
-    },
-    {
-      title: "Database Design",
-      description: "Design complete database schemas with relationships",
-      example: "Create e-commerce database with indexing",
-      result: "✅ Generated PostgreSQL schema with triggers and views",
-      icon: <Bug className="h-6 w-6" />,
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      codeType: "sql",
-      toolPath: "/tools/config-generator",
-    },
-  ];
-
-  const plans = [
-    {
-      name: "Starter",
-      price: "$5",
-      bdtPrice: "৳625",
-      period: "/month",
-      description: "Perfect for individual developers",
-      credits: 200,
-      popular: false,
-      features: [
-        "200 AI credits per month",
-        "All AI tools access",
-        "Email support",
-        "Basic usage analytics",
-      ],
-    },
-    {
-      name: "Pro",
-      price: "$10",
-      bdtPrice: "৳1,250",
-      period: "/month",
-      description: "Ideal for professional developers",
-      credits: 500,
-      popular: true,
-      features: [
-        "500 AI credits per month",
-        "All AI tools access",
-        "Priority processing",
-        "Priority email support",
-        "Advanced analytics",
-      ],
-    },
-    {
-      name: "Enterprise",
-      price: "$20",
-      bdtPrice: "৳2,500",
-      period: "/month",
-      description: "For teams and organizations",
-      credits: 1500,
-      popular: false,
-      features: [
-        "1,500 AI credits per month",
-        "All AI tools access",
-        "Highest priority processing",
-        "24/7 priority support",
-        "API access",
-      ],
-    },
-  ];
-
-  const faqs = [
-    {
-      question: "How does the AI code generation work?",
-      answer:
-        "Our AI uses advanced machine learning models trained on millions of code repositories to understand your requirements and generate high-quality, production-ready code in any programming language.",
-    },
-    {
-      question: "What programming languages are supported?",
-      answer:
-        "We support all major programming languages including JavaScript, Python, Java, C++, Go, Rust, TypeScript, PHP, Ruby, and many more. The AI can also work with frameworks and libraries.",
-    },
-    {
-      question: "How accurate is the bug detection?",
-      answer:
-        "Our AI bug detection has a 95% accuracy rate for common programming errors, memory leaks, security vulnerabilities, and performance issues. It continuously learns from new patterns.",
-    },
-    {
-      question: "Can I use this for commercial projects?",
-      answer:
-        "Yes! All generated code is yours to use in any project, including commercial applications. We don't claim any ownership over the code you generate.",
-    },
-    {
-      question: "What if I run out of credits?",
-      answer:
-        "You can upgrade your plan anytime or purchase additional credits. We also offer custom enterprise plans for high-volume usage.",
-    },
-    {
-      question: "Is my code data secure?",
-      answer:
-        "Absolutely. We use enterprise-grade encryption and never store your code permanently. All processing is done securely and your intellectual property remains yours.",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Senior Developer at TechCorp",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content:
-        "Coding Killer has transformed my development workflow. The AI-generated code is incredibly accurate and saves me hours every day. The bug detection feature alone has prevented countless production issues.",
-      rating: 5,
-    },
-    {
-      name: "Michael Chen",
-      role: "Full-Stack Developer",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      content:
-        "As a freelancer, time is money. This tool helps me deliver projects faster without compromising quality. The code explanations are particularly helpful when working with unfamiliar technologies.",
-      rating: 5,
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Tech Lead at StartupXYZ",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      content:
-        "Our team's productivity has increased by 40% since adopting Coding Killer. The API generation tool is phenomenal - it creates production-ready endpoints with proper validation and security.",
-      rating: 5,
-    },
-    {
-      name: "David Kim",
-      role: "Software Engineer",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The code refactoring tool is a game-changer. It not only improves code quality but also teaches me best practices. I've learned more about clean code in the past month than in years of experience.",
-      rating: 5,
-    },
-    {
-      name: "Lisa Thompson",
-      role: "Junior Developer",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-      content:
-        "As someone new to programming, the code explainer feature has been invaluable. It breaks down complex algorithms in a way that's easy to understand. Highly recommend for beginners!",
-      rating: 5,
-    },
-    {
-      name: "Alex Johnson",
-      role: "DevOps Engineer",
-      avatar:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-      content:
-        "The deployment script generator saves me tons of time. It creates robust, production-ready deployment scripts for various platforms. The security checker is also top-notch.",
-      rating: 5,
-    },
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <SEO
-        title="Home"
-        description="AI-powered coding assistant that helps developers write better code faster with intelligent code generation, bug fixing, optimization, and more."
-        keywords="AI coding assistant, code generator, bug fixer, code optimization, programming tools"
-        canonical="/"
-      />
+  const features = [{
+    icon: <Code className="h-8 w-8" />,
+    title: "AI Code Generator",
+    description: "Generate code from natural language descriptions in any programming language"
+  }, {
+    icon: <Bug className="h-8 w-8" />,
+    title: "AI Bug Fixer",
+    description: "Automatically detect and fix bugs in your code with AI-powered solutions"
+  }, {
+    icon: <FileText className="h-8 w-8" />,
+    title: "Code Explainer",
+    description: "Get detailed explanations of complex code snippets and algorithms"
+  }, {
+    icon: <Wrench className="h-8 w-8" />,
+    title: "Code Refactor",
+    description: "Improve code quality and maintainability with intelligent refactoring"
+  }, {
+    icon: <Zap className="h-8 w-8" />,
+    title: "Code Optimizer",
+    description: "Optimize your code for better performance and efficiency"
+  }, {
+    icon: <TestTube className="h-8 w-8" />,
+    title: "Unit Test Generator",
+    description: "Generate comprehensive unit tests for your functions and methods"
+  }, {
+    icon: <Globe className="h-8 w-8" />,
+    title: "API Generator",
+    description: "Create REST API endpoints with proper routing and validation"
+  }, {
+    icon: <Settings className="h-8 w-8" />,
+    title: "Config Generator",
+    description: "Generate configuration files for popular frameworks and tools"
+  }, {
+    icon: <Rocket className="h-8 w-8" />,
+    title: "Deployment Scripts",
+    description: "Create deployment scripts for various platforms and environments"
+  }, {
+    icon: <BookOpen className="h-8 w-8" />,
+    title: "Documentation Generator",
+    description: "Generate comprehensive documentation for your codebase"
+  }, {
+    icon: <Sparkles className="h-8 w-8" />,
+    title: "Lint Fixer",
+    description: "Automatically fix linting errors and improve code style"
+  }, {
+    icon: <Shield className="h-8 w-8" />,
+    title: "Security Checker",
+    description: "Scan your code for security vulnerabilities and get fixes"
+  }];
+  const aiDemoExamples = [{
+    title: "React Component Generator",
+    description: "Generate complete React components with hooks and TypeScript",
+    example: "Create a real-time chat system with WebSocket",
+    result: "✅ Generated React component with real-time messaging",
+    icon: <Code className="h-6 w-6" />,
+    bgColor: "bg-blue-50",
+    iconColor: "text-blue-600",
+    codeType: "javascript",
+    toolPath: "/tools/code-generator"
+  }, {
+    title: "Python API Development",
+    description: "Build Flask/Django APIs with authentication and caching",
+    example: "Create e-commerce product management API",
+    result: "✅ Generated Flask API with Redis caching and JWT auth",
+    icon: <Globe className="h-6 w-6" />,
+    bgColor: "bg-green-50",
+    iconColor: "text-green-600",
+    codeType: "python",
+    toolPath: "/tools/api-generator"
+  }, {
+    title: "Java Microservices",
+    description: "Generate Spring Boot microservices with Kafka integration",
+    example: "Build user service with event-driven architecture",
+    result: "✅ Created Spring Boot service with Kafka messaging",
+    icon: <Zap className="h-6 w-6" />,
+    bgColor: "bg-orange-50",
+    iconColor: "text-orange-600",
+    codeType: "java",
+    toolPath: "/tools/code-generator"
+  }, {
+    title: "Database Design",
+    description: "Design complete database schemas with relationships",
+    example: "Create e-commerce database with indexing",
+    result: "✅ Generated PostgreSQL schema with triggers and views",
+    icon: <Bug className="h-6 w-6" />,
+    bgColor: "bg-purple-50",
+    iconColor: "text-purple-600",
+    codeType: "sql",
+    toolPath: "/tools/config-generator"
+  }];
+  const plans = [{
+    name: "Starter",
+    price: "$5",
+    bdtPrice: "৳625",
+    period: "/month",
+    description: "Perfect for individual developers",
+    credits: 200,
+    popular: false,
+    features: ["200 AI credits per month", "All AI tools access", "Email support", "Basic usage analytics"]
+  }, {
+    name: "Pro",
+    price: "$10",
+    bdtPrice: "৳1,250",
+    period: "/month",
+    description: "Ideal for professional developers",
+    credits: 500,
+    popular: true,
+    features: ["500 AI credits per month", "All AI tools access", "Priority processing", "Priority email support", "Advanced analytics"]
+  }, {
+    name: "Enterprise",
+    price: "$20",
+    bdtPrice: "৳2,500",
+    period: "/month",
+    description: "For teams and organizations",
+    credits: 1500,
+    popular: false,
+    features: ["1,500 AI credits per month", "All AI tools access", "Highest priority processing", "24/7 priority support", "API access"]
+  }];
+  const faqs = [{
+    question: "How does the AI code generation work?",
+    answer: "Our AI uses advanced machine learning models trained on millions of code repositories to understand your requirements and generate high-quality, production-ready code in any programming language."
+  }, {
+    question: "What programming languages are supported?",
+    answer: "We support all major programming languages including JavaScript, Python, Java, C++, Go, Rust, TypeScript, PHP, Ruby, and many more. The AI can also work with frameworks and libraries."
+  }, {
+    question: "How accurate is the bug detection?",
+    answer: "Our AI bug detection has a 95% accuracy rate for common programming errors, memory leaks, security vulnerabilities, and performance issues. It continuously learns from new patterns."
+  }, {
+    question: "Can I use this for commercial projects?",
+    answer: "Yes! All generated code is yours to use in any project, including commercial applications. We don't claim any ownership over the code you generate."
+  }, {
+    question: "What if I run out of credits?",
+    answer: "You can upgrade your plan anytime or purchase additional credits. We also offer custom enterprise plans for high-volume usage."
+  }, {
+    question: "Is my code data secure?",
+    answer: "Absolutely. We use enterprise-grade encryption and never store your code permanently. All processing is done securely and your intellectual property remains yours."
+  }];
+  const testimonials = [{
+    name: "Sarah Johnson",
+    role: "Senior Developer at TechCorp",
+    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+    content: "Coding Killer has transformed my development workflow. The AI-generated code is incredibly accurate and saves me hours every day. The bug detection feature alone has prevented countless production issues.",
+    rating: 5
+  }, {
+    name: "Michael Chen",
+    role: "Full-Stack Developer",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    content: "As a freelancer, time is money. This tool helps me deliver projects faster without compromising quality. The code explanations are particularly helpful when working with unfamiliar technologies.",
+    rating: 5
+  }, {
+    name: "Emily Rodriguez",
+    role: "Tech Lead at StartupXYZ",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    content: "Our team's productivity has increased by 40% since adopting Coding Killer. The API generation tool is phenomenal - it creates production-ready endpoints with proper validation and security.",
+    rating: 5
+  }, {
+    name: "David Kim",
+    role: "Software Engineer",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    content: "The code refactoring tool is a game-changer. It not only improves code quality but also teaches me best practices. I've learned more about clean code in the past month than in years of experience.",
+    rating: 5
+  }, {
+    name: "Lisa Thompson",
+    role: "Junior Developer",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+    content: "As someone new to programming, the code explainer feature has been invaluable. It breaks down complex algorithms in a way that's easy to understand. Highly recommend for beginners!",
+    rating: 5
+  }, {
+    name: "Alex Johnson",
+    role: "DevOps Engineer",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    content: "The deployment script generator saves me tons of time. It creates robust, production-ready deployment scripts for various platforms. The security checker is also top-notch.",
+    rating: 5
+  }];
+  return <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <SEO title="Home" description="AI-powered coding assistant that helps developers write better code faster with intelligent code generation, bug fixing, optimization, and more." keywords="AI coding assistant, code generator, bug fixer, code optimization, programming tools" canonical="/" />
 
       <Navbar2 />
 
@@ -1222,19 +1092,12 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/signup">
-                  <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 text-lg px-8 py-4"
-                  >
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-4">
                     Start Coding with AI
                   </Button>
                 </Link>
                 <Link to="/pricing">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="text-lg px-8 py-4"
-                  >
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-4">
                     View Pricing
                   </Button>
                 </Link>
@@ -1243,13 +1106,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
             <div className="lg:pl-8">
               <div className="h-96 w-full">
-                <EnhancedCodeSlider
-                  code={heroSampleCode}
-                  language="javascript"
-                  title="AI Generated E-commerce Component (150+ lines)"
-                  maxHeight={384}
-                  enableAutoScroll={true}
-                />
+                <EnhancedCodeSlider code={heroSampleCode} language="javascript" title="AI Generated E-commerce Component (150+ lines)" maxHeight={384} enableAutoScroll={true} />
               </div>
             </div>
           </div>
@@ -1272,11 +1129,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="hover:shadow-lg transition-all duration-300 animate-slide-up border-primary/10"
-              >
+            {features.map((feature, index) => <Card key={index} className="hover:shadow-lg transition-all duration-300 animate-slide-up border-primary/10">
                 <CardHeader>
                   <div className="text-primary mb-4">{feature.icon}</div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
@@ -1286,8 +1139,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                     {feature.description}
                   </CardDescription>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -1326,14 +1178,9 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
           {/* Advanced Grid Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-8 mb-16">
-            {aiDemoExamples.map((demo, index) => (
-              <div
-                key={index}
-                className={`group relative transform transition-all duration-700 hover:scale-[1.02] ${
-                  index % 2 === 0 ? "lg:translate-y-8" : "lg:-translate-y-4"
-                }`}
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
+            {aiDemoExamples.map((demo, index) => <div key={index} className={`group relative transform transition-all duration-700 hover:scale-[1.02] ${index % 2 === 0 ? "lg:translate-y-8" : "lg:-translate-y-4"}`} style={{
+            animationDelay: `${index * 200}ms`
+          }}>
                 {/* Glowing border effect */}
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-blue-500 to-purple-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur"></div>
 
@@ -1352,12 +1199,8 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                     {/* Enhanced icon design */}
                     <div className="flex items-start justify-between mb-6">
                       <div className="flex items-center gap-4">
-                        <div
-                          className={`relative p-4 ${demo.bgColor} rounded-2xl shadow-xl group-hover:scale-110 transition-transform duration-300`}
-                        >
-                          <div
-                            className={`${demo.iconColor} transform group-hover:rotate-12 transition-transform duration-300`}
-                          >
+                        <div className={`relative p-4 ${demo.bgColor} rounded-2xl shadow-xl group-hover:scale-110 transition-transform duration-300`}>
+                          <div className={`${demo.iconColor} transform group-hover:rotate-12 transition-transform duration-300`}>
                             {demo.icon}
                           </div>
                           {/* Pulse ring */}
@@ -1444,37 +1287,13 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
                     {/* Enhanced code preview */}
                     <div className="mb-8">
-                      <div className="bg-gray-900 rounded-t-xl px-4 py-3 flex items-center gap-3">
-                        <div className="flex gap-2">
-                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        </div>
-                        <span className="text-gray-400 text-sm font-medium">
-                          Generated {demo.codeType.toUpperCase()} Code
-                        </span>
-                        <div className="ml-auto flex items-center gap-2">
-                          <div className="bg-green-500 w-2 h-2 rounded-full animate-pulse"></div>
-                          <span className="text-green-400 text-xs">
-                            Live Preview
-                          </span>
-                        </div>
-                      </div>
-                      <EnhancedCodeSlider
-                        code={codeExamples[demo.codeType]}
-                        language={demo.codeType}
-                        title=""
-                        maxHeight={280}
-                        enableAutoScroll={true}
-                      />
+                      
+                      <EnhancedCodeSlider code={codeExamples[demo.codeType]} language={demo.codeType} title="" maxHeight={280} enableAutoScroll={true} />
                     </div>
 
                     {/* Enhanced action button */}
                     <Link to={demo.toolPath}>
-                      <Button
-                        className="w-full bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 text-white shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] font-semibold text-lg py-6 rounded-xl relative overflow-hidden"
-                        size="lg"
-                      >
+                      <Button className="w-full bg-gradient-to-r from-primary via-primary to-primary/90 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 text-white shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02] font-semibold text-lg py-6 rounded-xl relative overflow-hidden" size="lg">
                         <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                         <div className="relative flex items-center justify-center gap-3">
                           <Play className="h-5 w-5" />
@@ -1493,8 +1312,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                     </div>
                   </div>
                 </Card>
-              </div>
-            ))}
+              </div>)}
           </div>
 
           {/* Enhanced Bottom CTA section */}
@@ -1521,10 +1339,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                   <Link to="/tools">
-                    <Button
-                      size="lg"
-                      className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-xl hover:shadow-2xl text-lg px-8 py-4 rounded-xl font-semibold relative overflow-hidden group"
-                    >
+                    <Button size="lg" className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-xl hover:shadow-2xl text-lg px-8 py-4 rounded-xl font-semibold relative overflow-hidden group">
                       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                       <div className="relative flex items-center gap-3">
                         <Zap className="h-6 w-6" />
@@ -1534,11 +1349,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                     </Button>
                   </Link>
                   <Link to="/signup">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
-                    >
+                    <Button variant="outline" size="lg" className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-lg px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg">
                       Start Free Trial
                     </Button>
                   </Link>
@@ -1578,16 +1389,10 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <Card
-                key={index}
-                className={`relative ${plan.popular ? "border-primary shadow-lg scale-105" : "border-gray-200"}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">
+            {plans.map((plan, index) => <Card key={index} className={`relative ${plan.popular ? "border-primary shadow-lg scale-105" : "border-gray-200"}`}>
+                {plan.popular && <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-sm font-medium">
                     Most Popular
-                  </div>
-                )}
+                  </div>}
 
                 <CardHeader className="text-center pb-4">
                   <CardTitle className="text-2xl font-bold">
@@ -1620,31 +1425,22 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                   </div>
 
                   <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center">
+                    {plan.features.map((feature, featureIndex) => <li key={featureIndex} className="flex items-center">
                         <Check className="h-4 w-4 text-primary mr-3 flex-shrink-0" />
                         <span className="text-sm text-gray-700">{feature}</span>
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
 
-                  <Link
-                    to="/payment"
-                    state={{ plan: plan.name, price: plan.price }}
-                  >
-                    <Button
-                      className={`w-full ${
-                        plan.popular
-                          ? "bg-primary hover:bg-primary/90"
-                          : "bg-gray-900 hover:bg-gray-800"
-                      }`}
-                    >
+                  <Link to="/payment" state={{
+                plan: plan.name,
+                price: plan.price
+              }}>
+                    <Button className={`w-full ${plan.popular ? "bg-primary hover:bg-primary/90" : "bg-gray-900 hover:bg-gray-800"}`}>
                       Get Started
                     </Button>
                   </Link>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -1663,12 +1459,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
           <div className="max-w-4xl mx-auto">
             <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <AccordionItem
-                  key={index}
-                  value={`item-${index}`}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200"
-                >
+              {faqs.map((faq, index) => <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg shadow-sm border border-gray-200">
                   <AccordionTrigger className="px-6 py-4 text-left hover:no-underline">
                     <span className="text-lg font-semibold text-gray-900">
                       {faq.question}
@@ -1679,8 +1470,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                       {faq.answer}
                     </p>
                   </AccordionContent>
-                </AccordionItem>
-              ))}
+                </AccordionItem>)}
             </Accordion>
           </div>
         </div>
@@ -1699,18 +1489,10 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300"
-              >
+            {testimonials.map((testimonial, index) => <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover mr-4"
-                    />
+                    <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
                     <div>
                       <h4 className="font-semibold text-gray-900">
                         {testimonial.name}
@@ -1722,12 +1504,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                   </div>
 
                   <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                      />
-                    ))}
+                    {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                   </div>
 
                   <div className="relative">
@@ -1737,8 +1514,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                     </p>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -1765,15 +1541,9 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <img
-                  src="https://i.postimg.cc/mkqZncXQ/Chat-GPT-Image-Jul-2-2025-04-29-00-PM-min.png"
-                  alt="Coding Killer Logo"
-                  className="w-8 h-8 rounded object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png";
-                  }}
-                />
+                <img src="https://i.postimg.cc/mkqZncXQ/Chat-GPT-Image-Jul-2-2025-04-29-00-PM-min.png" alt="Coding Killer Logo" className="w-8 h-8 rounded object-cover" onError={e => {
+                e.currentTarget.src = "/lovable-uploads/44f7b590-ba5e-4d61-b590-92095e19779b.png";
+              }} />
                 <span className="text-xl font-bold">Coding Killer</span>
               </div>
               <p className="text-gray-400">
@@ -1811,10 +1581,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="mailto:21ashikur1234@gmail.com"
-                    className="hover:text-white"
-                  >
+                  <a href="mailto:21ashikur1234@gmail.com" className="hover:text-white">
                     Contact
                   </a>
                 </li>
@@ -1852,8 +1619,6 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
       {/* Floating Components */}
       <FloatingCTA />
       <CookieConsent />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
