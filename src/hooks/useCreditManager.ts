@@ -237,7 +237,7 @@ export const useCreditManager = () => {
 
       return true;
     } catch (error) {
-      console.error("Error in credit deduction:", error);
+      logError("Error in credit deduction:", error);
       toast.error("Failed to deduct credits");
       return false;
     } finally {
