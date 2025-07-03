@@ -1,37 +1,43 @@
-
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import Header from '@/components/Header';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Copy, Bug, Wrench } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Copy, Bug, Wrench } from "lucide-react";
+import { toast } from "sonner";
 
 const BugFixer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [buggyCode, setBuggyCode] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [fixedCode, setFixedCode] = useState('');
-  const [explanation, setExplanation] = useState('');
+  const [buggyCode, setBuggyCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fixedCode, setFixedCode] = useState("");
+  const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);
 
   if (!user) {
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
   const handleFixBug = async () => {
     if (!buggyCode.trim()) {
-      toast.error('Please enter the buggy code');
+      toast.error("Please enter the buggy code");
       return;
     }
 
     setLoading(true);
-    
+
     // Simulate AI bug fixing (in real app, this would call OpenAI API)
     setTimeout(() => {
       const sampleFix = `// Fixed version of your code
@@ -40,7 +46,7 @@ function validateEmail(email) {
   if (!email || typeof email !== 'string') {
     return false;
   }
-  
+
   // Fixed: Improved regex pattern for better email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
   return emailRegex.test(email.trim());
@@ -72,19 +78,25 @@ function safeValidateEmail(email) {
       setFixedCode(sampleFix);
       setExplanation(sampleExplanation);
       setLoading(false);
-      toast.success('Bug fix generated successfully!');
+      toast.success("Bug fix generated successfully!");
     }, 2000);
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(fixedCode);
-    toast.success('Fixed code copied to clipboard!');
+    toast.success("Fixed code copied to clipboard!");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="AI Bug Fixer"
+        description="Find and fix bugs in your code automatically with AI-powered analysis and solutions."
+        canonical="/tools/bug-fixer"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -92,7 +104,8 @@ function safeValidateEmail(email) {
             <h1 className="text-4xl font-bold gradient-text">AI Bug Fixer</h1>
           </div>
           <p className="text-xl text-gray-600">
-            Find and fix bugs in your code automatically. Paste your buggy code and get an improved version with explanations.
+            Find and fix bugs in your code automatically. Paste your buggy code
+            and get an improved version with explanations.
           </p>
         </div>
 
@@ -105,12 +118,16 @@ function safeValidateEmail(email) {
                 Bug Analysis
               </CardTitle>
               <CardDescription>
-                Paste your problematic code and any error messages you're receiving
+                Paste your problematic code and any error messages you're
+                receiving
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label htmlFor="buggyCode" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="buggyCode"
+                  className="block text-sm font-medium mb-2"
+                >
                   Buggy Code
                 </label>
                 <Textarea
@@ -122,9 +139,12 @@ function safeValidateEmail(email) {
                   className="resize-none font-mono text-sm"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="errorMessage" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="errorMessage"
+                  className="block text-sm font-medium mb-2"
+                >
                   Error Message (Optional)
                 </label>
                 <Textarea
@@ -142,7 +162,7 @@ function safeValidateEmail(email) {
                   <Badge variant="outline">1 Credit</Badge>
                   <span className="text-sm text-gray-600">per bug fix</span>
                 </div>
-                <Button 
+                <Button
                   onClick={handleFixBug}
                   disabled={loading}
                   className="bg-primary hover:bg-primary/90"
@@ -154,7 +174,7 @@ function safeValidateEmail(email) {
                       <span></span>
                     </div>
                   ) : (
-                    'Fix Bugs'
+                    "Fix Bugs"
                   )}
                 </Button>
               </div>
@@ -169,9 +189,9 @@ function safeValidateEmail(email) {
                 <div className="flex items-center justify-between">
                   <CardTitle>Fixed Code</CardTitle>
                   {fixedCode && (
-                    <Button 
+                    <Button
                       onClick={copyToClipboard}
-                      variant="outline" 
+                      variant="outline"
                       size="sm"
                       className="flex items-center gap-2"
                     >
@@ -205,7 +225,9 @@ function safeValidateEmail(email) {
                 </CardHeader>
                 <CardContent>
                   <div className="prose prose-sm max-w-none">
-                    <pre className="whitespace-pre-wrap text-sm">{explanation}</pre>
+                    <pre className="whitespace-pre-wrap text-sm">
+                      {explanation}
+                    </pre>
                   </div>
                 </CardContent>
               </Card>
@@ -216,7 +238,9 @@ function safeValidateEmail(email) {
         {/* Tips Section */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-4 gradient-text">🐛 Bug Fixing Tips</h2>
+            <h2 className="text-xl font-semibold mb-4 gradient-text">
+              🐛 Bug Fixing Tips
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h3 className="font-medium mb-2">Include Error Messages</h3>
@@ -227,7 +251,8 @@ function safeValidateEmail(email) {
               <div>
                 <h3 className="font-medium mb-2">Provide Context</h3>
                 <p className="text-sm text-gray-600">
-                  Include relevant code around the buggy section for better analysis
+                  Include relevant code around the buggy section for better
+                  analysis
                 </p>
               </div>
               <div>
@@ -239,7 +264,8 @@ function safeValidateEmail(email) {
               <div>
                 <h3 className="font-medium mb-2">Test the Fix</h3>
                 <p className="text-sm text-gray-600">
-                  Always test the fixed code in your environment before deploying
+                  Always test the fixed code in your environment before
+                  deploying
                 </p>
               </div>
             </div>

@@ -1,5 +1,5 @@
 
-import { Navbar1 } from '@/components/ui/navbar-1';
+import { Navbar2 } from '@/components/ui/navbar-2';
 import SEO from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Mail, Shield } from 'lucide-react';
@@ -13,7 +13,7 @@ const RefundPolicy = () => {
         canonical="/refund-policy"
       />
       
-      <Navbar1 />
+      <Navbar2 />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">

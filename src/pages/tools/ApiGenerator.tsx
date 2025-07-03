@@ -1,40 +1,52 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Globe, RefreshCw, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Globe, RefreshCw, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const ApiGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [apiDescription, setApiDescription] = useState('');
-  const [framework, setFramework] = useState('express');
+
+  const [apiDescription, setApiDescription] = useState("");
+  const [framework, setFramework] = useState("express");
   const [includeErrorHandling, setIncludeErrorHandling] = useState(true);
   const [includeValidation, setIncludeValidation] = useState(true);
-  const [generatedCode, setGeneratedCode] = useState('');
+  const [generatedCode, setGeneratedCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleGenerateAPI = async () => {
     if (!apiDescription.trim()) {
-      toast.error('Please describe the API requirements');
+      toast.error("Please describe the API requirements");
       return;
     }
 
@@ -47,99 +59,119 @@ const ApiGenerator = () => {
 
     try {
       // Simulate API call - Replace with actual AI service
-      let mockCode = '';
-      
-      if (framework === 'express') {
+      let mockCode = "";
+
+      if (framework === "express") {
         mockCode = `const express = require('express');
-${includeValidation ? "const { body, validationResult } = require('express-validator');" : ''}
+${includeValidation ? "const { body, validationResult } = require('express-validator');" : ""}
 const app = express();
 
 app.use(express.json());
 
-${includeErrorHandling ? `
+${
+  includeErrorHandling
+    ? `
 // Error handling middleware
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Something went wrong!',
-    message: err.message 
+    message: err.message
   });
 };
-` : ''}
+`
+    : ""
+}
 
 // GET endpoint
 app.get('/api/users', async (req, res) => {
   try {
     // Implementation based on: ${apiDescription}
     const users = await getUsersFromDatabase();
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       data: users,
-      count: users.length 
+      count: users.length
     });
   } catch (error) {
-    ${includeErrorHandling ? 'next(error);' : 'res.status(500).json({ error: error.message });'}
+    ${includeErrorHandling ? "next(error);" : "res.status(500).json({ error: error.message });"}
   }
 });
 
 // POST endpoint
-app.post('/api/users', 
-  ${includeValidation ? `[
+app.post('/api/users',
+  ${
+    includeValidation
+      ? `[
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
-  ],` : ''}
+  ],`
+      : ""
+  }
   async (req, res) => {
     try {
-      ${includeValidation ? `
+      ${
+        includeValidation
+          ? `
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ 
-          success: false, 
-          errors: errors.array() 
+        return res.status(400).json({
+          success: false,
+          errors: errors.array()
         });
       }
-      ` : ''}
-      
+      `
+          : ""
+      }
+
       const newUser = await createUser(req.body);
-      res.status(201).json({ 
-        success: true, 
-        data: newUser 
+      res.status(201).json({
+        success: true,
+        data: newUser
       });
     } catch (error) {
-      ${includeErrorHandling ? 'next(error);' : 'res.status(500).json({ error: error.message });'}
+      ${includeErrorHandling ? "next(error);" : "res.status(500).json({ error: error.message });"}
     }
   }
 );
 
 // PUT endpoint
-app.put('/api/users/:id', 
-  ${includeValidation ? `[
+app.put('/api/users/:id',
+  ${
+    includeValidation
+      ? `[
     body('name').optional().notEmpty(),
     body('email').optional().isEmail(),
-  ],` : ''}
+  ],`
+      : ""
+  }
   async (req, res) => {
     try {
-      ${includeValidation ? `
+      ${
+        includeValidation
+          ? `
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ 
-          success: false, 
-          errors: errors.array() 
+        return res.status(400).json({
+          success: false,
+          errors: errors.array()
         });
       }
-      ` : ''}
-      
+      `
+          : ""
+      }
+
       const updatedUser = await updateUser(req.params.id, req.body);
       if (!updatedUser) {
-        return res.status(404).json({ 
-          success: false, 
-          message: 'User not found' 
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
         });
       }
-      
+
       res.json({ success: true, data: updatedUser });
     } catch (error) {
-      ${includeErrorHandling ? 'next(error);' : 'res.status(500).json({ error: error.message });'}
+      ${includeErrorHandling ? "next(error);" : "res.status(500).json({ error: error.message });"}
     }
   }
 );
@@ -149,22 +181,22 @@ app.delete('/api/users/:id', async (req, res) => {
   try {
     const deleted = await deleteUser(req.params.id);
     if (!deleted) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'User not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
       });
     }
-    
-    res.json({ 
-      success: true, 
-      message: 'User deleted successfully' 
+
+    res.json({
+      success: true,
+      message: 'User deleted successfully'
     });
   } catch (error) {
-    ${includeErrorHandling ? 'next(error);' : 'res.status(500).json({ error: error.message });'}
+    ${includeErrorHandling ? "next(error);" : "res.status(500).json({ error: error.message });"}
   }
 });
 
-${includeErrorHandling ? 'app.use(errorHandler);' : ''}
+${includeErrorHandling ? "app.use(errorHandler);" : ""}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -172,22 +204,28 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;`;
-      } else if (framework === 'flask') {
+      } else if (framework === "flask") {
         mockCode = `from flask import Flask, request, jsonify
-${includeValidation ? 'from marshmallow import Schema, fields, ValidationError' : ''}
-${includeErrorHandling ? 'from werkzeug.exceptions import BadRequest, NotFound, InternalServerError' : ''}
+${includeValidation ? "from marshmallow import Schema, fields, ValidationError" : ""}
+${includeErrorHandling ? "from werkzeug.exceptions import BadRequest, NotFound, InternalServerError" : ""}
 
 app = Flask(__name__)
 
-${includeValidation ? `
+${
+  includeValidation
+    ? `
 class UserSchema(Schema):
     name = fields.Str(required=True)
     email = fields.Email(required=True)
 
 user_schema = UserSchema()
-` : ''}
+`
+    : ""
+}
 
-${includeErrorHandling ? `
+${
+  includeErrorHandling
+    ? `
 @app.errorhandler(Exception)
 def handle_error(error):
     return jsonify({
@@ -201,7 +239,9 @@ def handle_validation_error(error):
         'success': False,
         'errors': error.messages
     }), 400
-` : ''}
+`
+    : ""
+}
 
 @app.route('/api/users', methods=['GET'])
 def get_users():
@@ -214,46 +254,54 @@ def get_users():
             'count': len(users)
         })
     except Exception as e:
-        ${includeErrorHandling ? 'raise InternalServerError(str(e))' : 'return jsonify({"error": str(e)}), 500'}
+        ${includeErrorHandling ? "raise InternalServerError(str(e))" : 'return jsonify({"error": str(e)}), 500'}
 
 @app.route('/api/users', methods=['POST'])
 def create_user():
     try:
-        ${includeValidation ? `
+        ${
+          includeValidation
+            ? `
         json_data = request.get_json()
         user_data = user_schema.load(json_data)
-        ` : 'user_data = request.get_json()'}
-        
+        `
+            : "user_data = request.get_json()"
+        }
+
         new_user = create_user_in_database(user_data)
         return jsonify({
             'success': True,
             'data': new_user
         }), 201
     except ValidationError as e:
-        ${includeErrorHandling ? 'raise BadRequest(str(e))' : 'return jsonify({"error": str(e)}), 400'}
+        ${includeErrorHandling ? "raise BadRequest(str(e))" : 'return jsonify({"error": str(e)}), 400'}
     except Exception as e:
-        ${includeErrorHandling ? 'raise InternalServerError(str(e))' : 'return jsonify({"error": str(e)}), 500'}
+        ${includeErrorHandling ? "raise InternalServerError(str(e))" : 'return jsonify({"error": str(e)}), 500'}
 
 @app.route('/api/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     try:
-        ${includeValidation ? `
+        ${
+          includeValidation
+            ? `
         json_data = request.get_json()
         user_data = user_schema.load(json_data, partial=True)
-        ` : 'user_data = request.get_json()'}
-        
+        `
+            : "user_data = request.get_json()"
+        }
+
         updated_user = update_user_in_database(user_id, user_data)
         if not updated_user:
             ${includeErrorHandling ? 'raise NotFound("User not found")' : 'return jsonify({"error": "User not found"}), 404'}
-        
+
         return jsonify({
             'success': True,
             'data': updated_user
         })
     except ValidationError as e:
-        ${includeErrorHandling ? 'raise BadRequest(str(e))' : 'return jsonify({"error": str(e)}), 400'}
+        ${includeErrorHandling ? "raise BadRequest(str(e))" : 'return jsonify({"error": str(e)}), 400'}
     except Exception as e:
-        ${includeErrorHandling ? 'raise InternalServerError(str(e))' : 'return jsonify({"error": str(e)}), 500'}
+        ${includeErrorHandling ? "raise InternalServerError(str(e))" : 'return jsonify({"error": str(e)}), 500'}
 
 @app.route('/api/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
@@ -261,13 +309,13 @@ def delete_user(user_id):
         deleted = delete_user_from_database(user_id)
         if not deleted:
             ${includeErrorHandling ? 'raise NotFound("User not found")' : 'return jsonify({"error": "User not found"}), 404'}
-        
+
         return jsonify({
             'success': True,
             'message': 'User deleted successfully'
         })
     except Exception as e:
-        ${includeErrorHandling ? 'raise InternalServerError(str(e))' : 'return jsonify({"error": str(e)}), 500'}
+        ${includeErrorHandling ? "raise InternalServerError(str(e))" : 'return jsonify({"error": str(e)}), 500'}
 
 if __name__ == '__main__':
     app.run(debug=True)`;
@@ -277,16 +325,16 @@ if __name__ == '__main__':
 
       // Deduct credits and log activity
       await deductCredits(
-        'AI API Generator',
+        "AI API Generator",
         requiredCredits,
         `Framework: ${framework}, ErrorHandling: ${includeErrorHandling}, Validation: ${includeValidation}, Description: ${apiDescription.substring(0, 100)}...`,
-        mockCode.substring(0, 200)
+        mockCode.substring(0, 200),
       );
 
-      toast.success('API code generated successfully!');
+      toast.success("API code generated successfully!");
     } catch (error) {
-      console.error('Error generating API:', error);
-      toast.error('Failed to generate API code');
+      console.error("Error generating API:", error);
+      toast.error("Failed to generate API code");
     } finally {
       setIsLoading(false);
     }
@@ -304,16 +352,25 @@ if __name__ == '__main__':
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="AI API Generator"
+        description="Generate REST API endpoints with proper routing, validation, and authentication using AI."
+        canonical="/tools/api-generator"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Globe className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI API Generator</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI API Generator
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
-            Generate complete REST API endpoints with proper routing and validation
+            Generate complete REST API endpoints with proper routing and
+            validation
           </p>
           <div className="flex items-center gap-4 mt-4">
             <Badge variant="outline">2 Credits per generation</Badge>
@@ -335,7 +392,9 @@ if __name__ == '__main__':
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Framework</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Framework
+                </label>
                 <Select value={framework} onValueChange={setFramework}>
                   <SelectTrigger>
                     <SelectValue />
@@ -354,29 +413,39 @@ if __name__ == '__main__':
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-sm font-medium">Include Error Handling</label>
-                    <p className="text-xs text-gray-500">Add comprehensive error handling middleware</p>
+                    <label className="text-sm font-medium">
+                      Include Error Handling
+                    </label>
+                    <p className="text-xs text-gray-500">
+                      Add comprehensive error handling middleware
+                    </p>
                   </div>
-                  <Switch 
-                    checked={includeErrorHandling} 
-                    onCheckedChange={setIncludeErrorHandling} 
+                  <Switch
+                    checked={includeErrorHandling}
+                    onCheckedChange={setIncludeErrorHandling}
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-sm font-medium">Include Input Validation</label>
-                    <p className="text-xs text-gray-500">Add request validation and sanitization</p>
+                    <label className="text-sm font-medium">
+                      Include Input Validation
+                    </label>
+                    <p className="text-xs text-gray-500">
+                      Add request validation and sanitization
+                    </p>
                   </div>
-                  <Switch 
-                    checked={includeValidation} 
-                    onCheckedChange={setIncludeValidation} 
+                  <Switch
+                    checked={includeValidation}
+                    onCheckedChange={setIncludeValidation}
                   />
                 </div>
               </div>
-              
+
               <div>
-                <label className="text-sm font-medium mb-2 block">API Description</label>
+                <label className="text-sm font-medium mb-2 block">
+                  API Description
+                </label>
                 <Textarea
                   placeholder="Describe your API requirements (e.g., 'Create a user management API with CRUD operations, authentication, and role-based access control')"
                   value={apiDescription}
@@ -384,10 +453,12 @@ if __name__ == '__main__':
                   className="min-h-[200px]"
                 />
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={handleGenerateAPI}
-                disabled={isLoading || !apiDescription.trim() || !checkCredits(2)}
+                disabled={
+                  isLoading || !apiDescription.trim() || !checkCredits(2)
+                }
                 className="w-full"
               >
                 {isLoading ? (
@@ -407,7 +478,8 @@ if __name__ == '__main__':
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <span className="text-sm text-red-700">
-                    Insufficient credits. You need 2 credits to generate API code.
+                    Insufficient credits. You need 2 credits to generate API
+                    code.
                   </span>
                 </div>
               )}
@@ -439,15 +511,23 @@ if __name__ == '__main__':
             </CardHeader>
             <CardContent>
               {generatedCode ? (
-                <CodeSlider 
+                <CodeSlider
                   code={generatedCode}
-                  language={framework === 'express' ? 'javascript' : framework === 'flask' || framework === 'fastapi' ? 'python' : 'javascript'}
+                  language={
+                    framework === "express"
+                      ? "javascript"
+                      : framework === "flask" || framework === "fastapi"
+                        ? "python"
+                        : "javascript"
+                  }
                 />
               ) : (
                 <div className="min-h-[400px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <Globe className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Generated API code will appear here</p>
+                    <p className="text-gray-500">
+                      Generated API code will appear here
+                    </p>
                   </div>
                 </div>
               )}
@@ -458,7 +538,9 @@ if __name__ == '__main__':
         {/* API Development Tips */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">API Development Best Practices</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              API Development Best Practices
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">🔐 Security</h4>

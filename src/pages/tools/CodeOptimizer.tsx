@@ -1,39 +1,51 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Zap, RefreshCw, AlertCircle, TrendingUp } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Zap, RefreshCw, AlertCircle, TrendingUp } from "lucide-react";
+import { toast } from "sonner";
 
 const CodeOptimizer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [inputCode, setInputCode] = useState('');
-  const [language, setLanguage] = useState('javascript');
-  const [optimizedCode, setOptimizedCode] = useState('');
+
+  const [inputCode, setInputCode] = useState("");
+  const [language, setLanguage] = useState("javascript");
+  const [optimizedCode, setOptimizedCode] = useState("");
   const [optimizationTips, setOptimizationTips] = useState<string[]>([]);
-  const [performanceGains, setPerformanceGains] = useState<string>('');
+  const [performanceGains, setPerformanceGains] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleOptimize = async () => {
     if (!inputCode.trim()) {
-      toast.error('Please enter some code to optimize');
+      toast.error("Please enter some code to optimize");
       return;
     }
 
@@ -61,10 +73,11 @@ ${inputCode}
         "Use object destructuring to reduce property access",
         "Optimize database queries with proper indexing",
         "Implement lazy loading for large datasets",
-        "Use web workers for CPU-intensive tasks"
+        "Use web workers for CPU-intensive tasks",
       ];
 
-      const mockPerformanceGains = "Estimated 40-60% performance improvement with 25% memory reduction";
+      const mockPerformanceGains =
+        "Estimated 40-60% performance improvement with 25% memory reduction";
 
       setOptimizedCode(mockOptimizedCode);
       setOptimizationTips(mockTips);
@@ -72,16 +85,16 @@ ${inputCode}
 
       // Deduct credits and log activity
       await deductCredits(
-        'AI Code Optimizer',
+        "AI Code Optimizer",
         requiredCredits,
         `Language: ${language}, Input: ${inputCode.substring(0, 100)}...`,
-        mockOptimizedCode.substring(0, 200)
+        mockOptimizedCode.substring(0, 200),
       );
 
-      toast.success('Code optimized successfully!');
+      toast.success("Code optimized successfully!");
     } catch (error) {
-      console.error('Error optimizing code:', error);
-      toast.error('Failed to optimize code');
+      console.error("Error optimizing code:", error);
+      toast.error("Failed to optimize code");
     } finally {
       setIsLoading(false);
     }
@@ -99,16 +112,25 @@ ${inputCode}
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="AI Code Optimizer"
+        description="Optimize your code for better performance, readability, and maintainability with AI."
+        canonical="/tools/code-optimizer"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Zap className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI Code Optimizer</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI Code Optimizer
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
-            Transform slow, performance-heavy code into lightning-fast optimized versions
+            Transform slow, performance-heavy code into lightning-fast optimized
+            versions
           </p>
           <div className="flex items-center gap-4 mt-4">
             <Badge variant="outline">1 Credit per optimization</Badge>
@@ -130,7 +152,9 @@ ${inputCode}
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium mb-2 block">Programming Language</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Programming Language
+                </label>
                 <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger>
                     <SelectValue />
@@ -149,15 +173,15 @@ ${inputCode}
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <Textarea
                 placeholder="Enter your code here..."
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
                 className="min-h-[300px] font-mono text-sm"
               />
-              
-              <Button 
+
+              <Button
                 onClick={handleOptimize}
                 disabled={isLoading || !inputCode.trim() || !checkCredits(1)}
                 className="w-full"
@@ -211,13 +235,12 @@ ${inputCode}
             </CardHeader>
             <CardContent>
               {optimizedCode ? (
-                <CodeSlider 
-                  code={optimizedCode}
-                  language={language}
-                />
+                <CodeSlider code={optimizedCode} language={language} />
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">Optimized code will appear here</p>
+                  <p className="text-gray-500">
+                    Optimized code will appear here
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -237,7 +260,9 @@ ${inputCode}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-green-700 font-medium">{performanceGains}</p>
+                  <p className="text-green-700 font-medium">
+                    {performanceGains}
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -251,7 +276,10 @@ ${inputCode}
                 <CardContent>
                   <ul className="space-y-2">
                     {optimizationTips.map((tip, index) => (
-                      <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                      <li
+                        key={index}
+                        className="text-sm text-gray-700 flex items-start gap-2"
+                      >
                         <span className="text-primary font-bold">•</span>
                         <span>{tip}</span>
                       </li>
@@ -266,7 +294,9 @@ ${inputCode}
         {/* Tips Section */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Optimization Strategies</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Optimization Strategies
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">⚡ Speed Optimization</h4>

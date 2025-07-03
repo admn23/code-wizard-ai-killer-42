@@ -1,19 +1,32 @@
-
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useUserData } from '@/hooks/useUserData';
-import { Navbar1 } from '@/components/ui/navbar-1';
-import SEO from '@/components/SEO';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { User, CreditCard, Activity, Settings, Mail, Phone, Calendar } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUserData } from "@/hooks/useUserData";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  User,
+  CreditCard,
+  Activity,
+  Settings,
+  Mail,
+  Phone,
+  Calendar,
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Profile = () => {
   const { user, loading: authLoading } = useAuth();
@@ -21,21 +34,21 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    full_name: '',
-    email: ''
+    full_name: "",
+    email: "",
   });
 
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
     if (profile) {
       setFormData({
-        full_name: profile.full_name || '',
-        email: profile.email || ''
+        full_name: profile.full_name || "",
+        email: profile.email || "",
       });
     }
   }, [profile]);
@@ -45,28 +58,62 @@ const Profile = () => {
 
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({
           full_name: formData.full_name,
           email: formData.email,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
-      toast.success('Profile updated successfully');
+      toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
+      // Comprehensive error handling to prevent [object Object] display
+      let errorMessage = "Unknown error occurred";
+      let errorCode = "No error code";
+      let errorDetails = "No additional details";
+
+      if (error && typeof error === "object") {
+        errorMessage =
+          error.message ||
+          error.error_description ||
+          error.description ||
+          "Unknown error occurred";
+        errorCode =
+          error.code || error.error_code || error.status || "No error code";
+        errorDetails =
+          error.details ||
+          error.hint ||
+          error.error_hint ||
+          "No additional details";
+      } else if (error) {
+        errorMessage = String(error);
+      }
+
+      // Ensure message is always a string
+      errorMessage = String(errorMessage);
+      errorCode = String(errorCode);
+      errorDetails = String(errorDetails);
+
+      console.error("Error updating profile:", {
+        message: errorMessage,
+        code: errorCode,
+        details: errorDetails,
+        timestamp: new Date().toISOString(),
+        originalError: error,
+      });
+
+      toast.error(`Failed to update profile: ${errorMessage}`);
     }
   };
 
   if (authLoading || dataLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <Navbar1 />
+        <Navbar2 />
         <div className="min-h-screen flex items-center justify-center">
           <div className="loading-dots">
             <span></span>
@@ -82,26 +129,32 @@ const Profile = () => {
     return null;
   }
 
-  const planType = profile?.plan_type || 'Free';
+  const planType = profile?.plan_type || "Free";
   const creditsRemaining = profile?.credits_remaining || 0;
   const tasksThisMonth = profile?.tasks_this_month || 0;
-  const joinDate = profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : 'N/A';
+  const joinDate = profile?.created_at
+    ? new Date(profile.created_at).toLocaleDateString()
+    : "N/A";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <SEO 
+      <SEO
         title="Profile"
         description="Manage your Coding Killer profile settings and view account information"
         canonical="/profile"
       />
-      
-      <Navbar1 />
-      
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold gradient-text mb-2">Profile Settings</h1>
-            <p className="text-gray-600">Manage your account information and preferences</p>
+            <h1 className="text-3xl font-bold gradient-text mb-2">
+              Profile Settings
+            </h1>
+            <p className="text-gray-600">
+              Manage your account information and preferences
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -124,7 +177,12 @@ const Profile = () => {
                       <Input
                         id="fullName"
                         value={formData.full_name}
-                        onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            full_name: e.target.value,
+                          })
+                        }
                         disabled={!isEditing}
                       />
                     </div>
@@ -134,24 +192,39 @@ const Profile = () => {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        disabled={!isEditing}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        disabled={true}
+                        className="bg-gray-50 cursor-not-allowed"
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Email cannot be changed for security reasons
+                      </p>
                     </div>
                   </div>
 
                   <div className="flex gap-3">
                     {isEditing ? (
                       <>
-                        <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
+                        <Button
+                          onClick={handleSave}
+                          className="bg-primary hover:bg-primary/90"
+                        >
                           Save Changes
                         </Button>
-                        <Button variant="outline" onClick={() => setIsEditing(false)}>
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsEditing(false)}
+                        >
                           Cancel
                         </Button>
                       </>
                     ) : (
-                      <Button onClick={() => setIsEditing(true)} variant="outline">
+                      <Button
+                        onClick={() => setIsEditing(true)}
+                        variant="outline"
+                      >
                         <Settings className="h-4 w-4 mr-2" />
                         Edit Profile
                       </Button>
@@ -201,14 +274,23 @@ const Profile = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <Badge className={`mb-3 ${planType === 'Free' ? 'bg-gray-500' : 'bg-primary'}`}>
+                    <Badge
+                      className={`mb-3 ${planType === "Free" ? "bg-gray-500" : "bg-primary"}`}
+                    >
                       {planType} Plan
                     </Badge>
-                    <p className="text-2xl font-bold text-primary mb-1">{creditsRemaining}</p>
-                    <p className="text-sm text-gray-600 mb-4">Credits Remaining</p>
-                    
-                    {planType === 'Free' && (
-                      <Button className="w-full bg-primary hover:bg-primary/90" asChild>
+                    <p className="text-2xl font-bold text-primary mb-1">
+                      {creditsRemaining}
+                    </p>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Credits Remaining
+                    </p>
+
+                    {planType === "Free" && (
+                      <Button
+                        className="w-full bg-primary hover:bg-primary/90"
+                        asChild
+                      >
                         <a href="/pricing">Upgrade Plan</a>
                       </Button>
                     )}
@@ -227,18 +309,20 @@ const Profile = () => {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-primary">{tasksThisMonth}</p>
+                      <p className="text-2xl font-bold text-primary">
+                        {tasksThisMonth}
+                      </p>
                       <p className="text-sm text-gray-600">Tasks This Month</p>
                     </div>
-                    
+
                     <Separator />
-                    
+
                     <div className="text-center">
                       <p className="text-lg font-semibold">Plan Limits</p>
                       <p className="text-sm text-gray-600 mt-1">
-                        {planType === 'Free' && '5 credits/month'}
-                        {planType === 'Pro' && '500 credits/month'}
-                        {planType === 'Enterprise' && '1,500 credits/month'}
+                        {planType === "Free" && "5 credits/month"}
+                        {planType === "Pro" && "500 credits/month"}
+                        {planType === "Enterprise" && "1,500 credits/month"}
                       </p>
                     </div>
                   </div>
@@ -251,19 +335,31 @@ const Profile = () => {
                   <CardTitle>Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start" asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    asChild
+                  >
                     <a href="/dashboard">
                       <Activity className="h-4 w-4 mr-2" />
                       View Dashboard
                     </a>
                   </Button>
-                  <Button variant="outline" className="w-full justify-start" asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    asChild
+                  >
                     <a href="/tools">
                       <Settings className="h-4 w-4 mr-2" />
                       Browse Tools
                     </a>
                   </Button>
-                  <Button variant="outline" className="w-full justify-start" asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    asChild
+                  >
                     <a href="/pricing">
                       <CreditCard className="h-4 w-4 mr-2" />
                       View Pricing

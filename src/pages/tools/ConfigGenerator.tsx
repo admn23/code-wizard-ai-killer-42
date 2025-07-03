@@ -1,72 +1,88 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Settings, RefreshCw, AlertCircle, FileText } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Settings, RefreshCw, AlertCircle, FileText } from "lucide-react";
+import { toast } from "sonner";
 
 const ConfigGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [projectType, setProjectType] = useState('react');
-  const [framework, setFramework] = useState('vite');
-  const [requirements, setRequirements] = useState('');
-  const [selectedConfigs, setSelectedConfigs] = useState<string[]>(['main']);
-  const [generatedConfigs, setGeneratedConfigs] = useState<{[key: string]: string}>({});
+
+  const [projectType, setProjectType] = useState("react");
+  const [framework, setFramework] = useState("vite");
+  const [requirements, setRequirements] = useState("");
+  const [selectedConfigs, setSelectedConfigs] = useState<string[]>(["main"]);
+  const [generatedConfigs, setGeneratedConfigs] = useState<{
+    [key: string]: string;
+  }>({});
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const configOptions = {
     react: [
-      { id: 'main', label: 'Main Config (vite.config.js/package.json)', required: true },
-      { id: 'tailwind', label: 'Tailwind Config' },
-      { id: 'eslint', label: 'ESLint Config' },
-      { id: 'prettier', label: 'Prettier Config' },
-      { id: 'typescript', label: 'TypeScript Config' }
+      {
+        id: "main",
+        label: "Main Config (vite.config.js/package.json)",
+        required: true,
+      },
+      { id: "tailwind", label: "Tailwind Config" },
+      { id: "eslint", label: "ESLint Config" },
+      { id: "prettier", label: "Prettier Config" },
+      { id: "typescript", label: "TypeScript Config" },
     ],
     nextjs: [
-      { id: 'main', label: 'Next.js Config (next.config.js)', required: true },
-      { id: 'tailwind', label: 'Tailwind Config' },
-      { id: 'eslint', label: 'ESLint Config' },
-      { id: 'typescript', label: 'TypeScript Config' }
+      { id: "main", label: "Next.js Config (next.config.js)", required: true },
+      { id: "tailwind", label: "Tailwind Config" },
+      { id: "eslint", label: "ESLint Config" },
+      { id: "typescript", label: "TypeScript Config" },
     ],
     node: [
-      { id: 'main', label: 'Package.json & Server Config', required: true },
-      { id: 'eslint', label: 'ESLint Config' },
-      { id: 'prettier', label: 'Prettier Config' },
-      { id: 'docker', label: 'Dockerfile' }
-    ]
+      { id: "main", label: "Package.json & Server Config", required: true },
+      { id: "eslint", label: "ESLint Config" },
+      { id: "prettier", label: "Prettier Config" },
+      { id: "docker", label: "Dockerfile" },
+    ],
   };
 
   const handleConfigChange = (configId: string, checked: boolean) => {
-    if (configId === 'main') return; // Main config is always required
-    
-    setSelectedConfigs(prev => 
-      checked 
-        ? [...prev, configId]
-        : prev.filter(id => id !== configId)
+    if (configId === "main") return; // Main config is always required
+
+    setSelectedConfigs((prev) =>
+      checked ? [...prev, configId] : prev.filter((id) => id !== configId),
     );
   };
 
   const handleGenerateConfigs = async () => {
     if (!requirements.trim()) {
-      toast.error('Please describe your project requirements');
+      toast.error("Please describe your project requirements");
       return;
     }
 
@@ -78,10 +94,10 @@ const ConfigGenerator = () => {
     setIsLoading(true);
 
     try {
-      const mockConfigs: {[key: string]: string} = {};
+      const mockConfigs: { [key: string]: string } = {};
 
-      if (selectedConfigs.includes('main')) {
-        if (projectType === 'react') {
+      if (selectedConfigs.includes("main")) {
+        if (projectType === "react") {
           mockConfigs.main = `// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -106,7 +122,7 @@ export default defineConfig({
 
 // package.json
 {
-  "name": "${requirements.toLowerCase().replace(/\s+/g, '-') || 'my-react-app'}",
+  "name": "${requirements.toLowerCase().replace(/\s+/g, "-") || "my-react-app"}",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -131,7 +147,7 @@ export default defineConfig({
         }
       }
 
-      if (selectedConfigs.includes('tailwind')) {
+      if (selectedConfigs.includes("tailwind")) {
         mockConfigs.tailwind = `// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -169,7 +185,7 @@ export default {
 }`;
       }
 
-      if (selectedConfigs.includes('eslint')) {
+      if (selectedConfigs.includes("eslint")) {
         mockConfigs.eslint = `// .eslintrc.js
 module.exports = {
   root: true,
@@ -199,7 +215,7 @@ node_modules
 .env.*`;
       }
 
-      if (selectedConfigs.includes('prettier')) {
+      if (selectedConfigs.includes("prettier")) {
         mockConfigs.prettier = `// .prettierrc
 {
   "semi": true,
@@ -218,7 +234,7 @@ node_modules
 package-lock.json`;
       }
 
-      if (selectedConfigs.includes('typescript')) {
+      if (selectedConfigs.includes("typescript")) {
         mockConfigs.typescript = `// tsconfig.json
 {
   "compilerOptions": {
@@ -262,16 +278,16 @@ package-lock.json`;
       setGeneratedConfigs(mockConfigs);
 
       await deductCredits(
-        'AI Config Generator',
+        "AI Config Generator",
         requiredCredits,
-        `Project: ${projectType}, Framework: ${framework}, Configs: ${selectedConfigs.join(', ')}, Requirements: ${requirements.substring(0, 100)}...`,
-        `Generated ${Object.keys(mockConfigs).length} config files`
+        `Project: ${projectType}, Framework: ${framework}, Configs: ${selectedConfigs.join(", ")}, Requirements: ${requirements.substring(0, 100)}...`,
+        `Generated ${Object.keys(mockConfigs).length} config files`,
       );
 
-      toast.success('Configuration files generated successfully!');
+      toast.success("Configuration files generated successfully!");
     } catch (error) {
-      console.error('Error generating configs:', error);
-      toast.error('Failed to generate configuration files');
+      console.error("Error generating configs:", error);
+      toast.error("Failed to generate configuration files");
     } finally {
       setIsLoading(false);
     }
@@ -289,13 +305,21 @@ package-lock.json`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="AI Config Generator"
+        description="Generate configuration files for popular frameworks and tools using AI."
+        canonical="/tools/config-generator"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Settings className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI Config Generator</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI Config Generator
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
             Generate configuration files for popular frameworks and tools
@@ -320,7 +344,9 @@ package-lock.json`;
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Project Type</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Project Type
+                  </label>
                   <Select value={projectType} onValueChange={setProjectType}>
                     <SelectTrigger>
                       <SelectValue />
@@ -335,7 +361,9 @@ package-lock.json`;
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Framework/Tool</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Framework/Tool
+                  </label>
                   <Select value={framework} onValueChange={setFramework}>
                     <SelectTrigger>
                       <SelectValue />
@@ -351,27 +379,40 @@ package-lock.json`;
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Configuration Files</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Configuration Files
+                </label>
                 <div className="space-y-2">
-                  {configOptions[projectType as keyof typeof configOptions]?.map((config) => (
-                    <div key={config.id} className="flex items-center space-x-2">
+                  {configOptions[
+                    projectType as keyof typeof configOptions
+                  ]?.map((config) => (
+                    <div
+                      key={config.id}
+                      className="flex items-center space-x-2"
+                    >
                       <Checkbox
                         id={config.id}
                         checked={selectedConfigs.includes(config.id)}
-                        onCheckedChange={(checked) => handleConfigChange(config.id, checked as boolean)}
+                        onCheckedChange={(checked) =>
+                          handleConfigChange(config.id, checked as boolean)
+                        }
                         disabled={config.required}
                       />
                       <label htmlFor={config.id} className="text-sm">
                         {config.label}
-                        {config.required && <span className="text-red-500 ml-1">*</span>}
+                        {config.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
                       </label>
                     </div>
                   ))}
                 </div>
               </div>
-              
+
               <div>
-                <label className="text-sm font-medium mb-2 block">Project Requirements</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Project Requirements
+                </label>
                 <Textarea
                   placeholder="Describe your project requirements, features, and any specific configurations needed..."
                   value={requirements}
@@ -379,8 +420,8 @@ package-lock.json`;
                   className="min-h-[150px]"
                 />
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={handleGenerateConfigs}
                 disabled={isLoading || !requirements.trim() || !checkCredits(1)}
                 className="w-full"
@@ -402,7 +443,8 @@ package-lock.json`;
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <span className="text-sm text-red-700">
-                    Insufficient credits. You need 1 credit to generate config files.
+                    Insufficient credits. You need 1 credit to generate config
+                    files.
                   </span>
                 </div>
               )}
@@ -434,21 +476,24 @@ package-lock.json`;
             <CardContent>
               {Object.keys(generatedConfigs).length > 0 ? (
                 <div className="space-y-4">
-                  {Object.entries(generatedConfigs).map(([configType, code]) => (
-                    <div key={configType}>
-                      <h4 className="font-medium mb-2 capitalize">{configType} Configuration</h4>
-                      <CodeSlider 
-                        code={code}
-                        language="javascript"
-                      />
-                    </div>
-                  ))}
+                  {Object.entries(generatedConfigs).map(
+                    ([configType, code]) => (
+                      <div key={configType}>
+                        <h4 className="font-medium mb-2 capitalize">
+                          {configType} Configuration
+                        </h4>
+                        <CodeSlider code={code} language="javascript" />
+                      </div>
+                    ),
+                  )}
                 </div>
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <FileText className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Configuration files will appear here</p>
+                    <p className="text-gray-500">
+                      Configuration files will appear here
+                    </p>
                   </div>
                 </div>
               )}
@@ -458,7 +503,9 @@ package-lock.json`;
 
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Configuration Best Practices</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Configuration Best Practices
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">⚙️ Essential Configs</h4>

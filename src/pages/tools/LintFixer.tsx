@@ -1,43 +1,61 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { CheckCircle, RefreshCw, AlertCircle, FileText, AlertTriangle } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import {
+  CheckCircle,
+  RefreshCw,
+  AlertCircle,
+  FileText,
+  AlertTriangle,
+} from "lucide-react";
+import { toast } from "sonner";
 
 const LintFixer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [inputCode, setInputCode] = useState('');
-  const [language, setLanguage] = useState('javascript');
-  const [linter, setLinter] = useState('eslint');
+
+  const [inputCode, setInputCode] = useState("");
+  const [language, setLanguage] = useState("javascript");
+  const [linter, setLinter] = useState("eslint");
   const [showComparison, setShowComparison] = useState(true);
-  const [fixedCode, setFixedCode] = useState('');
+  const [fixedCode, setFixedCode] = useState("");
   const [lintIssues, setLintIssues] = useState<string[]>([]);
   const [fixedIssues, setFixedIssues] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleFixLint = async () => {
     if (!inputCode.trim()) {
-      toast.error('Please enter some code to fix lint issues');
+      toast.error("Please enter some code to fix lint issues");
       return;
     }
 
@@ -51,18 +69,20 @@ const LintFixer = () => {
     try {
       // Simulate API call - Replace with actual AI service
       const mockIssues = [
-        'Missing semicolon at line 5',
+        "Missing semicolon at line 5",
         'Unused variable "temp" at line 12',
-        'Inconsistent indentation at line 8',
-        'Missing space before function parentheses at line 15',
-        'Trailing comma in object literal at line 20',
-        'Double quotes should be single quotes at line 3',
-        'Missing newline at end of file',
-        'Camelcase naming convention violated at line 18'
+        "Inconsistent indentation at line 8",
+        "Missing space before function parentheses at line 15",
+        "Trailing comma in object literal at line 20",
+        "Double quotes should be single quotes at line 3",
+        "Missing newline at end of file",
+        "Camelcase naming convention violated at line 18",
       ];
 
       const mockFixedCode = `// Fixed Code - All lint issues resolved
-${language === 'javascript' ? `
+${
+  language === "javascript"
+    ? `
 // ESLint fixes applied
 const userData = {
   name: 'John Doe',
@@ -74,7 +94,7 @@ function processUser(user) {
   if (!user) {
     return null;
   }
-  
+
   return {
     ...user,
     processed: true,
@@ -86,7 +106,9 @@ const result = processUser(userData);
 console.log(result);
 
 export default processUser;
-` : language === 'python' ? `
+`
+    : language === "python"
+      ? `
 # Flake8/Black fixes applied
 import os
 from typing import Dict, Optional
@@ -96,7 +118,7 @@ def process_user(user_data: Dict[str, str]) -> Optional[Dict]:
     """Process user data and return formatted result."""
     if not user_data:
         return None
-    
+
     return {
         **user_data,
         'processed': True,
@@ -112,7 +134,8 @@ if __name__ == '__main__':
     }
     result = process_user(user)
     print(result)
-` : `
+`
+      : `
 // TypeScript fixes applied
 interface UserData {
   name: string;
@@ -129,7 +152,7 @@ const processUser = (user: UserData): ProcessedUser | null => {
   if (!user) {
     return null;
   }
-  
+
   return {
     ...user,
     processed: true,
@@ -138,38 +161,41 @@ const processUser = (user: UserData): ProcessedUser | null => {
 };
 
 export { processUser, type UserData, type ProcessedUser };
-`}
+`
+}
 
 // Summary: Fixed ${Math.floor(Math.random() * 8) + 5} lint issues
 // Linter: ${linter}
-// Rules applied: ${linter === 'eslint' ? 'ESLint recommended' : linter === 'flake8' ? 'PEP8 compliance' : 'TSLint standard'}`;
+// Rules applied: ${linter === "eslint" ? "ESLint recommended" : linter === "flake8" ? "PEP8 compliance" : "TSLint standard"}`;
 
       const mockFixedIssues = [
-        'Added missing semicolons',
-        'Removed unused variables',
-        'Fixed indentation (2 spaces)',
-        'Added proper spacing around operators',
-        'Removed trailing commas',
-        'Converted double quotes to single quotes',
-        'Added newline at end of file',
-        'Fixed variable naming to camelCase'
+        "Added missing semicolons",
+        "Removed unused variables",
+        "Fixed indentation (2 spaces)",
+        "Added proper spacing around operators",
+        "Removed trailing commas",
+        "Converted double quotes to single quotes",
+        "Added newline at end of file",
+        "Fixed variable naming to camelCase",
       ];
 
       setFixedCode(mockFixedCode);
       setLintIssues(mockIssues.slice(0, Math.floor(Math.random() * 5) + 3));
-      setFixedIssues(mockFixedIssues.slice(0, Math.floor(Math.random() * 5) + 3));
-
-      await deductCredits(
-        'AI Lint Fixer',
-        requiredCredits,
-        `Language: ${language}, Linter: ${linter}, Input: ${inputCode.substring(0, 100)}...`,
-        `Fixed ${mockFixedIssues.length} lint issues`
+      setFixedIssues(
+        mockFixedIssues.slice(0, Math.floor(Math.random() * 5) + 3),
       );
 
-      toast.success('Lint issues fixed successfully!');
+      await deductCredits(
+        "AI Lint Fixer",
+        requiredCredits,
+        `Language: ${language}, Linter: ${linter}, Input: ${inputCode.substring(0, 100)}...`,
+        `Fixed ${mockFixedIssues.length} lint issues`,
+      );
+
+      toast.success("Lint issues fixed successfully!");
     } catch (error) {
-      console.error('Error fixing lint issues:', error);
-      toast.error('Failed to fix lint issues');
+      console.error("Error fixing lint issues:", error);
+      toast.error("Failed to fix lint issues");
     } finally {
       setIsLoading(false);
     }
@@ -187,8 +213,14 @@ export { processUser, type UserData, type ProcessedUser };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
-      
+      <SEO
+        title="AI Lint Fixer"
+        description="Automatically fix linting errors and improve code style with AI-powered analysis."
+        canonical="/tools/lint-fixer"
+      />
+
+      <Navbar2 />
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -218,7 +250,9 @@ export { processUser, type UserData, type ProcessedUser };
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Programming Language</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Programming Language
+                  </label>
                   <Select value={language} onValueChange={setLanguage}>
                     <SelectTrigger>
                       <SelectValue />
@@ -236,18 +270,28 @@ export { processUser, type UserData, type ProcessedUser };
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Linter Type</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Linter Type
+                  </label>
                   <Select value={linter} onValueChange={setLinter}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="eslint">ESLint (JavaScript/TypeScript)</SelectItem>
-                      <SelectItem value="prettier">Prettier (Formatting)</SelectItem>
+                      <SelectItem value="eslint">
+                        ESLint (JavaScript/TypeScript)
+                      </SelectItem>
+                      <SelectItem value="prettier">
+                        Prettier (Formatting)
+                      </SelectItem>
                       <SelectItem value="flake8">Flake8 (Python)</SelectItem>
                       <SelectItem value="black">Black (Python)</SelectItem>
-                      <SelectItem value="checkstyle">Checkstyle (Java)</SelectItem>
-                      <SelectItem value="phpcs">PHP_CodeSniffer (PHP)</SelectItem>
+                      <SelectItem value="checkstyle">
+                        Checkstyle (Java)
+                      </SelectItem>
+                      <SelectItem value="phpcs">
+                        PHP_CodeSniffer (PHP)
+                      </SelectItem>
                       <SelectItem value="rubocop">RuboCop (Ruby)</SelectItem>
                     </SelectContent>
                   </Select>
@@ -264,15 +308,15 @@ export { processUser, type UserData, type ProcessedUser };
                   Show before/after comparison
                 </label>
               </div>
-              
+
               <Textarea
                 placeholder="Paste your code with lint issues here..."
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
                 className="min-h-[300px] font-mono text-sm"
               />
-              
-              <Button 
+
+              <Button
                 onClick={handleFixLint}
                 disabled={isLoading || !inputCode.trim() || !checkCredits(1)}
                 className="w-full"
@@ -333,16 +377,10 @@ export { processUser, type UserData, type ProcessedUser };
                       <TabsTrigger value="issues">Issues</TabsTrigger>
                     </TabsList>
                     <TabsContent value="fixed" className="mt-4">
-                      <CodeSlider 
-                        code={fixedCode}
-                        language={language}
-                      />
+                      <CodeSlider code={fixedCode} language={language} />
                     </TabsContent>
                     <TabsContent value="original" className="mt-4">
-                      <CodeSlider 
-                        code={inputCode}
-                        language={language}
-                      />
+                      <CodeSlider code={inputCode} language={language} />
                     </TabsContent>
                     <TabsContent value="issues" className="mt-4">
                       <div className="space-y-4">
@@ -353,7 +391,10 @@ export { processUser, type UserData, type ProcessedUser };
                           </h4>
                           <ul className="space-y-1">
                             {lintIssues.map((issue, index) => (
-                              <li key={index} className="text-sm text-red-700 bg-red-50 p-2 rounded">
+                              <li
+                                key={index}
+                                className="text-sm text-red-700 bg-red-50 p-2 rounded"
+                              >
                                 • {issue}
                               </li>
                             ))}
@@ -366,7 +407,10 @@ export { processUser, type UserData, type ProcessedUser };
                           </h4>
                           <ul className="space-y-1">
                             {fixedIssues.map((fix, index) => (
-                              <li key={index} className="text-sm text-green-700 bg-green-50 p-2 rounded">
+                              <li
+                                key={index}
+                                className="text-sm text-green-700 bg-green-50 p-2 rounded"
+                              >
                                 ✓ {fix}
                               </li>
                             ))}
@@ -376,10 +420,7 @@ export { processUser, type UserData, type ProcessedUser };
                     </TabsContent>
                   </Tabs>
                 ) : (
-                  <CodeSlider 
-                    code={fixedCode}
-                    language={language}
-                  />
+                  <CodeSlider code={fixedCode} language={language} />
                 )
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
@@ -395,7 +436,9 @@ export { processUser, type UserData, type ProcessedUser };
 
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Linting Best Practices</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Linting Best Practices
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">🔧 Common Fixes</h4>
