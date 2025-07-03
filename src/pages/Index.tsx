@@ -17,6 +17,7 @@ import { Navbar2 } from "@/components/ui/navbar-2";
 import SEO from "@/components/SEO";
 import TypingAnimation from "@/components/TypingAnimation";
 import CodeSlider from "@/components/CodeSlider";
+import EnhancedCodeSlider from "@/components/EnhancedCodeSlider";
 import {
   Code,
   Bug,
@@ -1242,10 +1243,11 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
 
             <div className="lg:pl-8">
               <div className="h-96 w-full">
-                <CodeSlider
+                <EnhancedCodeSlider
                   code={heroSampleCode}
                   language="javascript"
-                  title="AI Generated Component"
+                  title="AI Generated E-commerce Component (150+ lines)"
+                  maxHeight={384}
                 />
               </div>
             </div>
