@@ -49,22 +49,59 @@ export const useCreditManager = () => {
         .eq("id", user.id);
 
       if (profileError) {
-        console.error("Error updating profile:", profileError);
+        console.error("Error updating profile:", {
+          message: profileError.message,
+          details: profileError.details,
+          hint: profileError.hint,
+          code: profileError.code,
+        });
         toast.error("Failed to deduct credits");
         return false;
       }
 
-      // Update credits in user_credits table
-      const { error: creditsError } = await supabase
+      // Update or create credits in user_credits table
+      const { data: existingCredits } = await supabase
         .from("user_credits")
-        .update({
-          credits_remaining: newCredits,
-          last_updated: new Date().toISOString(),
-        })
-        .eq("user_id", user.id);
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
 
-      if (creditsError) {
-        console.error("Error updating user credits:", creditsError);
+      if (existingCredits) {
+        const { error: creditsError } = await supabase
+          .from("user_credits")
+          .update({
+            credits_remaining: newCredits,
+            last_updated: new Date().toISOString(),
+          })
+          .eq("user_id", user.id);
+
+        if (creditsError) {
+          console.error("Error updating user credits:", {
+            message: creditsError.message,
+            details: creditsError.details,
+            hint: creditsError.hint,
+            code: creditsError.code,
+          });
+        }
+      } else {
+        // Create new user_credits entry
+        const { error: createCreditsError } = await supabase
+          .from("user_credits")
+          .insert({
+            user_id: user.id,
+            credits_remaining: newCredits,
+            plan_type: profile.plan_type || "Free",
+            last_updated: new Date().toISOString(),
+          });
+
+        if (createCreditsError) {
+          console.error("Error creating user credits:", {
+            message: createCreditsError.message,
+            details: createCreditsError.details,
+            hint: createCreditsError.hint,
+            code: createCreditsError.code,
+          });
+        }
       }
 
       // Log activity
@@ -79,7 +116,12 @@ export const useCreditManager = () => {
         });
 
       if (activityError) {
-        console.error("Error logging activity:", activityError);
+        console.error("Error logging activity:", {
+          message: activityError.message,
+          details: activityError.details,
+          hint: activityError.hint,
+          code: activityError.code,
+        });
       }
 
       toast.success(`${creditsToDeduct} credits deducted successfully`);
