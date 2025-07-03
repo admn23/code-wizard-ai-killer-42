@@ -8,6 +8,7 @@ interface EnhancedCodeSliderProps {
   language?: string;
   title?: string;
   maxHeight?: number;
+  enableAutoScroll?: boolean;
 }
 
 const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
@@ -15,6 +16,7 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
   language = "javascript",
   title = "Generated Code",
   maxHeight = 400,
+  enableAutoScroll = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -29,9 +31,35 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(code);
-      toast.success("Code copied to clipboard!");
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(code);
+        toast.success("Code copied to clipboard!");
+      } else {
+        // Fallback for non-secure contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = code;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            toast.success("Code copied to clipboard!");
+          } else {
+            throw new Error("Copy command failed");
+          }
+        } catch (err) {
+          toast.error("Failed to copy code");
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
     } catch (error) {
+      console.error("Copy failed:", error);
       toast.error("Failed to copy code");
     }
   };
@@ -44,6 +72,7 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
   // Smooth scroll animation on hover
   useEffect(() => {
     if (
+      !enableAutoScroll ||
       !shouldShowSlider ||
       !isHovered ||
       !codeRef.current ||
@@ -178,11 +207,13 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
           {shouldShowSlider && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-blue-400 bg-blue-900/30 px-2 py-1 rounded">
-                {isAutoScrolling
-                  ? "Auto-scrolling"
-                  : isManualScrolling
-                    ? "Manual scroll"
-                    : "Hover to auto-scroll"}{" "}
+                {enableAutoScroll
+                  ? isAutoScrolling
+                    ? "Auto-scrolling"
+                    : isManualScrolling
+                      ? "Manual scroll"
+                      : "Hover to auto-scroll"
+                  : "Scroll to view"}{" "}
                 • {codeLines.length} lines
               </span>
               {isManualScrolling && (
@@ -288,7 +319,8 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
       )}
 
       {/* Hover instruction */}
-      {shouldShowSlider &&
+      {enableAutoScroll &&
+        shouldShowSlider &&
         !isHovered &&
         !isFullscreen &&
         !isManualScrolling && (

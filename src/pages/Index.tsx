@@ -1248,6 +1248,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                   language="javascript"
                   title="AI Generated E-commerce Component (150+ lines)"
                   maxHeight={384}
+                  enableAutoScroll={true}
                 />
               </div>
             </div>
@@ -1344,6 +1345,7 @@ GROUP BY p.id, p.name, p.price, p.stock_quantity;`,
                       language={demo.codeType}
                       title={`Generated ${demo.codeType.toUpperCase()} Code`}
                       maxHeight={200}
+                      enableAutoScroll={true}
                     />
                   </div>
 
