@@ -40,8 +40,19 @@ export const useUserData = () => {
         .eq("id", user.id)
         .single();
 
-      if (profileError && profileError.code !== "PGRST116") {
-        console.error("Error fetching profile:", profileError);
+      if (profileError) {
+        // Check if it's just that no profile exists yet
+        if (profileError.code === "PGRST116") {
+          console.log("No profile found for user, will create one");
+          setProfile(null);
+        } else {
+          console.error("Error fetching profile:", {
+            message: profileError.message,
+            details: profileError.details,
+            hint: profileError.hint,
+            code: profileError.code,
+          });
+        }
       } else if (profileData) {
         setProfile(profileData);
       }
@@ -55,12 +66,21 @@ export const useUserData = () => {
         .limit(10);
 
       if (activitiesError) {
-        console.error("Error fetching activities:", activitiesError);
+        console.error("Error fetching activities:", {
+          message: activitiesError.message,
+          details: activitiesError.details,
+          hint: activitiesError.hint,
+          code: activitiesError.code,
+        });
+        // Set empty array if there's an error
+        setActivities([]);
       } else {
         setActivities(activitiesData || []);
       }
     } catch (error) {
       console.error("Error refetching user data:", error);
+      setProfile(null);
+      setActivities([]);
     } finally {
       setLoading(false);
     }
@@ -76,6 +96,8 @@ export const useUserData = () => {
 
     const fetchUserData = async () => {
       try {
+        setLoading(true);
+
         // Fetch user profile
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
@@ -83,8 +105,42 @@ export const useUserData = () => {
           .eq("id", user.id)
           .single();
 
-        if (profileError && profileError.code !== "PGRST116") {
-          console.error("Error fetching profile:", profileError);
+        if (profileError) {
+          // Check if it's just that no profile exists yet
+          if (profileError.code === "PGRST116") {
+            console.log("No profile found for user, will create one");
+            // Create a basic profile for the user
+            const { data: newProfile, error: createError } = await supabase
+              .from("profiles")
+              .insert({
+                id: user.id,
+                email: user.email,
+                full_name: user.user_metadata?.full_name || null,
+                plan_type: "Free",
+                credits_remaining: 5,
+                tasks_this_month: 0,
+              })
+              .select()
+              .single();
+
+            if (createError) {
+              console.error("Error creating profile:", {
+                message: createError.message,
+                details: createError.details,
+                hint: createError.hint,
+                code: createError.code,
+              });
+            } else {
+              setProfile(newProfile);
+            }
+          } else {
+            console.error("Error fetching profile:", {
+              message: profileError.message,
+              details: profileError.details,
+              hint: profileError.hint,
+              code: profileError.code,
+            });
+          }
         } else if (profileData) {
           setProfile(profileData);
         }
@@ -98,12 +154,21 @@ export const useUserData = () => {
           .limit(10);
 
         if (activitiesError) {
-          console.error("Error fetching activities:", activitiesError);
+          console.error("Error fetching activities:", {
+            message: activitiesError.message,
+            details: activitiesError.details,
+            hint: activitiesError.hint,
+            code: activitiesError.code,
+          });
+          // Set empty array if there's an error
+          setActivities([]);
         } else {
           setActivities(activitiesData || []);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setProfile(null);
+        setActivities([]);
       } finally {
         setLoading(false);
       }
