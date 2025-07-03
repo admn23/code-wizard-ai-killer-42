@@ -29,7 +29,6 @@ import {
   Activity,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import DatabaseTest from "@/components/DatabaseTest";
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -202,9 +201,6 @@ const Dashboard = () => {
             Ready to code smarter with AI assistance?
           </p>
         </div>
-
-        {/* Debug component - remove in production */}
-        <DatabaseTest />
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
