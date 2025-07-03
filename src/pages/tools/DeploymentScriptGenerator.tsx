@@ -390,7 +390,13 @@ For static sites, use S3 bucket with CloudFront distribution:
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Deployment Script Generator"
+        description="Create deployment scripts for various platforms and environments with AI assistance."
+        canonical="/tools/deployment-script-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

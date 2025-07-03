@@ -305,7 +305,13 @@ package-lock.json`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Config Generator"
+        description="Generate configuration files for popular frameworks and tools using AI."
+        canonical="/tools/config-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

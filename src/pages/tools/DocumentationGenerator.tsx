@@ -277,7 +277,13 @@ API requests are limited to 1000 requests per hour per API key.`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Documentation Generator"
+        description="Generate comprehensive documentation for your codebase automatically with AI."
+        canonical="/tools/documentation-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
