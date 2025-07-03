@@ -25,6 +25,7 @@ const EnhancedCodeSlider: React.FC<EnhancedCodeSliderProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>();
+  const manualScrollTimeout = useRef<NodeJS.Timeout>();
 
   const copyToClipboard = async () => {
     try {
