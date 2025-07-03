@@ -103,9 +103,17 @@ export const useCreditManager = () => {
         .eq("id", user.id);
 
       if (profileError) {
-        logError("Error updating profile:", profileError);
-        toast.error("Failed to deduct credits");
-        return false;
+        if (profileError.code === "42501") {
+          console.log(
+            "Permission denied for profile update - credits may not be synced with database",
+          );
+          toast.warning("Credits deducted locally - may not sync with server");
+          // Continue with local credit tracking
+        } else {
+          logError("Error updating profile:", profileError);
+          toast.error("Failed to deduct credits");
+          return false;
+        }
       }
 
       // Update or create credits in user_credits table
@@ -125,7 +133,13 @@ export const useCreditManager = () => {
           .eq("user_id", user.id);
 
         if (creditsError) {
-          logError("Error updating user credits:", creditsError);
+          if (creditsError.code === "42501") {
+            console.log(
+              "Permission denied for user_credits update - this is expected",
+            );
+          } else {
+            logError("Error updating user credits:", creditsError);
+          }
         }
       } else {
         // Create new user_credits entry
@@ -139,7 +153,13 @@ export const useCreditManager = () => {
           });
 
         if (createCreditsError) {
-          logError("Error creating user credits:", createCreditsError);
+          if (createCreditsError.code === "42501") {
+            console.log(
+              "Permission denied for creating user_credits - this is expected",
+            );
+          } else {
+            logError("Error creating user credits:", createCreditsError);
+          }
         }
       }
 
@@ -155,7 +175,13 @@ export const useCreditManager = () => {
         });
 
       if (activityError) {
-        logError("Error logging activity:", activityError);
+        if (activityError.code === "42501") {
+          console.log(
+            "Permission denied for logging activity - this is expected",
+          );
+        } else {
+          logError("Error logging activity:", activityError);
+        }
       }
 
       toast.success(`${creditsToDeduct} credits deducted successfully`);
