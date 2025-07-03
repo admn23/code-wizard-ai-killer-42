@@ -1,39 +1,51 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { TestTube, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { TestTube, RefreshCw, AlertCircle, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const UnitTestGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [inputCode, setInputCode] = useState('');
-  const [testFramework, setTestFramework] = useState('jest');
-  const [language, setLanguage] = useState('javascript');
-  const [generatedTests, setGeneratedTests] = useState('');
+
+  const [inputCode, setInputCode] = useState("");
+  const [testFramework, setTestFramework] = useState("jest");
+  const [language, setLanguage] = useState("javascript");
+  const [generatedTests, setGeneratedTests] = useState("");
   const [edgeCases, setEdgeCases] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleGenerateTests = async () => {
     if (!inputCode.trim()) {
-      toast.error('Please enter some code to generate tests for');
+      toast.error("Please enter some code to generate tests for");
       return;
     }
 
@@ -47,7 +59,9 @@ const UnitTestGenerator = () => {
     try {
       // Simulate API call - Replace with actual AI service
       const mockTestCode = `// Generated Unit Tests using ${testFramework}
-${testFramework === 'jest' ? `
+${
+  testFramework === "jest"
+    ? `
 describe('Function Tests', () => {
   test('should handle normal input correctly', () => {
     const result = yourFunction('normal input');
@@ -74,7 +88,9 @@ describe('Function Tests', () => {
     expect(() => yourFunction(undefined)).toThrow();
   });
 });
-` : testFramework === 'mocha' ? `
+`
+    : testFramework === "mocha"
+      ? `
 const { expect } = require('chai');
 
 describe('Function Tests', function() {
@@ -93,7 +109,8 @@ describe('Function Tests', function() {
     expect(result).to.be.null;
   });
 });
-` : `
+`
+      : `
 import pytest
 
 def test_normal_input():
@@ -111,7 +128,8 @@ def test_null_input():
 def test_invalid_input():
     with pytest.raises(ValueError):
         your_function(undefined_value)
-`}
+`
+}
 
 // Test coverage: ${Math.floor(Math.random() * 20) + 80}%
 // Assertions: ${Math.floor(Math.random() * 10) + 15}`;
@@ -124,7 +142,7 @@ def test_invalid_input():
         "Network timeout and error scenarios",
         "Concurrent access and race conditions",
         "Memory overflow protection",
-        "Special character and Unicode handling"
+        "Special character and Unicode handling",
       ];
 
       setGeneratedTests(mockTestCode);
@@ -132,16 +150,16 @@ def test_invalid_input():
 
       // Deduct credits and log activity
       await deductCredits(
-        'AI Unit Test Generator',
+        "AI Unit Test Generator",
         requiredCredits,
         `Framework: ${testFramework}, Language: ${language}, Input: ${inputCode.substring(0, 100)}...`,
-        mockTestCode.substring(0, 200)
+        mockTestCode.substring(0, 200),
       );
 
-      toast.success('Unit tests generated successfully!');
+      toast.success("Unit tests generated successfully!");
     } catch (error) {
-      console.error('Error generating tests:', error);
-      toast.error('Failed to generate unit tests');
+      console.error("Error generating tests:", error);
+      toast.error("Failed to generate unit tests");
     } finally {
       setIsLoading(false);
     }
@@ -160,15 +178,18 @@ def test_invalid_input():
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <TestTube className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI Unit Test Generator</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI Unit Test Generator
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
-            Generate comprehensive unit tests for your functions, classes, and API routes
+            Generate comprehensive unit tests for your functions, classes, and
+            API routes
           </p>
           <div className="flex items-center gap-4 mt-4">
             <Badge variant="outline">1 Credit per generation</Badge>
@@ -191,7 +212,9 @@ def test_invalid_input():
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Programming Language</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Programming Language
+                  </label>
                   <Select value={language} onValueChange={setLanguage}>
                     <SelectTrigger>
                       <SelectValue />
@@ -209,14 +232,23 @@ def test_invalid_input():
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Test Framework</label>
-                  <Select value={testFramework} onValueChange={setTestFramework}>
+                  <label className="text-sm font-medium mb-2 block">
+                    Test Framework
+                  </label>
+                  <Select
+                    value={testFramework}
+                    onValueChange={setTestFramework}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="jest">Jest (JavaScript/TypeScript)</SelectItem>
-                      <SelectItem value="mocha">Mocha + Chai (JavaScript)</SelectItem>
+                      <SelectItem value="jest">
+                        Jest (JavaScript/TypeScript)
+                      </SelectItem>
+                      <SelectItem value="mocha">
+                        Mocha + Chai (JavaScript)
+                      </SelectItem>
                       <SelectItem value="pytest">PyTest (Python)</SelectItem>
                       <SelectItem value="junit">JUnit (Java)</SelectItem>
                       <SelectItem value="nunit">NUnit (C#)</SelectItem>
@@ -226,15 +258,15 @@ def test_invalid_input():
                   </Select>
                 </div>
               </div>
-              
+
               <Textarea
                 placeholder="Enter your function, class, or API route code here..."
                 value={inputCode}
                 onChange={(e) => setInputCode(e.target.value)}
                 className="min-h-[300px] font-mono text-sm"
               />
-              
-              <Button 
+
+              <Button
                 onClick={handleGenerateTests}
                 disabled={isLoading || !inputCode.trim() || !checkCredits(1)}
                 className="w-full"
@@ -256,7 +288,8 @@ def test_invalid_input():
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <span className="text-sm text-red-700">
-                    Insufficient credits. You need 1 credit to generate unit tests.
+                    Insufficient credits. You need 1 credit to generate unit
+                    tests.
                   </span>
                 </div>
               )}
@@ -288,13 +321,12 @@ def test_invalid_input():
             </CardHeader>
             <CardContent>
               {generatedTests ? (
-                <CodeSlider 
-                  code={generatedTests}
-                  language={language}
-                />
+                <CodeSlider code={generatedTests} language={language} />
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">Generated tests will appear here</p>
+                  <p className="text-gray-500">
+                    Generated tests will appear here
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -329,7 +361,9 @@ def test_invalid_input():
         {/* Testing Best Practices */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Testing Best Practices</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Testing Best Practices
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">🧪 Test Structure</h4>

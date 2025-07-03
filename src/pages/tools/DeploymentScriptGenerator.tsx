@@ -1,40 +1,54 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Rocket, RefreshCw, AlertCircle, FileText, Cloud } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Rocket, RefreshCw, AlertCircle, FileText, Cloud } from "lucide-react";
+import { toast } from "sonner";
 
 const DeploymentScriptGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [projectType, setProjectType] = useState('react');
-  const [deploymentTarget, setDeploymentTarget] = useState('vercel');
-  const [projectDescription, setProjectDescription] = useState('');
-  const [generatedScripts, setGeneratedScripts] = useState<{[key: string]: string}>({});
-  const [instructions, setInstructions] = useState('');
+
+  const [projectType, setProjectType] = useState("react");
+  const [deploymentTarget, setDeploymentTarget] = useState("vercel");
+  const [projectDescription, setProjectDescription] = useState("");
+  const [generatedScripts, setGeneratedScripts] = useState<{
+    [key: string]: string;
+  }>({});
+  const [instructions, setInstructions] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleGenerateScripts = async () => {
     if (!projectDescription.trim()) {
-      toast.error('Please describe your project for deployment');
+      toast.error("Please describe your project for deployment");
       return;
     }
 
@@ -46,10 +60,10 @@ const DeploymentScriptGenerator = () => {
     setIsLoading(true);
 
     try {
-      const mockScripts: {[key: string]: string} = {};
-      let mockInstructions = '';
+      const mockScripts: { [key: string]: string } = {};
+      let mockInstructions = "";
 
-      if (deploymentTarget === 'vercel') {
+      if (deploymentTarget === "vercel") {
         mockScripts.vercel = `{
   "version": 2,
   "builds": [
@@ -116,8 +130,7 @@ Set these in Vercel dashboard under Project Settings:
 1. Go to Project Settings > Domains
 2. Add your custom domain
 3. Configure DNS records as shown`;
-
-      } else if (deploymentTarget === 'netlify') {
+      } else if (deploymentTarget === "netlify") {
         mockScripts.netlify = `[build]
   publish = "dist"
   command = "npm run build"
@@ -168,8 +181,7 @@ Set these in Vercel dashboard under Project Settings:
 
 ## Environment Variables
 Set in Netlify dashboard under Site Settings > Environment Variables`;
-
-      } else if (deploymentTarget === 'docker') {
+      } else if (deploymentTarget === "docker") {
         mockScripts.docker = `# Dockerfile
 FROM node:18-alpine
 
@@ -268,8 +280,7 @@ networks:
 - Set up SSL certificates
 - Configure environment variables
 - Set up monitoring and logging`;
-
-      } else if (deploymentTarget === 'aws') {
+      } else if (deploymentTarget === "aws") {
         mockScripts.lambda = `# serverless.yml
 service: my-app
 
@@ -352,16 +363,16 @@ For static sites, use S3 bucket with CloudFront distribution:
       setInstructions(mockInstructions);
 
       await deductCredits(
-        'AI Deployment Script Generator',
+        "AI Deployment Script Generator",
         requiredCredits,
         `Project: ${projectType}, Target: ${deploymentTarget}, Description: ${projectDescription.substring(0, 100)}...`,
-        `Generated deployment scripts for ${deploymentTarget}`
+        `Generated deployment scripts for ${deploymentTarget}`,
       );
 
-      toast.success('Deployment scripts generated successfully!');
+      toast.success("Deployment scripts generated successfully!");
     } catch (error) {
-      console.error('Error generating deployment scripts:', error);
-      toast.error('Failed to generate deployment scripts');
+      console.error("Error generating deployment scripts:", error);
+      toast.error("Failed to generate deployment scripts");
     } finally {
       setIsLoading(false);
     }
@@ -380,12 +391,14 @@ For static sites, use S3 bucket with CloudFront distribution:
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <Rocket className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI Deployment Script Generator</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI Deployment Script Generator
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
             Generate deployment scripts and configurations for various platforms
@@ -410,7 +423,9 @@ For static sites, use S3 bucket with CloudFront distribution:
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Project Type</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Project Type
+                  </label>
                   <Select value={projectType} onValueChange={setProjectType}>
                     <SelectTrigger>
                       <SelectValue />
@@ -426,8 +441,13 @@ For static sites, use S3 bucket with CloudFront distribution:
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Deployment Target</label>
-                  <Select value={deploymentTarget} onValueChange={setDeploymentTarget}>
+                  <label className="text-sm font-medium mb-2 block">
+                    Deployment Target
+                  </label>
+                  <Select
+                    value={deploymentTarget}
+                    onValueChange={setDeploymentTarget}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -442,9 +462,11 @@ For static sites, use S3 bucket with CloudFront distribution:
                   </Select>
                 </div>
               </div>
-              
+
               <div>
-                <label className="text-sm font-medium mb-2 block">Project Description</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Project Description
+                </label>
                 <Textarea
                   placeholder="Describe your project, its dependencies, build process, and any special requirements for deployment..."
                   value={projectDescription}
@@ -452,10 +474,12 @@ For static sites, use S3 bucket with CloudFront distribution:
                   className="min-h-[200px]"
                 />
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={handleGenerateScripts}
-                disabled={isLoading || !projectDescription.trim() || !checkCredits(2)}
+                disabled={
+                  isLoading || !projectDescription.trim() || !checkCredits(2)
+                }
                 className="w-full"
               >
                 {isLoading ? (
@@ -475,7 +499,8 @@ For static sites, use S3 bucket with CloudFront distribution:
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <span className="text-sm text-red-700">
-                    Insufficient credits. You need 2 credits to generate deployment scripts.
+                    Insufficient credits. You need 2 credits to generate
+                    deployment scripts.
                   </span>
                 </div>
               )}
@@ -513,29 +538,36 @@ For static sites, use S3 bucket with CloudFront distribution:
                   </TabsList>
                   <TabsContent value="scripts" className="mt-4">
                     <div className="space-y-4">
-                      {Object.entries(generatedScripts).map(([fileName, code]) => (
-                        <div key={fileName}>
-                          <h4 className="font-medium mb-2 capitalize">{fileName.replace('_', '.')} File</h4>
-                          <CodeSlider 
-                            code={code}
-                            language={fileName.includes('docker') ? 'dockerfile' : 'yaml'}
-                          />
-                        </div>
-                      ))}
+                      {Object.entries(generatedScripts).map(
+                        ([fileName, code]) => (
+                          <div key={fileName}>
+                            <h4 className="font-medium mb-2 capitalize">
+                              {fileName.replace("_", ".")} File
+                            </h4>
+                            <CodeSlider
+                              code={code}
+                              language={
+                                fileName.includes("docker")
+                                  ? "dockerfile"
+                                  : "yaml"
+                              }
+                            />
+                          </div>
+                        ),
+                      )}
                     </div>
                   </TabsContent>
                   <TabsContent value="instructions" className="mt-4">
-                    <CodeSlider 
-                      code={instructions}
-                      language="markdown"
-                    />
+                    <CodeSlider code={instructions} language="markdown" />
                   </TabsContent>
                 </Tabs>
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <Cloud className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Deployment scripts will appear here</p>
+                    <p className="text-gray-500">
+                      Deployment scripts will appear here
+                    </p>
                   </div>
                 </div>
               )}
@@ -545,22 +577,36 @@ For static sites, use S3 bucket with CloudFront distribution:
 
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Deployment Platform Comparison</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Deployment Platform Comparison
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">🚀 Easy Deployment</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• <strong>Vercel:</strong> Best for React/Next.js</li>
-                  <li>• <strong>Netlify:</strong> Great for static sites</li>
-                  <li>• <strong>Heroku:</strong> Simple for full-stack apps</li>
+                  <li>
+                    • <strong>Vercel:</strong> Best for React/Next.js
+                  </li>
+                  <li>
+                    • <strong>Netlify:</strong> Great for static sites
+                  </li>
+                  <li>
+                    • <strong>Heroku:</strong> Simple for full-stack apps
+                  </li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-2">⚙️ Advanced Control</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• <strong>Docker:</strong> Containerized deployment</li>
-                  <li>• <strong>AWS:</strong> Scalable cloud infrastructure</li>
-                  <li>• <strong>DigitalOcean:</strong> VPS with flexibility</li>
+                  <li>
+                    • <strong>Docker:</strong> Containerized deployment
+                  </li>
+                  <li>
+                    • <strong>AWS:</strong> Scalable cloud infrastructure
+                  </li>
+                  <li>
+                    • <strong>DigitalOcean:</strong> VPS with flexibility
+                  </li>
                 </ul>
               </div>
               <div>

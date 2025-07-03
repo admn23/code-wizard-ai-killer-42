@@ -1,44 +1,56 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCreditManager } from '@/hooks/useCreditManager';
-import Header from '@/components/Header';
-import CodeSlider from '@/components/CodeSlider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, RefreshCw, AlertCircle, FileText } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreditManager } from "@/hooks/useCreditManager";
+import { Navbar2 } from "@/components/ui/navbar-2";
+import SEO from "@/components/SEO";
+import CodeSlider from "@/components/CodeSlider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookOpen, RefreshCw, AlertCircle, FileText } from "lucide-react";
+import { toast } from "sonner";
 
 const DocumentationGenerator = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkCredits, deductCredits, currentCredits } = useCreditManager();
-  
-  const [inputCode, setInputCode] = useState('');
-  const [docType, setDocType] = useState('jsdoc');
-  const [language, setLanguage] = useState('javascript');
-  const [projectName, setProjectName] = useState('');
+
+  const [inputCode, setInputCode] = useState("");
+  const [docType, setDocType] = useState("jsdoc");
+  const [language, setLanguage] = useState("javascript");
+  const [projectName, setProjectName] = useState("");
   const [generatedDocs, setGeneratedDocs] = useState({
-    jsdoc: '',
-    readme: '',
-    api: ''
+    jsdoc: "",
+    readme: "",
+    api: "",
   });
   const [isLoading, setIsLoading] = useState(false);
 
   React.useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
   const handleGenerateDocs = async () => {
     if (!inputCode.trim()) {
-      toast.error('Please enter some code to generate documentation for');
+      toast.error("Please enter some code to generate documentation for");
       return;
     }
 
@@ -52,7 +64,7 @@ const DocumentationGenerator = () => {
     try {
       // Simulate API call - Replace with actual AI service
       const mockJSDoc = `/**
- * ${projectName || 'Function'} - Advanced utility function
+ * ${projectName || "Function"} - Advanced utility function
  * @description This function performs complex operations with multiple parameters
  * @param {string} input - The input parameter for processing
  * @param {Object} options - Configuration options
@@ -64,31 +76,31 @@ const DocumentationGenerator = () => {
  * // Basic usage
  * const result = await yourFunction('input', { validate: true });
  * console.log(result);
- * 
+ *
  * @example
  * // With custom options
- * const result = await yourFunction('input', { 
- *   validate: false, 
- *   timeout: 5000 
+ * const result = await yourFunction('input', {
+ *   validate: false,
+ *   timeout: 5000
  * });
- * 
+ *
  * @since 1.0.0
  * @author Development Team
  */`;
 
-      const mockReadme = `# ${projectName || 'Project Name'}
+      const mockReadme = `# ${projectName || "Project Name"}
 
 ## Description
 This project provides a comprehensive solution for [describe your project functionality].
 
 ## Installation
 \`\`\`bash
-npm install ${projectName?.toLowerCase() || 'your-project'}
+npm install ${projectName?.toLowerCase() || "your-project"}
 \`\`\`
 
 ## Quick Start
 \`\`\`javascript
-const { yourFunction } = require('${projectName?.toLowerCase() || 'your-project'}');
+const { yourFunction } = require('${projectName?.toLowerCase() || "your-project"}');
 
 // Basic usage
 const result = await yourFunction('input');
@@ -233,21 +245,21 @@ API requests are limited to 1000 requests per hour per API key.`;
       setGeneratedDocs({
         jsdoc: mockJSDoc,
         readme: mockReadme,
-        api: mockApiDocs
+        api: mockApiDocs,
       });
 
       // Deduct credits and log activity
       await deductCredits(
-        'AI Documentation Generator',
+        "AI Documentation Generator",
         requiredCredits,
         `Type: ${docType}, Language: ${language}, Project: ${projectName}, Input: ${inputCode.substring(0, 100)}...`,
-        `Generated ${docType} documentation`
+        `Generated ${docType} documentation`,
       );
 
-      toast.success('Documentation generated successfully!');
+      toast.success("Documentation generated successfully!");
     } catch (error) {
-      console.error('Error generating documentation:', error);
-      toast.error('Failed to generate documentation');
+      console.error("Error generating documentation:", error);
+      toast.error("Failed to generate documentation");
     } finally {
       setIsLoading(false);
     }
@@ -266,15 +278,18 @@ API requests are limited to 1000 requests per hour per API key.`;
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <BookOpen className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold gradient-text">AI Documentation Generator</h1>
+            <h1 className="text-4xl font-bold gradient-text">
+              AI Documentation Generator
+            </h1>
           </div>
           <p className="text-xl text-gray-600">
-            Generate comprehensive documentation for your functions, APIs, and projects
+            Generate comprehensive documentation for your functions, APIs, and
+            projects
           </p>
           <div className="flex items-center gap-4 mt-4">
             <Badge variant="outline">1 Credit per generation</Badge>
@@ -297,7 +312,9 @@ API requests are limited to 1000 requests per hour per API key.`;
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Documentation Type</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Documentation Type
+                  </label>
                   <Select value={docType} onValueChange={setDocType}>
                     <SelectTrigger>
                       <SelectValue />
@@ -311,7 +328,9 @@ API requests are limited to 1000 requests per hour per API key.`;
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Programming Language</label>
+                  <label className="text-sm font-medium mb-2 block">
+                    Programming Language
+                  </label>
                   <Select value={language} onValueChange={setLanguage}>
                     <SelectTrigger>
                       <SelectValue />
@@ -331,7 +350,9 @@ API requests are limited to 1000 requests per hour per API key.`;
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">Project Name (Optional)</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Project Name (Optional)
+                </label>
                 <input
                   type="text"
                   placeholder="Enter project name..."
@@ -340,9 +361,11 @@ API requests are limited to 1000 requests per hour per API key.`;
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              
+
               <div>
-                <label className="text-sm font-medium mb-2 block">Code/Function/API Details</label>
+                <label className="text-sm font-medium mb-2 block">
+                  Code/Function/API Details
+                </label>
                 <Textarea
                   placeholder="Enter your code, function, or project description here..."
                   value={inputCode}
@@ -350,8 +373,8 @@ API requests are limited to 1000 requests per hour per API key.`;
                   className="min-h-[250px] font-mono text-sm"
                 />
               </div>
-              
-              <Button 
+
+              <Button
                 onClick={handleGenerateDocs}
                 disabled={isLoading || !inputCode.trim() || !checkCredits(1)}
                 className="w-full"
@@ -373,7 +396,8 @@ API requests are limited to 1000 requests per hour per API key.`;
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <span className="text-sm text-red-700">
-                    Insufficient credits. You need 1 credit to generate documentation.
+                    Insufficient credits. You need 1 credit to generate
+                    documentation.
                   </span>
                 </div>
               )}
@@ -390,7 +414,9 @@ API requests are limited to 1000 requests per hour per API key.`;
                     Professional documentation ready to use
                   </CardDescription>
                 </div>
-                {(generatedDocs.jsdoc || generatedDocs.readme || generatedDocs.api) && (
+                {(generatedDocs.jsdoc ||
+                  generatedDocs.readme ||
+                  generatedDocs.api) && (
                   <Button
                     onClick={regenerateDocs}
                     disabled={isLoading}
@@ -404,7 +430,9 @@ API requests are limited to 1000 requests per hour per API key.`;
               </div>
             </CardHeader>
             <CardContent>
-              {(generatedDocs.jsdoc || generatedDocs.readme || generatedDocs.api) ? (
+              {generatedDocs.jsdoc ||
+              generatedDocs.readme ||
+              generatedDocs.api ? (
                 <Tabs defaultValue="jsdoc" className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="jsdoc">JSDoc/Docstring</TabsTrigger>
@@ -412,29 +440,28 @@ API requests are limited to 1000 requests per hour per API key.`;
                     <TabsTrigger value="api">API Docs</TabsTrigger>
                   </TabsList>
                   <TabsContent value="jsdoc" className="mt-4">
-                    <CodeSlider 
+                    <CodeSlider
                       code={generatedDocs.jsdoc}
                       language={language}
                     />
                   </TabsContent>
                   <TabsContent value="readme" className="mt-4">
-                    <CodeSlider 
+                    <CodeSlider
                       code={generatedDocs.readme}
                       language="markdown"
                     />
                   </TabsContent>
                   <TabsContent value="api" className="mt-4">
-                    <CodeSlider 
-                      code={generatedDocs.api}
-                      language="markdown"
-                    />
+                    <CodeSlider code={generatedDocs.api} language="markdown" />
                   </TabsContent>
                 </Tabs>
               ) : (
                 <div className="min-h-[300px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <FileText className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500">Generated documentation will appear here</p>
+                    <p className="text-gray-500">
+                      Generated documentation will appear here
+                    </p>
                   </div>
                 </div>
               )}
@@ -445,7 +472,9 @@ API requests are limited to 1000 requests per hour per API key.`;
         {/* Documentation Tips */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <h3 className="text-xl font-bold mb-4 gradient-text">Documentation Best Practices</h3>
+            <h3 className="text-xl font-bold mb-4 gradient-text">
+              Documentation Best Practices
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
                 <h4 className="font-semibold mb-2">📝 JSDoc/Docstrings</h4>
