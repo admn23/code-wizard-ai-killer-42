@@ -24,39 +24,101 @@ interface UserActivity {
 
 // Utility function to safely log errors
 const logError = (context: string, error: any) => {
-  console.log("🔍 DEBUG - logError called with:", context, typeof error);
+  console.log("🔍 DEBUG - logError called with:", context, typeof error, error);
+
   try {
     if (error && typeof error === "object") {
-      const errorInfo = {
-        message: error.message || "Unknown error",
-        code: error.code || "No code",
-        details: error.details || "No details",
-        hint: error.hint || "No hint",
-        statusCode: error.statusCode || "No status",
-        fullErrorObject: error,
-        errorString: JSON.stringify(
-          error,
-          Object.getOwnPropertyNames(error),
-          2,
-        ),
-      };
-      console.error("🚨", context, errorInfo);
+      // Create a safe serializable object
+      const safeError: any = {};
+
+      // Copy basic properties
+      if (error.message) safeError.message = error.message;
+      if (error.code) safeError.code = error.code;
+      if (error.details) safeError.details = error.details;
+      if (error.hint) safeError.hint = error.hint;
+      if (error.statusCode) safeError.statusCode = error.statusCode;
+      if (error.status) safeError.status = error.status;
+
+      // Get all enumerable properties
+      Object.keys(error).forEach((key) => {
+        try {
+          const value = error[key];
+          if (
+            value !== undefined &&
+            value !== null &&
+            typeof value !== "function"
+          ) {
+            safeError[key] = value;
+          }
+        } catch (e) {
+          safeError[key] = `[Error accessing property: ${e}]`;
+        }
+      });
+
+      // Get non-enumerable properties
+      Object.getOwnPropertyNames(error).forEach((key) => {
+        try {
+          if (!safeError.hasOwnProperty(key)) {
+            const value = error[key];
+            if (
+              value !== undefined &&
+              value !== null &&
+              typeof value !== "function"
+            ) {
+              safeError[key] = value;
+            }
+          }
+        } catch (e) {
+          safeError[key] = `[Error accessing property: ${e}]`;
+        }
+      });
+
+      console.error("🚨", context);
+      console.error("   📝 Error Message:", safeError.message || "No message");
+      console.error("   🔢 Error Code:", safeError.code || "No code");
+      console.error("   📋 Details:", safeError.details || "No details");
+      console.error("   💡 Hint:", safeError.hint || "No hint");
+      console.error(
+        "   🌐 Status:",
+        safeError.status || safeError.statusCode || "No status",
+      );
+      console.error("   📦 Full Error Object:", safeError);
+
+      // Try different serialization methods
+      try {
+        console.error(
+          "   🔧 JSON Serialized:",
+          JSON.stringify(safeError, null, 2),
+        );
+      } catch (e) {
+        console.error("   ❌ JSON serialization failed:", e);
+        console.error("   📄 toString():", error.toString());
+      }
     } else {
-      console.error("🚨", context, String(error));
+      console.error("🚨", context, "Non-object error:", String(error));
     }
   } catch (logErr) {
-    console.error(
-      "🚨",
-      context,
-      "Error occurred but could not be logged:",
-      String(error),
-    );
+    console.error("🚨", context, "CRITICAL: Error logging failed completely");
+    console.error("   Original error (string):", String(error));
+    console.error("   Logging error:", String(logErr));
+
+    // Last resort - try to get some information
+    try {
+      console.error("   Error constructor:", error?.constructor?.name);
+      console.error("   Error keys:", Object.keys(error || {}));
+    } catch (e) {
+      console.error("   Cannot access error properties at all");
+    }
   }
 };
 
 // Test the logError function immediately
-console.log("🔧 Testing logError function...");
+console.log("🔧 Testing enhanced logError function...");
 logError("Test error logging", { message: "Test message", code: "TEST001" });
+logError("Test circular reference", { self: null });
+const circular: any = { circular: null };
+circular.circular = circular;
+logError("Test circular object", circular);
 
 export const useUserData = () => {
   const { user } = useAuth();
