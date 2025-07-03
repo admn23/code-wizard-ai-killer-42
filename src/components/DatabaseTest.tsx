@@ -19,22 +19,33 @@ const DatabaseTest = () => {
 
       results.push(`✅ User logged in: ${user.email} (ID: ${user.id})`);
 
-      // Test 1: Check if we can access Supabase
+      // Test current session
       try {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("count")
-          .limit(1);
-        if (error) {
-          results.push(`❌ Supabase connection error: ${error.message}`);
+        const { data: session } = await supabase.auth.getSession();
+        if (session.session) {
+          results.push("✅ Valid auth session exists");
         } else {
-          results.push("✅ Supabase connection working");
+          results.push("❌ No valid auth session");
         }
       } catch (error) {
-        results.push(`❌ Supabase connection failed: ${error}`);
+        results.push(`❌ Session check failed: ${String(error)}`);
       }
 
-      // Test 2: Check if user profile exists
+      // Test basic Supabase connectivity
+      try {
+        const { error } = await supabase.from("profiles").select("id").limit(1);
+        if (error) {
+          results.push(
+            `❌ Supabase access error: ${error.message} (${error.code})`,
+          );
+        } else {
+          results.push("✅ Supabase tables accessible");
+        }
+      } catch (error) {
+        results.push(`❌ Supabase connection failed: ${String(error)}`);
+      }
+
+      // Test profile query
       try {
         const { data: profile, error: profileError } = await supabase
           .from("profiles")
@@ -44,61 +55,46 @@ const DatabaseTest = () => {
 
         if (profileError) {
           if (profileError.code === "PGRST116") {
-            results.push("❌ No profile found (PGRST116 - no rows)");
+            results.push("❌ No profile found - will be created automatically");
           } else {
             results.push(
-              `❌ Profile error: ${profileError.message} (Code: ${profileError.code})`,
+              `❌ Profile error: ${profileError.message} (${profileError.code})`,
+            );
+            results.push(
+              `Full error: ${JSON.stringify(profileError, null, 2)}`,
             );
           }
         } else {
-          results.push(`✅ Profile found: ${JSON.stringify(profile, null, 2)}`);
+          results.push(
+            `✅ Profile exists: Plan=${profile.plan_type}, Credits=${profile.credits_remaining}`,
+          );
         }
       } catch (error) {
-        results.push(`❌ Profile check failed: ${error}`);
+        results.push(`❌ Profile query failed: ${String(error)}`);
       }
 
-      // Test 3: Check if user_activities table is accessible
+      // Test activities query
       try {
         const { data: activities, error: activitiesError } = await supabase
           .from("user_activities")
-          .select("*")
+          .select("id, tool_name, created_at")
           .eq("user_id", user.id)
-          .limit(1);
+          .limit(3);
 
         if (activitiesError) {
           results.push(
-            `❌ Activities error: ${activitiesError.message} (Code: ${activitiesError.code})`,
+            `❌ Activities error: ${activitiesError.message} (${activitiesError.code})`,
+          );
+          results.push(
+            `Full error: ${JSON.stringify(activitiesError, null, 2)}`,
           );
         } else {
           results.push(
-            `✅ Activities accessible: ${activities?.length || 0} records`,
+            `✅ Activities query successful: ${activities?.length || 0} records`,
           );
         }
       } catch (error) {
-        results.push(`❌ Activities check failed: ${error}`);
-      }
-
-      // Test 4: Check if user_credits table is accessible
-      try {
-        const { data: credits, error: creditsError } = await supabase
-          .from("user_credits")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
-
-        if (creditsError) {
-          if (creditsError.code === "PGRST116") {
-            results.push("❌ No user_credits found (PGRST116 - no rows)");
-          } else {
-            results.push(
-              `❌ Credits error: ${creditsError.message} (Code: ${creditsError.code})`,
-            );
-          }
-        } else {
-          results.push(`✅ Credits found: ${JSON.stringify(credits, null, 2)}`);
-        }
-      } catch (error) {
-        results.push(`❌ Credits check failed: ${error}`);
+        results.push(`❌ Activities query failed: ${String(error)}`);
       }
 
       setTestResults(results);
