@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,10 +20,12 @@ import {
   Play,
   Star,
   Users,
-  Award
+  Award,
+  ChevronDown
 } from 'lucide-react';
 import TypingAnimation from '@/components/TypingAnimation';
 import CodeSlider from '@/components/CodeSlider';
+import SEO from '@/components/SEO';
 import { useState } from 'react';
 
 const Index = () => {
@@ -262,6 +265,13 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <SEO 
+        title="AI Powered Coding Assistant - Generate, Fix & Optimize Code"
+        description="Revolutionary AI coding assistant that generates code instantly, fixes bugs automatically, and optimizes performance. Write better code faster with 12+ AI-powered tools."
+        keywords="AI code generator, automated bug fixing, code optimization, AI programming assistant, coding tools"
+        canonical="https://codingkiller.com"
+      />
+      
       <Navbar1 />
       
       {/* Hero Section */}
@@ -323,7 +333,7 @@ useEffect(() => {
                   <div className="text-white">
                     <span className="text-purple-400">function</span>{" "}
                     <span className="text-yellow-300">login</span>
-                    <span className="text-white">(email, password) {"{"}
+                    <span className="text-white">(email, password) {"{"}</span>
                   </div>
                   <div className="text-white ml-4">
                     <span className="text-purple-400">const</span>{" "}
@@ -456,54 +466,47 @@ useEffect(() => {
             <p className="text-xl text-gray-600">Watch our AI tools solve real coding challenges</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Examples Navigation */}
-            <div className="space-y-4">
-              {aiExamples.map((example, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveExample(index)}
-                  className={`w-full text-left p-4 rounded-lg border transition-all ${
-                    activeExample === index 
-                      ? 'border-primary bg-primary/5 shadow-md' 
-                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-lg ${
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {aiExamples.map((example, index) => (
+              <Card key={index} className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                activeExample === index 
+                  ? 'border-primary bg-primary/5 shadow-md transform scale-105' 
+                  : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+              }`}
+              onClick={() => setActiveExample(index)}>
+                <CardHeader>
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className={`p-3 rounded-lg ${
                       activeExample === index ? 'bg-primary text-white' : 'bg-gray-100 text-primary'
                     }`}>
                       {example.icon}
                     </div>
                     <div>
-                      <h3 className="font-semibold">{example.title}</h3>
-                      <p className="text-sm text-gray-600">{example.description}</p>
+                      <CardTitle className="text-lg">{example.title}</CardTitle>
+                      <CardDescription className="text-sm">{example.description}</CardDescription>
                     </div>
                   </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Code Example */}
-            <div className="lg:col-span-2">
-              <div className="bg-gray-50 rounded-lg p-6 border">
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold mb-2">Input:</h3>
-                  <p className="text-gray-700 bg-white p-3 rounded border italic">
-                    "{aiExamples[activeExample].input}"
-                  </p>
-                </div>
+                </CardHeader>
                 
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">AI Generated Output:</h3>
-                  <CodeSlider 
-                    code={aiExamples[activeExample].output}
-                    language="javascript"
-                    maxHeight={300}
-                  />
-                </div>
-              </div>
-            </div>
+                <CardContent>
+                  <div className="mb-4">
+                    <h4 className="font-semibold mb-2 text-sm text-gray-600">Input:</h4>
+                    <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded border italic">
+                      "{example.input}"
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-semibold mb-2 text-sm text-gray-600">AI Generated Output:</h4>
+                    <CodeSlider 
+                      code={example.output}
+                      language="javascript"
+                      maxHeight={200}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -584,17 +587,17 @@ useEffect(() => {
 
           <div className="max-w-3xl mx-auto space-y-4">
             {faqData.map((faq, index) => (
-              <div key={index} className="faq-item">
+              <div key={index} className="border border-gray-200 rounded-lg">
                 <button
-                  className="faq-question w-full flex items-center justify-between"
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                 >
-                  <span className="font-medium">{faq.question}</span>
+                  <span className="font-medium text-lg">{faq.question}</span>
                   <ChevronDown className={`h-5 w-5 transition-transform ${openFaq === index ? 'rotate-180' : ''}`} />
                 </button>
                 {openFaq === index && (
-                  <div className="faq-answer">
-                    <p className="text-gray-700">{faq.answer}</p>
+                  <div className="px-6 pb-6 border-t border-gray-100">
+                    <p className="text-gray-700 pt-4">{faq.answer}</p>
                   </div>
                 )}
               </div>
