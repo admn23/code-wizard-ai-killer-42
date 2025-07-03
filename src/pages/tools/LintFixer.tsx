@@ -213,7 +213,13 @@ export { processUser, type UserData, type ProcessedUser };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Lint Fixer"
+        description="Automatically fix linting errors and improve code style with AI-powered analysis."
+        canonical="/tools/lint-fixer"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

@@ -177,7 +177,13 @@ def test_invalid_input():
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header />
+      <SEO
+        title="AI Unit Test Generator"
+        description="Generate comprehensive unit tests for your functions and methods automatically with AI."
+        canonical="/tools/unit-test-generator"
+      />
+
+      <Navbar2 />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
