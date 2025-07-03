@@ -358,9 +358,57 @@ export const useUserData = () => {
           setActivities([]);
         }
       } catch (error) {
-        logError("Error fetching user data:", error);
-        setProfile(null);
-        setActivities([]);
+        // Check if this is a network error and we haven't reached max retries
+        if (
+          (error?.message?.includes("Failed to fetch") ||
+            error?.message?.includes("TypeError") ||
+            error?.message?.includes("NetworkError")) &&
+          retryCount < 2
+        ) {
+          console.log(
+            `Network error in fetchUserData (attempt ${retryCount + 1}/3):`,
+            error?.message,
+          );
+          logError(
+            `Network error in fetchUserData (attempt ${retryCount + 1}/3):`,
+            error,
+          );
+          // Retry after a delay
+          setTimeout(
+            () => {
+              fetchUserData(retryCount + 1);
+            },
+            (retryCount + 1) * 2000,
+          ); // 2s, 4s delays
+          return;
+        } else {
+          logError("Error fetching user data:", error);
+          // Set fallback profile on network failure
+          if (
+            user &&
+            (error?.message?.includes("Failed to fetch") ||
+              error?.message?.includes("TypeError") ||
+              error?.message?.includes("NetworkError"))
+          ) {
+            console.log(
+              "Setting offline fallback profile due to network error",
+            );
+            const offlineFallbackProfile = {
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || "User",
+              plan_type: "Free",
+              credits_remaining: 5,
+              tasks_this_month: 0,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            setProfile(offlineFallbackProfile);
+          } else {
+            setProfile(null);
+          }
+          setActivities([]);
+        }
       } finally {
         setLoading(false);
       }
