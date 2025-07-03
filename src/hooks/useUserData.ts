@@ -112,14 +112,6 @@ const logError = (context: string, error: any) => {
   }
 };
 
-// Test the logError function immediately
-console.log("🔧 Testing enhanced logError function...");
-logError("Test error logging", { message: "Test message", code: "TEST001" });
-logError("Test circular reference", { self: null });
-const circular: any = { circular: null };
-circular.circular = circular;
-logError("Test circular object", circular);
-
 export const useUserData = () => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
