@@ -1,7 +1,6 @@
-
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface UserProfile {
   id: string;
@@ -29,6 +28,44 @@ export const useUserData = () => {
   const [activities, setActivities] = useState<UserActivity[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const refetch = async () => {
+    if (!user) return;
+
+    setLoading(true);
+    try {
+      // Fetch user profile
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (profileError && profileError.code !== "PGRST116") {
+        console.error("Error fetching profile:", profileError);
+      } else if (profileData) {
+        setProfile(profileData);
+      }
+
+      // Fetch recent activities
+      const { data: activitiesData, error: activitiesError } = await supabase
+        .from("user_activities")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (activitiesError) {
+        console.error("Error fetching activities:", activitiesError);
+      } else {
+        setActivities(activitiesData || []);
+      }
+    } catch (error) {
+      console.error("Error refetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       setProfile(null);
@@ -41,32 +78,32 @@ export const useUserData = () => {
       try {
         // Fetch user profile
         const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
           .single();
 
-        if (profileError && profileError.code !== 'PGRST116') {
-          console.error('Error fetching profile:', profileError);
+        if (profileError && profileError.code !== "PGRST116") {
+          console.error("Error fetching profile:", profileError);
         } else if (profileData) {
           setProfile(profileData);
         }
 
         // Fetch recent activities
         const { data: activitiesData, error: activitiesError } = await supabase
-          .from('user_activities')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
+          .from("user_activities")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
           .limit(10);
 
         if (activitiesError) {
-          console.error('Error fetching activities:', activitiesError);
+          console.error("Error fetching activities:", activitiesError);
         } else {
           setActivities(activitiesData || []);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       } finally {
         setLoading(false);
       }
@@ -76,41 +113,44 @@ export const useUserData = () => {
 
     // Set up real-time subscription for profile changes
     const profileChannel = supabase
-      .channel('profile-changes')
+      .channel("profile-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'profiles',
-          filter: `id=eq.${user.id}`
+          event: "*",
+          schema: "public",
+          table: "profiles",
+          filter: `id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('Profile updated:', payload);
-          if (payload.eventType === 'UPDATE' && payload.new) {
+          console.log("Profile updated:", payload);
+          if (payload.eventType === "UPDATE" && payload.new) {
             setProfile(payload.new as UserProfile);
           }
-        }
+        },
       )
       .subscribe();
 
     // Set up real-time subscription for activities
     const activitiesChannel = supabase
-      .channel('activities-changes')
+      .channel("activities-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'user_activities',
-          filter: `user_id=eq.${user.id}`
+          event: "INSERT",
+          schema: "public",
+          table: "user_activities",
+          filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('New activity:', payload);
+          console.log("New activity:", payload);
           if (payload.new) {
-            setActivities(prev => [payload.new as UserActivity, ...prev.slice(0, 9)]);
+            setActivities((prev) => [
+              payload.new as UserActivity,
+              ...prev.slice(0, 9),
+            ]);
           }
-        }
+        },
       )
       .subscribe();
 
@@ -120,5 +160,5 @@ export const useUserData = () => {
     };
   }, [user]);
 
-  return { profile, activities, loading };
+  return { profile, activities, loading, refetch };
 };
